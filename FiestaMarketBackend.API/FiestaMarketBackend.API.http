@@ -1,0 +1,6 @@
+@FiestaMarketBackend.API_HostAddress = http://localhost:5121
+
+GET {{FiestaMarketBackend.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
