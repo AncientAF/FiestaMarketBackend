@@ -11,6 +11,7 @@ namespace FiestaMarketBackend.Core.Entities
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string FullName { get; set; }
+        public Category Category { get; set; }
         public int Price { get; set; }
         public int MinQuantity { get; set; }
         public bool Relevant { get; set; }
