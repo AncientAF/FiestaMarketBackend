@@ -17,26 +17,27 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<List<Category>> Get()
+        public async Task<List<Category>> GetAsync()
         {
-            return await _dbContext.Categories.ToListAsync();
+            return await _dbContext.Categories.AsNoTracking().ToListAsync();
         }
 
-        public async Task<Category?> GetById(Guid id)
+        public async Task<Category?> GetByIdAsync(Guid id)
         {
-            return await _dbContext.Categories.FirstOrDefaultAsync(c => c.Id == id);
+            return await _dbContext.Categories.AsNoTracking().FirstOrDefaultAsync(c => c.Id == id);
         }
 
-        public async Task<List<Category>> GetWithSubCategories()
+        public async Task<List<Category>> GetWithSubCategoriesAsync()
         {
             return await _dbContext.Categories
+                .AsNoTracking()
                 .Include(c => c.ParentCategory)
                 .Include(c => c.SubCategories)
                 .Where(c => c.ParentCategory == null)
                 .ToListAsync();
         }
 
-        public async Task Add(Guid id, string name, Category parentCategory)
+        public async Task AddAsync(Guid id, string name, Category parentCategory)
         {
             var categoryToAdd = new Category
             {
@@ -49,7 +50,7 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task Update(Category updatedCategory)
+        public async Task UpdateAsync(Category updatedCategory)
         {
             await _dbContext.Categories
                 .Where(p => p.Id == updatedCategory.Id)
@@ -58,9 +59,10 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
                     .SetProperty(p => p.ParentCategory, updatedCategory.ParentCategory));
         }
 
-        public async Task Delete(Guid id)
+        public async Task DeleteAsync(Guid id)
         {
             await _dbContext.Categories
+                .AsNoTracking()
                 .Where(p => p.Id == id)
                 .ExecuteDeleteAsync();
         }

@@ -12,7 +12,7 @@ namespace FiestaMarketBackend.Core.Entities
         public string Name { get; set; }
         public string FullName { get; set; }
         public Category Category { get; set; }
-        public int Price { get; set; }
+        public decimal Price { get; set; }
         public int MinQuantity { get; set; }
         public bool Relevant { get; set; }
         public bool Recommended { get; set; }

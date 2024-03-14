@@ -18,15 +18,16 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
         }
 
         #region Get методы
-        public async Task<List<Product>> Get()
+        public async Task<List<Product>> GetAsync()
         {
             return await _dbContext.Products
                 .AsNoTracking()
                 .Include(p => p.Description)
+                .Include(p => p.Category)
                 .ToListAsync();
         }
 
-        public async Task<List<Product>> GetWithImages()
+        public async Task<List<Product>> GetWithImagesAsync()
         {
             return await _dbContext.Products
                 .AsNoTracking()
@@ -35,7 +36,7 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public async Task<Product?> GetById(Guid id)
+        public async Task<Product?> GetByIdAsync(Guid id)
         {
             return await _dbContext.Products
                 .AsNoTracking()
@@ -43,9 +44,13 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
 
-        public async Task<List<Product>> GetByFilter(string name, Category category)
+        public async Task<List<Product>> GetByFilterAsync(string name, Category category)
         {
-            var query = _dbContext.Products.AsNoTracking();
+            var query = _dbContext.Products
+                .AsNoTracking()
+                .Include(p => p.Category)
+                .Include(p => p.Images)
+                .Include(p => p.Description);
 
             if (!string.IsNullOrEmpty(name))
                 query.Where(p => p.Name.Contains(name));
@@ -57,30 +62,33 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
             return await query.ToListAsync();
         }
 
-        public async Task<List<Product>> GetByPage(int page, int pageSize)
+        public async Task<List<Product>> GetByPageAsync(int pageIndex, int pageSize)
         {
             return await _dbContext.Products
                 .AsNoTracking()
-                .Skip((page - 1) * pageSize)
+                .Include(p => p.Images)
+                .Include(p => p.Description)
+                .Include(p => p.Category)
+                .Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
         }
         #endregion
 
-        public async Task Add(Guid id, string name, ProductDescription description)
+        public async Task AddAsync(Product product)
         {
-            var product = new Product
+            var productToAdd = new Product
             {
-                Id = id,
-                Name = name,
-                Description = description
+                Id = product.Id,
+                Name = product.Name,
+                Description = product.Description
             };
 
-            await _dbContext.AddAsync(product);
+            await _dbContext.AddAsync(productToAdd);
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task Update(Product updatedProduct)
+        public async Task UpdateAsync(Product updatedProduct)
         {
             await _dbContext.Products
                 .Where(p => p.Id == updatedProduct.Id)
@@ -97,7 +105,7 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
                     .SetProperty(p => p.Description.Size, updatedProduct.Description.Size));
         }
 
-        public async Task Delete(Guid id)
+        public async Task DeleteAsync(Guid id)
         {
             await _dbContext.Products
                 .Where(p => p.Id == id)
