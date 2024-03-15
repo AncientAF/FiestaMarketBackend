@@ -1,4 +1,4 @@
-﻿using FiestaMarketBackend.Application.Queries;
+﻿using FiestaMarketBackend.Application.Queries.Product;
 using FiestaMarketBackend.Application.Responses;
 using FiestaMarketBackend.Infrastructure.Repositories;
 using Mapster;
@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FiestaMarketBackend.Application.Handlers
+namespace FiestaMarketBackend.Application.Handlers.Product
 {
     internal class GetProductsByPageQueryHandler : IRequestHandler<GetProductsByPageQuery, List<ProductResponse>>
     {
