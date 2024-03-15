@@ -37,11 +37,10 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public async Task AddAsync(Guid id, string name, Category parentCategory)
+        public async Task AddAsync(string name, Category parentCategory)
         {
             var categoryToAdd = new Category
             {
-                Id = id,
                 Name = name,
                 ParentCategory = parentCategory
             };

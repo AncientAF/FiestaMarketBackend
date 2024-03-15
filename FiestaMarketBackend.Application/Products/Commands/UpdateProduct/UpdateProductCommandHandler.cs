@@ -1,5 +1,4 @@
-﻿using FiestaMarketBackend.Application.Commands.Product;
-using FiestaMarketBackend.Core.Entities;
+﻿using FiestaMarketBackend.Core.Entities;
 using FiestaMarketBackend.Infrastructure.Repositories;
 using Mapster;
 using MediatR;
@@ -9,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FiestaMarketBackend.Application.Handlers.Product
+namespace FiestaMarketBackend.Application.Products.Commands.UpdateProduct
 {
     public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand>
     {

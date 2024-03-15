@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FiestaMarketBackend.Application.Commands.Product
+namespace FiestaMarketBackend.Application.Products.Commands.DeleteProduct
 {
     public class DeleteProductCommand : IRequest
     {

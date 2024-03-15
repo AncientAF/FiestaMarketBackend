@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FiestaMarketBackend.Application.Commands.News
+namespace FiestaMarketBackend.Application.News.Commands.CreateNews
 {
     public class CreateNewsCommand : IRequest
     {

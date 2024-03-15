@@ -1,5 +1,4 @@
-﻿using FiestaMarketBackend.Application.Commands.Product;
-using FiestaMarketBackend.Infrastructure.Repositories;
+﻿using FiestaMarketBackend.Infrastructure.Repositories;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -7,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FiestaMarketBackend.Application.Handlers.Product
+namespace FiestaMarketBackend.Application.Products.Commands.DeleteProduct
 {
     public class DeleteProductCommandHandler : IRequestHandler<DeleteProductCommand>
     {

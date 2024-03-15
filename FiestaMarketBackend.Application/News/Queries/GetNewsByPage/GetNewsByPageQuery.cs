@@ -6,11 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FiestaMarketBackend.Application.Queries.Product
+namespace FiestaMarketBackend.Application.News.Queries.GetNewsByPage
 {
-    internal class GetProductsByPageQuery : IRequest<List<ProductResponse>>
+    public class GetNewsByPageQuery : IRequest<List<NewsResponse>>
     {
-        public GetProductsByPageQuery(int pageIndex, int pageSize)
+        public GetNewsByPageQuery(int pageIndex, int pageSize)
         {
             PageIndex = pageIndex;
             PageSize = pageSize;

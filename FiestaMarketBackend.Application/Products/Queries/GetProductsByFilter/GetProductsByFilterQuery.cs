@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FiestaMarketBackend.Application.Queries.Product
+namespace FiestaMarketBackend.Application.Products.Queries.GetProductsByFilter
 {
     public class GetProductsByFilterQuery : IRequest<List<ProductResponse>>
     {

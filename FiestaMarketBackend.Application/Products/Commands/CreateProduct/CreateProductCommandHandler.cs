@@ -1,10 +1,9 @@
-﻿using FiestaMarketBackend.Application.Commands.Product;
-using FiestaMarketBackend.Core.Entities;
+﻿using FiestaMarketBackend.Core.Entities;
 using FiestaMarketBackend.Infrastructure.Repositories;
 using Mapster;
 using MediatR;
 
-namespace FiestaMarketBackend.Application.Handlers.Product
+namespace FiestaMarketBackend.Application.Products.Commands.CreateProduct
 {
     public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand>
     {

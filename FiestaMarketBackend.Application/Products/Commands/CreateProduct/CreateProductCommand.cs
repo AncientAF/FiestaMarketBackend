@@ -1,7 +1,7 @@
 ﻿using FiestaMarketBackend.Core.Entities;
 using MediatR;
 
-namespace FiestaMarketBackend.Application.Commands.Product
+namespace FiestaMarketBackend.Application.Products.Commands.CreateProduct
 {
     public class CreateProductCommand : IRequest
     {

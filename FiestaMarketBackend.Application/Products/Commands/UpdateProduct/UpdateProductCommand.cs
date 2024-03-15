@@ -6,12 +6,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FiestaMarketBackend.Application.Commands.Product
+namespace FiestaMarketBackend.Application.Products.Commands.UpdateProduct
 {
     public class UpdateProductCommand : IRequest
     {
-        public UpdateProductCommand(string name, string fullName, Category category, decimal price, int minQuantity, bool relevant, bool recommended, List<Image> images, ProductDescription description)
+        public UpdateProductCommand(Guid id, string name, string fullName, Category category, decimal price, int minQuantity, bool relevant, bool recommended, List<Image> images, ProductDescription description)
         {
+            Id = id;
             Name = name;
             FullName = fullName;
             Category = category;
@@ -23,6 +24,7 @@ namespace FiestaMarketBackend.Application.Commands.Product
             Description = description;
         }
 
+        public Guid Id { get; set; }
         public string Name { get; set; }
         public string FullName { get; set; }
         public Category Category { get; set; }
