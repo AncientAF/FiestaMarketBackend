@@ -2,7 +2,7 @@
 using Mapster;
 using MediatR;
 
-namespace FiestaMarketBackend.Application.Category.Commands.UpdateCategory
+namespace FiestaMarketBackend.Application.Category
 {
     using FiestaMarketBackend.Core.Entities;
 

@@ -12,16 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FiestaMarketBackend.Core\FiestaMarketBackend.Core.csproj" />
-    <ProjectReference Include="..\FiestaMarketBackend.Infrastructure\FiestaMarketBackend.Infrastructure.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Commands\Category\" />
-    <Folder Include="Handlers\Category\" />
-    <Folder Include="Handlers\News\" />
-    <Folder Include="Queries\Category\" />
-    <Folder Include="Queries\News\" />
+	  <ProjectReference Include="..\FiestaMarketBackend.Infrastructure\FiestaMarketBackend.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

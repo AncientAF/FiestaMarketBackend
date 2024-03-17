@@ -10,7 +10,7 @@ namespace FiestaMarketBackend.Infrastructure
         public DbSet<Product> Products { get; set; }
         public DbSet<News> News { get; set; }
         public DbSet<Category> Categories { get; set; }
-        public FiestaDbContext(DbContextOptions<FiestaDbContext> options) 
+        public FiestaDbContext(DbContextOptions<FiestaDbContext> options)
             : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -1,15 +1,9 @@
-﻿using FiestaMarketBackend.Application.Products.Queries.GetProductsByFilter;
-using FiestaMarketBackend.Application.Responses;
+﻿using FiestaMarketBackend.Application.Responses;
 using FiestaMarketBackend.Infrastructure.Repositories;
 using Mapster;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace FiestaMarketBackend.Application.Products.Queries.GetProductsByPage
+namespace FiestaMarketBackend.Application.Products.Queries
 {
     internal class GetProductsByPageQueryHandler : IRequestHandler<GetProductsByPageQuery, List<ProductResponse>>
     {

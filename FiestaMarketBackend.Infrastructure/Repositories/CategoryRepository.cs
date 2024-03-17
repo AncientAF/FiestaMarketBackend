@@ -1,10 +1,5 @@
 ﻿using FiestaMarketBackend.Core.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FiestaMarketBackend.Infrastructure.Repositories
 {
@@ -37,12 +32,12 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public async Task AddAsync(string name, Category parentCategory)
+        public async Task AddAsync(string name, Guid? parentCategoryId)
         {
             var categoryToAdd = new Category
             {
                 Name = name,
-                ParentCategory = parentCategory
+                ParentCategory = await _dbContext.Categories.FirstOrDefaultAsync(c => c.Id == parentCategoryId) ?? null,
             };
 
             await _dbContext.Categories.AddAsync(categoryToAdd);

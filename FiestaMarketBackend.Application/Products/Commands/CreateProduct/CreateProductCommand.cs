@@ -1,8 +1,8 @@
-﻿using FiestaMarketBackend.Core.Entities;
-using MediatR;
+﻿using MediatR;
 
-namespace FiestaMarketBackend.Application.Products.Commands.CreateProduct
+namespace FiestaMarketBackend.Application.Products.Commands
 {
+    using FiestaMarketBackend.Core.Entities;
     public class CreateProductCommand : IRequest
     {
         public CreateProductCommand(string name, string fullName, Category category, decimal price, int minQuantity, bool relevant, bool recommended, List<Image> images, ProductDescription description)

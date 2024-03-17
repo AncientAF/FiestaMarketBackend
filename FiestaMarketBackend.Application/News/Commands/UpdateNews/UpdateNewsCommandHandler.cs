@@ -1,15 +1,10 @@
-﻿using FiestaMarketBackend.Core.Entities;
-using FiestaMarketBackend.Infrastructure.Repositories;
+﻿using FiestaMarketBackend.Infrastructure.Repositories;
 using Mapster;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FiestaMarketBackend.Application.News.Commands.UpdateNews
 {
+    using FiestaMarketBackend.Core.Entities;
     public class UpdateNewsCommandHandler : IRequestHandler<UpdateNewsCommand>
     {
         private readonly NewsRepository _newsRepository;

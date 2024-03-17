@@ -13,9 +13,10 @@ namespace FiestaMarketBackend.Infrastructure.Configurations
                 .HasMany(p => p.Images)
                 .WithOne(i => i.Product);
 
-            builder
-                .HasOne(p => p.Description)
-                .WithOne(d => d.Product);
+            //builder
+            //    .HasOne(p => p.DescriptionId)
+            //    .WithOne(d => d.ProductId);
+            builder.OwnsOne(p => p.Description);
 
             builder
                 .HasOne(a => a.Category)

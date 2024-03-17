@@ -3,7 +3,7 @@ using FiestaMarketBackend.Infrastructure.Repositories;
 using Mapster;
 using MediatR;
 
-namespace FiestaMarketBackend.Application.Products.Commands.CreateProduct
+namespace FiestaMarketBackend.Application.Products.Commands
 {
     public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand>
     {

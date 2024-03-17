@@ -1,14 +1,9 @@
 ﻿using FiestaMarketBackend.Application.Responses;
-using FiestaMarketBackend.Core.Entities;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace FiestaMarketBackend.Application.Products.Queries.GetProductsByFilter
+namespace FiestaMarketBackend.Application.Products.Queries
 {
+    using FiestaMarketBackend.Core.Entities;
     public class GetProductsByFilterQuery : IRequest<List<ProductResponse>>
     {
         public string name;

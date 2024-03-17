@@ -1,16 +1,10 @@
-﻿using FiestaMarketBackend.Core.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FiestaMarketBackend.Application.Responses
+﻿namespace FiestaMarketBackend.Application.Responses
 {
+    using FiestaMarketBackend.Core.Entities;
     public class ProductResponse
     {
 
-        public Guid Id { get; set; }
+        public System.Guid Id { get; set; }
         public string Name { get; set; }
         public string FullName { get; set; }
         public Category Category { get; set; }
@@ -20,7 +14,7 @@ namespace FiestaMarketBackend.Application.Responses
         public bool Recommended { get; set; }
         public List<Image> Images { get; set; }
         public ProductDescription Description { get; set; }
-        public ProductResponse(Guid id, string name, string fullName, Category category, decimal price, int minQuantity, bool relevant, bool recommended, List<Image> images, ProductDescription description)
+        public ProductResponse(System.Guid id, string name, string fullName, Category category, decimal price, int minQuantity, bool relevant, bool recommended, List<Image> images, ProductDescription description)
         {
             Id = id;
             Name = name;
