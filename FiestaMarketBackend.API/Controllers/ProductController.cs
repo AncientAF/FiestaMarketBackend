@@ -19,7 +19,7 @@ namespace FiestaMarketBackend.API.Controllers
 
         [HttpGet]
         [Route("[action]")]
-        public async Task<ActionResult<NewsResponse>> GetByFilter(GetProductsByFilterQuery query)
+        public async Task<ActionResult<ProductResponse>> GetByFilter(GetProductsByFilterQuery query)
         {
             var result = await _mediator.Send(query);
 
@@ -28,7 +28,7 @@ namespace FiestaMarketBackend.API.Controllers
 
         [HttpGet]
         [Route("[action]")]
-        public async Task<ActionResult<NewsResponse>> GetByPage(int pageIndex, int pageSize)
+        public async Task<ActionResult<ProductResponse>> GetByPage(int pageIndex, int pageSize)
         {
             var query = new GetProductsByPageQuery(pageIndex, pageSize);
             var result = await _mediator.Send(query);
@@ -38,7 +38,7 @@ namespace FiestaMarketBackend.API.Controllers
 
         [HttpGet]
         [Route("[action]")]
-        public async Task<ActionResult<NewsResponse>> Get()
+        public async Task<ActionResult<ProductResponse>> Get()
         {
             var query = new GetProductsQuery();
             var result = await _mediator.Send(query);

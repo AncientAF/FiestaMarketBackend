@@ -62,7 +62,7 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
             return await _dbContext.Products
                 .AsNoTracking()
                 .Include(p => p.Images)
-                .Include(p => p.Description)
+                //.Include(p => p.Description)
                 .Include(p => p.Category)
                 .Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize)
@@ -72,14 +72,14 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
 
         public async Task AddAsync(Product product)
         {
-            var productToAdd = new Product
-            {
-                Id = product.Id,
-                Name = product.Name,
-                Description = product.Description
-            };
+            //var productToAdd = new Product
+            //{
+            //    Id = product.Id,
+            //    Name = product.Name,
+            //    Description = product.Description
+            //};
 
-            await _dbContext.AddAsync(productToAdd);
+            await _dbContext.AddAsync(product);
             await _dbContext.SaveChangesAsync();
         }
 
