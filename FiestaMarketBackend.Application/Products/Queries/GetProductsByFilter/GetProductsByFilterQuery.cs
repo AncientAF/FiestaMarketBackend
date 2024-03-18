@@ -3,16 +3,15 @@ using MediatR;
 
 namespace FiestaMarketBackend.Application.Products.Queries
 {
-    using FiestaMarketBackend.Core.Entities;
     public class GetProductsByFilterQuery : IRequest<List<ProductResponse>>
     {
-        public string name;
-        public Category Category;
-
-        public GetProductsByFilterQuery(string name, Category category)
+        public GetProductsByFilterQuery(string? name, Guid? category)
         {
-            this.name = name;
+            Name = name;
             Category = category;
         }
+        public string? Name { get; set; }
+        public Guid? Category { get; set; }
+
     }
 }

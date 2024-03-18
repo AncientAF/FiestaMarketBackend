@@ -16,7 +16,7 @@ namespace FiestaMarketBackend.Application.Products.Queries
 
         public async Task<List<ProductResponse>> Handle(GetProductsByFilterQuery request, CancellationToken cancellationToken)
         {
-            var result = await _productsRepository.GetByFilterAsync(request.name, request.Category);
+            var result = await _productsRepository.GetByFilterAsync(request.Name, request.Category);
 
             return result.Adapt<List<ProductResponse>>();
         }

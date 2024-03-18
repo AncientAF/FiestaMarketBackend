@@ -39,22 +39,22 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
 
-        public async Task<List<Product>> GetByFilterAsync(string name, Category category)
+        public async Task<List<Product>> GetByFilterAsync(string? name, Guid? categoryId)
         {
             var query = _dbContext.Products
-                .AsNoTracking()
                 .Include(p => p.Category)
                 .Include(p => p.Images)
-                .Include(p => p.Description);
+                .Include(p => p.Description)
+                .AsNoTracking();
 
             if (!string.IsNullOrEmpty(name))
-                query.Where(p => p.Name.Contains(name));
+                query = query.Where(p => p.Name.Contains(name));
 
-            if (category != null)
-                query.Where(p => p.Category == category);
+            if (categoryId != null)
+                query = query.Where(p => p.Category.Id == categoryId);
 
-
-            return await query.ToListAsync();
+            var res = await query.ToListAsync();
+            return res;
         }
 
         public async Task<List<Product>> GetByPageAsync(int pageIndex, int pageSize)
@@ -62,7 +62,7 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
             return await _dbContext.Products
                 .AsNoTracking()
                 .Include(p => p.Images)
-                //.Include(p => p.Description)
+                .Include(p => p.Description)
                 .Include(p => p.Category)
                 .Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize)

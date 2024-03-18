@@ -17,7 +17,7 @@ namespace FiestaMarketBackend.API.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("[action]")]
         public async Task<ActionResult<ProductResponse>> GetByFilter(GetProductsByFilterQuery query)
         {

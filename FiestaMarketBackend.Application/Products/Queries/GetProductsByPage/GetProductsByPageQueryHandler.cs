@@ -18,7 +18,7 @@ namespace FiestaMarketBackend.Application.Products.Queries
         {
             var result = await _productsRepository.GetByPageAsync(request.PageIndex, request.PageSize);
 
-            return request.Adapt<List<ProductResponse>>();
+            return result.Adapt<List<ProductResponse>>();
         }
     }
 }
