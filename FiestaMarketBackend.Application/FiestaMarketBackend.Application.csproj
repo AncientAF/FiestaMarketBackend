@@ -15,4 +15,8 @@
 	  <ProjectReference Include="..\FiestaMarketBackend.Infrastructure\FiestaMarketBackend.Infrastructure.csproj" />
   </ItemGroup>
 
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
+
 </Project>

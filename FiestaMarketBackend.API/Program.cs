@@ -1,7 +1,9 @@
 using FiestaMarketBackend.Application.Products.Commands;
+using FiestaMarketBackend.Application.Services;
 using FiestaMarketBackend.Infrastructure;
 using FiestaMarketBackend.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +25,10 @@ builder.Services.AddScoped<ProductsRepository>();
 builder.Services.AddScoped<NewsRepository>();
 builder.Services.AddScoped<CategoryRepository>();
 
+var requestPath = "/StaticFiles";
+var staticFilesPath = Path.Combine(builder.Environment.ContentRootPath, "StaticFiles");
+builder.Services.AddScoped(f => new FileService(staticFilesPath, requestPath));
+
 builder.Services.AddMediatR(cfg =>
     {
         cfg.RegisterServicesFromAssembly(typeof(CreateProductCommandHandler).Assembly);
@@ -39,6 +45,11 @@ if (app.Environment.IsDevelopment())
 
 
 app.UseHttpsRedirection();
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(staticFilesPath),
+    RequestPath = requestPath
+});
 
 app.UseAuthorization();
 

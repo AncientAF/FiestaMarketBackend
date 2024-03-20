@@ -3,6 +3,7 @@ using System;
 using FiestaMarketBackend.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FiestaMarketBackend.Infrastructure.Migrations
 {
     [DbContext(typeof(FiestaDbContext))]
-    partial class FiestaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240319140232_ChangedImage_2")]
+    partial class ChangedImage_2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -59,6 +62,35 @@ namespace FiestaMarketBackend.Infrastructure.Migrations
                     b.HasIndex("ParentCategoryId");
 
                     b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("FiestaMarketBackend.Core.Entities.Image", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("CatalogId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid?>("ProductId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CatalogId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("Image");
                 });
 
             modelBuilder.Entity("FiestaMarketBackend.Core.Entities.News", b =>
@@ -123,39 +155,6 @@ namespace FiestaMarketBackend.Infrastructure.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("FiestaMarketBackend.Core.Entities.Catalog", b =>
-                {
-                    b.OwnsMany("FiestaMarketBackend.Core.Entities.Image", "Images", b1 =>
-                        {
-                            b1.Property<Guid?>("CatalogId")
-                                .HasColumnType("uuid");
-
-                            b1.Property<Guid>("Id")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("uuid");
-
-                            b1.Property<string>("Path")
-                                .IsRequired()
-                                .HasColumnType("text");
-
-                            b1.Property<Guid?>("ProductId")
-                                .HasColumnType("uuid");
-
-                            b1.Property<string>("Url")
-                                .IsRequired()
-                                .HasColumnType("text");
-
-                            b1.HasKey("CatalogId", "Id");
-
-                            b1.ToTable("Catalogs_Images");
-
-                            b1.WithOwner()
-                                .HasForeignKey("CatalogId");
-                        });
-
-                    b.Navigation("Images");
-                });
-
             modelBuilder.Entity("FiestaMarketBackend.Core.Entities.Category", b =>
                 {
                     b.HasOne("FiestaMarketBackend.Core.Entities.Category", "ParentCategory")
@@ -165,39 +164,26 @@ namespace FiestaMarketBackend.Infrastructure.Migrations
                     b.Navigation("ParentCategory");
                 });
 
+            modelBuilder.Entity("FiestaMarketBackend.Core.Entities.Image", b =>
+                {
+                    b.HasOne("FiestaMarketBackend.Core.Entities.Catalog", "Catalog")
+                        .WithMany("Images")
+                        .HasForeignKey("CatalogId");
+
+                    b.HasOne("FiestaMarketBackend.Core.Entities.Product", "Product")
+                        .WithMany("Images")
+                        .HasForeignKey("ProductId");
+
+                    b.Navigation("Catalog");
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("FiestaMarketBackend.Core.Entities.Product", b =>
                 {
                     b.HasOne("FiestaMarketBackend.Core.Entities.Category", "Category")
                         .WithMany("Products")
                         .HasForeignKey("CategoryId");
-
-                    b.OwnsMany("FiestaMarketBackend.Core.Entities.Image", "Images", b1 =>
-                        {
-                            b1.Property<Guid?>("ProductId")
-                                .HasColumnType("uuid");
-
-                            b1.Property<Guid>("Id")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("uuid");
-
-                            b1.Property<Guid?>("CatalogId")
-                                .HasColumnType("uuid");
-
-                            b1.Property<string>("Path")
-                                .IsRequired()
-                                .HasColumnType("text");
-
-                            b1.Property<string>("Url")
-                                .IsRequired()
-                                .HasColumnType("text");
-
-                            b1.HasKey("ProductId", "Id");
-
-                            b1.ToTable("Products_Images");
-
-                            b1.WithOwner()
-                                .HasForeignKey("ProductId");
-                        });
 
                     b.OwnsOne("FiestaMarketBackend.Core.Entities.ProductDescription", "Description", b1 =>
                         {
@@ -234,7 +220,10 @@ namespace FiestaMarketBackend.Infrastructure.Migrations
                     b.Navigation("Category");
 
                     b.Navigation("Description");
+                });
 
+            modelBuilder.Entity("FiestaMarketBackend.Core.Entities.Catalog", b =>
+                {
                     b.Navigation("Images");
                 });
 
@@ -243,6 +232,11 @@ namespace FiestaMarketBackend.Infrastructure.Migrations
                     b.Navigation("Products");
 
                     b.Navigation("SubCategories");
+                });
+
+            modelBuilder.Entity("FiestaMarketBackend.Core.Entities.Product", b =>
+                {
+                    b.Navigation("Images");
                 });
 #pragma warning restore 612, 618
         }

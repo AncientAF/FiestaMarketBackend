@@ -106,5 +106,27 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
                 .Where(p => p.Id == id)
                 .ExecuteDeleteAsync();
         }
+
+        public async Task<List<Image>> GetImages(Guid id)
+        {
+            return (await _dbContext.Products
+                .Include(p => p.Images)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(p => p.Id == id)).Images;
+        }
+
+        public async Task DeleteImages(Guid productId, List<Guid> images)
+        {
+            var product = await _dbContext.Products.Include(p => p.Images).FirstOrDefaultAsync(p => p.Id == productId);
+            product.Images.RemoveAll(i => images.Contains(i.Id));
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task AddImages(Guid productId, List<Image> images)
+        {
+            var product = await _dbContext.Products.Include(p => p.Images).FirstOrDefaultAsync(p => p.Id == productId);
+            product.Images.AddRange(images);
+            await _dbContext.SaveChangesAsync();
+        }
     }
 }

@@ -1,8 +1,10 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 
 namespace FiestaMarketBackend.Application.Products.Commands
 {
     using FiestaMarketBackend.Core.Entities;
+
     public class CreateProductCommand : IRequest
     {
 
@@ -13,8 +15,8 @@ namespace FiestaMarketBackend.Application.Products.Commands
         public int MinQuantity { get; set; }
         public bool Relevant { get; set; }
         public bool Recommended { get; set; }
-        public List<Image>? Images { get; set; }
         public ProductDescription? Description { get; set; }
+        public List<IFormFile>? Images { get; set; }
 
     }
 }

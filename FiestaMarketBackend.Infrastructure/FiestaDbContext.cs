@@ -17,7 +17,7 @@ namespace FiestaMarketBackend.Infrastructure
         {
             modelBuilder.ApplyConfiguration(new CatalogConfiguration());
             modelBuilder.ApplyConfiguration(new CategoryConfiguration());
-            modelBuilder.ApplyConfiguration(new ImageConfiguration());
+            //modelBuilder.ApplyConfiguration(new ImageConfiguration());
             modelBuilder.ApplyConfiguration(new NewsConfiguration());
             modelBuilder.ApplyConfiguration(new ProductConfiguration());
 

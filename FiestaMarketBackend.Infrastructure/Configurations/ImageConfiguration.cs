@@ -9,12 +9,13 @@ namespace FiestaMarketBackend.Infrastructure.Configurations
         public void Configure(EntityTypeBuilder<Image> builder)
         {
             builder.HasKey(i => i.Id);
-            builder
-                .HasOne(i => i.Product)
-                .WithMany(p => p.Images);
-            builder
-                .HasOne(i => i.Catalog)
-                .WithMany(c => c.Images);
+
+            //builder
+            //    .HasOne(i => i.ProductId)
+            //    .WithMany(p => p.Images);
+            //builder
+            //    .HasOne(i => i.CatalogId)
+            //    .WithMany(c => c.Images);
         }
     }
 }
