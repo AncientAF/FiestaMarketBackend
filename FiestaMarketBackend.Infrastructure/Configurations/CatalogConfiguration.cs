@@ -13,10 +13,7 @@ namespace FiestaMarketBackend.Infrastructure.Configurations
             //builder
             //    .HasMany(c => c.Images)
             //    .WithOne(c => c.Catalog);
-            builder.OwnsMany(c => c.Images, i =>
-            {
-                i.WithOwner().HasForeignKey(i => i.CatalogId);
-            });
+            builder.OwnsMany(c => c.Images);
         }
     }
 }
