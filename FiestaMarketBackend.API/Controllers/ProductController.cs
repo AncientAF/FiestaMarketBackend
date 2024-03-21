@@ -1,6 +1,6 @@
-﻿using FiestaMarketBackend.Application.Responses;
-using FiestaMarketBackend.Application.Products.Commands;
-using FiestaMarketBackend.Application.Products.Queries;
+﻿using FiestaMarketBackend.Application.Product.Commands;
+using FiestaMarketBackend.Application.Product.Queries;
+using FiestaMarketBackend.Application.Responses;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

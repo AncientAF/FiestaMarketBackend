@@ -1,10 +1,5 @@
 ﻿using FiestaMarketBackend.Core.Entities;
 using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FiestaMarketBackend.Application.Services
 {
@@ -35,7 +30,7 @@ namespace FiestaMarketBackend.Application.Services
                 }
 
                 var url = _requestPath + "/Images/" + name;
-                var addedImage = new Image { Id = Guid.NewGuid(), Path = path, Url = url};
+                var addedImage = new Image { Id = Guid.NewGuid(), Path = path, Url = url };
                 addedImages.Add(addedImage);
             }
 

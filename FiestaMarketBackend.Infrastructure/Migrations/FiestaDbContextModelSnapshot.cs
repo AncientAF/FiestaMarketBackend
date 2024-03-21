@@ -28,7 +28,7 @@ namespace FiestaMarketBackend.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<decimal>("TotalPrice")
+                    b.Property<decimal?>("TotalPrice")
                         .HasColumnType("numeric");
 
                     b.HasKey("Id");
@@ -181,14 +181,14 @@ namespace FiestaMarketBackend.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("CartId")
+                    b.Property<Guid?>("CartId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid>("FavoriteId")
+                    b.Property<Guid?>("FavoriteId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Name")
@@ -312,7 +312,6 @@ namespace FiestaMarketBackend.Infrastructure.Migrations
                                 .HasColumnType("uuid");
 
                             b1.Property<string>("ContactPerson")
-                                .IsRequired()
                                 .HasColumnType("text");
 
                             b1.Property<string>("DeliveryAddress")
@@ -320,7 +319,6 @@ namespace FiestaMarketBackend.Infrastructure.Migrations
                                 .HasColumnType("text");
 
                             b1.Property<string>("Details")
-                                .IsRequired()
                                 .HasColumnType("text");
 
                             b1.Property<string>("PhoneNumber")
@@ -459,15 +457,11 @@ namespace FiestaMarketBackend.Infrastructure.Migrations
                 {
                     b.HasOne("FiestaMarketBackend.Core.Entities.Cart", "Cart")
                         .WithMany()
-                        .HasForeignKey("CartId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CartId");
 
                     b.HasOne("FiestaMarketBackend.Core.Entities.Favorite", "Favorite")
                         .WithMany()
-                        .HasForeignKey("FavoriteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("FavoriteId");
 
                     b.OwnsMany("FiestaMarketBackend.Core.Entities.Address", "Addresses", b1 =>
                         {
@@ -481,7 +475,6 @@ namespace FiestaMarketBackend.Infrastructure.Migrations
                             NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b1.Property<int>("Id"));
 
                             b1.Property<string>("ContactPerson")
-                                .IsRequired()
                                 .HasColumnType("text");
 
                             b1.Property<string>("DeliveryAddress")
@@ -489,7 +482,6 @@ namespace FiestaMarketBackend.Infrastructure.Migrations
                                 .HasColumnType("text");
 
                             b1.Property<string>("Details")
-                                .IsRequired()
                                 .HasColumnType("text");
 
                             b1.Property<string>("PhoneNumber")

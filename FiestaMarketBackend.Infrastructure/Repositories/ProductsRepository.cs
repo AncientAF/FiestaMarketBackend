@@ -60,10 +60,10 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
         public async Task<List<Product>> GetByPageAsync(int pageIndex, int pageSize)
         {
             return await _dbContext.Products
-                .AsNoTracking()
                 .Include(p => p.Images)
                 .Include(p => p.Description)
                 .Include(p => p.Category)
+                .AsNoTracking()
                 .Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
@@ -107,7 +107,7 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
                 .ExecuteDeleteAsync();
         }
 
-        public async Task<List<Image>> GetImages(Guid id)
+        public async Task<List<Image>> GetImagesAsync(Guid id)
         {
             return (await _dbContext.Products
                 .Include(p => p.Images)
@@ -115,14 +115,14 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
                 .FirstOrDefaultAsync(p => p.Id == id)).Images;
         }
 
-        public async Task DeleteImages(Guid productId, List<Guid> images)
+        public async Task DeleteImagesAsync(Guid productId, List<Guid> images)
         {
             var product = await _dbContext.Products.Include(p => p.Images).FirstOrDefaultAsync(p => p.Id == productId);
             product.Images.RemoveAll(i => images.Contains(i.Id));
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task AddImages(Guid productId, List<Image> images)
+        public async Task AddImagesAsync(Guid productId, List<Image> images)
         {
             var product = await _dbContext.Products.Include(p => p.Images).FirstOrDefaultAsync(p => p.Id == productId);
             product.Images.AddRange(images);

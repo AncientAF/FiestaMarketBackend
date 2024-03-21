@@ -14,21 +14,25 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
 
         public async Task<List<Category>> GetAsync()
         {
-            return await _dbContext.Categories.AsNoTracking().ToListAsync();
+            return await _dbContext.Categories
+                .AsNoTracking()
+                .ToListAsync();
         }
 
         public async Task<Category?> GetByIdAsync(Guid id)
         {
-            return await _dbContext.Categories.AsNoTracking().FirstOrDefaultAsync(c => c.Id == id);
+            return await _dbContext.Categories
+                .AsNoTracking()
+                .FirstOrDefaultAsync(c => c.Id == id);
         }
 
         public async Task<List<Category>> GetWithSubCategoriesAsync()
         {
             return await _dbContext.Categories
-                .AsNoTracking()
                 .Include(c => c.ParentCategory)
                 .Include(c => c.SubCategories)
                 .Where(c => c.ParentCategory == null)
+                .AsNoTracking()
                 .ToListAsync();
         }
 
@@ -56,7 +60,6 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
         public async Task DeleteAsync(Guid id)
         {
             await _dbContext.Categories
-                .AsNoTracking()
                 .Where(p => p.Id == id)
                 .ExecuteDeleteAsync();
         }

@@ -1,6 +1,4 @@
-﻿using FiestaMarketBackend.Core.Enums;
-
-namespace FiestaMarketBackend.Core.Entities
+﻿namespace FiestaMarketBackend.Core.Entities
 {
     public record Image
     {

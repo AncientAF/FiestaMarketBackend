@@ -1,4 +1,4 @@
-using FiestaMarketBackend.Application.Products.Commands;
+using FiestaMarketBackend.Application.Product.Commands;
 using FiestaMarketBackend.Application.Services;
 using FiestaMarketBackend.Infrastructure;
 using FiestaMarketBackend.Infrastructure.Repositories;
@@ -24,10 +24,12 @@ builder.Services.AddDbContext<FiestaDbContext>(
 builder.Services.AddScoped<ProductsRepository>();
 builder.Services.AddScoped<NewsRepository>();
 builder.Services.AddScoped<CategoryRepository>();
+builder.Services.AddScoped<UserRepository>();
+builder.Services.AddScoped<OrderRepository>();
 
 var requestPath = "/StaticFiles";
 var staticFilesPath = Path.Combine(builder.Environment.ContentRootPath, "StaticFiles");
-builder.Services.AddScoped(f => new FileService(staticFilesPath, requestPath));
+builder.Services.AddScoped<FileService>(_ => new FileService(staticFilesPath, requestPath));
 
 builder.Services.AddMediatR(cfg =>
     {
