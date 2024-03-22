@@ -80,6 +80,13 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
             return user.Cart;
         }
 
+        public async Task<List<Order>> GetOrdersAsync(Guid id)
+        {
+            var user = await GetByIdAsync(id);
+
+            return user.Orders;
+        }
+
         public async Task AddProductsToFavoriteAsync(Guid id, List<Product> products)
         {
             var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == id);

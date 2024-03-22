@@ -15,6 +15,9 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
         public async Task<List<Order>> GetAsync()
         {
             return await _dbContext.Orders
+                .Include(o => o.Address)
+                .Include(o => o.Items)
+                .Include(o => o.User)
                 .AsNoTracking()
                 .ToListAsync();
         }
@@ -22,19 +25,11 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
         public async Task<Order?> GetByIdAsync(Guid id)
         {
             return await _dbContext.Orders
-                .Include(c => c.Address)
-                .Include(c => c.Items)
+                .Include(o => o.Address)
+                .Include(o => o.Items)
+                .Include(o => o.User)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(c => c.Id == id);
-        }
-
-        public async Task<List<Order>> GetEverythingAsync()
-        {
-            return await _dbContext.Orders
-                .Include(c => c.Address)
-                .Include(c => c.Items)
-                .AsNoTracking()
-                .ToListAsync();
         }
 
         public async Task AddAsync(Order order)
@@ -58,7 +53,7 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
         public async Task DeleteAsync(Guid id)
         {
             await _dbContext.Orders
-                .Where(p => p.Id == id)
+                .Where(o => o.Id == id)
                 .ExecuteDeleteAsync();
         }
     }
