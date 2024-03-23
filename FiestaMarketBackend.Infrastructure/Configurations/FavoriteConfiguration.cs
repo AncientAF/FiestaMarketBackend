@@ -10,7 +10,7 @@ namespace FiestaMarketBackend.Infrastructure.Configurations
         {
             builder.HasKey(f => f.Id);
 
-            builder.HasMany(f => f.Products);
+            builder.HasMany(f => f.Products).WithMany(p => p.Favorites);
         }
     }
 }

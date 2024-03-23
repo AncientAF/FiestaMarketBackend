@@ -20,10 +20,9 @@ namespace FiestaMarketBackend.API.Controllers
 
 
         [HttpGet]
-        public async Task<ActionResult<List<UserResponse>>> GetAllUsers(GetAllUsersQuery query)
+        public async Task<ActionResult<List<UserResponse>>> GetAllUsers()
         {
-            await _mediator.Send(query);
-            var result = await _mediator.Send(query);
+            var result = await _mediator.Send(new GetAllUsersQuery());
 
             return Ok(result);
         }
@@ -68,10 +67,10 @@ namespace FiestaMarketBackend.API.Controllers
 
         #region Favorite
         [HttpGet]
-        [Route("favorite")]
-        public async Task<ActionResult<FavoriteResponse>> GetFavorites(GetFavoritesQuery query)
+        [Route("favorite{id:guid}")]
+        public async Task<ActionResult<FavoriteResponse>> GetFavorites(Guid id)
         {
-            await _mediator.Send(query);
+            var query = new GetFavoritesQuery { Id = id };
             var result = await _mediator.Send(query);
 
             return Ok(result);
@@ -98,10 +97,10 @@ namespace FiestaMarketBackend.API.Controllers
 
         #region Cart
         [HttpGet]
-        [Route("cart")]
-        public async Task<ActionResult<CartResponse>> GetCart(GetCartQuery query)
+        [Route("cart{id:guid}")]
+        public async Task<ActionResult<CartResponse>> GetCart(Guid id)
         {
-            await _mediator.Send(query);
+            var query = new GetCartQuery { Id = id };
             var result = await _mediator.Send(query);
 
             return Ok(result);

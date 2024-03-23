@@ -30,10 +30,9 @@ namespace FiestaMarketBackend.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get([FromBody] GetOrdersQuery query)
+        public async Task<IActionResult> Get()
         {
-            await _mediator.Send(query);
-            var result = await _mediator.Send(query);
+            var result = await _mediator.Send(new GetOrdersQuery());
 
             return Ok(result);
         }

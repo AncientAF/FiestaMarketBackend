@@ -20,7 +20,7 @@ namespace FiestaMarketBackend.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<NewsResponse>> Get(int pageIndex, int pageSize)
+        public async Task<ActionResult<NewsResponse>> GetByPage(int pageIndex, int pageSize)
         {
             var query = new GetNewsByPageQuery(pageIndex, pageSize);
             var result = await _mediator.Send(query);

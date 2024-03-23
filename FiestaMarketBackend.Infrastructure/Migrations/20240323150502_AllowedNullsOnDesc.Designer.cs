@@ -3,6 +3,7 @@ using System;
 using FiestaMarketBackend.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FiestaMarketBackend.Infrastructure.Migrations
 {
     [DbContext(typeof(FiestaDbContext))]
-    partial class FiestaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240323150502_AllowedNullsOnDesc")]
+    partial class AllowedNullsOnDesc
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,21 +24,6 @@ namespace FiestaMarketBackend.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("FavoriteProduct", b =>
-                {
-                    b.Property<Guid>("FavoritesId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("ProductsId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("FavoritesId", "ProductsId");
-
-                    b.HasIndex("ProductsId");
-
-                    b.ToTable("FavoriteProduct");
-                });
 
             modelBuilder.Entity("FiestaMarketBackend.Core.Entities.Cart", b =>
                 {
@@ -158,6 +146,9 @@ namespace FiestaMarketBackend.Infrastructure.Migrations
                     b.Property<Guid?>("CategoryId")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid?>("FavoriteId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("FullName")
                         .IsRequired()
                         .HasColumnType("text");
@@ -181,6 +172,8 @@ namespace FiestaMarketBackend.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("FavoriteId");
 
                     b.ToTable("Products");
                 });
@@ -224,21 +217,6 @@ namespace FiestaMarketBackend.Infrastructure.Migrations
                     b.HasIndex("FavoriteId");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("FavoriteProduct", b =>
-                {
-                    b.HasOne("FiestaMarketBackend.Core.Entities.Favorite", null)
-                        .WithMany()
-                        .HasForeignKey("FavoritesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FiestaMarketBackend.Core.Entities.Product", null)
-                        .WithMany()
-                        .HasForeignKey("ProductsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("FiestaMarketBackend.Core.Entities.Cart", b =>
@@ -407,8 +385,12 @@ namespace FiestaMarketBackend.Infrastructure.Migrations
             modelBuilder.Entity("FiestaMarketBackend.Core.Entities.Product", b =>
                 {
                     b.HasOne("FiestaMarketBackend.Core.Entities.Category", "Category")
-                        .WithMany()
+                        .WithMany("Products")
                         .HasForeignKey("CategoryId");
+
+                    b.HasOne("FiestaMarketBackend.Core.Entities.Favorite", null)
+                        .WithMany("Products")
+                        .HasForeignKey("FavoriteId");
 
                     b.OwnsMany("FiestaMarketBackend.Core.Entities.Image", "Images", b1 =>
                         {
@@ -443,6 +425,9 @@ namespace FiestaMarketBackend.Infrastructure.Migrations
                             b1.Property<string>("Games")
                                 .HasColumnType("text");
 
+                            b1.Property<Guid>("Id")
+                                .HasColumnType("uuid");
+
                             b1.Property<string>("Material")
                                 .HasColumnType("text");
 
@@ -462,8 +447,7 @@ namespace FiestaMarketBackend.Infrastructure.Migrations
 
                     b.Navigation("Category");
 
-                    b.Navigation("Description")
-                        .IsRequired();
+                    b.Navigation("Description");
 
                     b.Navigation("Images");
                 });
@@ -520,7 +504,14 @@ namespace FiestaMarketBackend.Infrastructure.Migrations
 
             modelBuilder.Entity("FiestaMarketBackend.Core.Entities.Category", b =>
                 {
+                    b.Navigation("Products");
+
                     b.Navigation("SubCategories");
+                });
+
+            modelBuilder.Entity("FiestaMarketBackend.Core.Entities.Favorite", b =>
+                {
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("FiestaMarketBackend.Core.Entities.User", b =>

@@ -83,21 +83,10 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
 
         public async Task<Product> UpdateAsync(Product updatedProduct)
         {
-            await _dbContext.Products
-                .Where(p => p.Id == updatedProduct.Id)
-                .ExecuteUpdateAsync(update => update
-                    .SetProperty(p => p.Name, updatedProduct.Name)
-                    .SetProperty(p => p.Price, updatedProduct.Price)
-                    .SetProperty(p => p.Recommended, updatedProduct.Recommended)
-                    .SetProperty(p => p.Relevant, updatedProduct.Relevant)
-                    .SetProperty(p => p.FullName, updatedProduct.FullName)
-                    .SetProperty(p => p.Category, updatedProduct.Category)
-                    .SetProperty(p => p.Description.Text, updatedProduct.Description.Text)
-                    .SetProperty(p => p.Description.Games, updatedProduct.Description.Games)
-                    .SetProperty(p => p.Description.Material, updatedProduct.Description.Material)
-                    .SetProperty(p => p.Description.Size, updatedProduct.Description.Size));
+            var product = await _dbContext.Products.FirstOrDefaultAsync(p => p.Id == updatedProduct.Id);
 
-            var product = await _dbContext.Products.AsNoTracking().FirstOrDefaultAsync(p => p.Id == updatedProduct.Id);
+            _dbContext.Entry(product).CurrentValues.SetValues(updatedProduct);
+            await _dbContext.SaveChangesAsync();
 
             return product;
         }

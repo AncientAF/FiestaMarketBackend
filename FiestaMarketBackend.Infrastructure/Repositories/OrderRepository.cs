@@ -45,16 +45,10 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
 
         public async Task<Order> UpdateAsync(Order updatedOrder)
         {
-            await _dbContext.Orders
-                .Where(p => p.Id == updatedOrder.Id)
-                .ExecuteUpdateAsync(update => update
-                    .SetProperty(o => o.Address, updatedOrder.Address)
-                    .SetProperty(o => o.Items, updatedOrder.Items)
-                    .SetProperty(o => o.Status, updatedOrder.Status)
-                    .SetProperty(o => o.TotalPrice, updatedOrder.TotalPrice)
-                    .SetProperty(o => o.User, updatedOrder.User));
+            var order = await _dbContext.Orders.FirstOrDefaultAsync(p => p.Id == updatedOrder.Id);
 
-            var order = await _dbContext.Orders.AsNoTracking().FirstOrDefaultAsync(o => o.Id == updatedOrder.Id);
+            _dbContext.Entry(order).CurrentValues.SetValues(updatedOrder);
+            await _dbContext.SaveChangesAsync();
 
             return order;
         }

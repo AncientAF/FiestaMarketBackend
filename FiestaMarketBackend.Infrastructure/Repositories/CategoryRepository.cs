@@ -29,9 +29,8 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
         public async Task<List<Category>> GetWithSubCategoriesAsync()
         {
             return await _dbContext.Categories
-                .Include(c => c.ParentCategory)
-                .Include(c => c.SubCategories)
                 .Where(c => c.ParentCategory == null)
+                .Include(c => c.SubCategories)
                 .AsNoTracking()
                 .ToListAsync();
         }
@@ -54,15 +53,12 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
 
         public async Task<Category> UpdateAsync(Category updatedCategory)
         {
-            await _dbContext.Categories
-                .Where(p => p.Id == updatedCategory.Id)
-                .ExecuteUpdateAsync(update => update
-                    .SetProperty(p => p.Name, updatedCategory.Name)
-                    .SetProperty(p => p.ParentCategory, updatedCategory.ParentCategory));
+            var category = await _dbContext.Categories.FirstOrDefaultAsync(p => p.Id == updatedCategory.Id);
 
-            var category = await _dbContext.Categories.AsNoTracking().FirstOrDefaultAsync(c => c.Id == updatedCategory.Id);
+            _dbContext.Entry(category).CurrentValues.SetValues(updatedCategory);
+            await _dbContext.SaveChangesAsync();
+
             return category;
-
         }
 
         public async Task DeleteAsync(Guid id)

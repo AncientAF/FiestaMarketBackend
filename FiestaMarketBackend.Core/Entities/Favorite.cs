@@ -3,6 +3,6 @@
     public class Favorite
     {
         public Guid Id { get; set; }
-        public List<Product>? Products { get; set; }
+        public List<Product>? Products { get; set; } = new();
     }
 }

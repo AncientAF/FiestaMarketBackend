@@ -2,8 +2,9 @@
 
 namespace FiestaMarketBackend.Application.Product.Commands
 {
+    using FiestaMarketBackend.Application.Responses;
     using FiestaMarketBackend.Core.Entities;
-    public class UpdateProductCommand : IRequest
+    public class UpdateProductCommand : IRequest<ProductResponse>
     {
         public Guid Id { get; set; }
         public string? Name { get; set; }

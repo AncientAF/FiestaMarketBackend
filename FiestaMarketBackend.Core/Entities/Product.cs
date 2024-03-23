@@ -11,6 +11,7 @@
         public bool Relevant { get; set; }
         public bool Recommended { get; set; }
         public List<Image>? Images { get; set; }
-        public ProductDescription? Description { get; set; }
+        public ProductDescription Description { get; set; }
+        public List<Favorite>? Favorites { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using System;
 using FiestaMarketBackend.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FiestaMarketBackend.Infrastructure.Migrations
 {
     [DbContext(typeof(FiestaDbContext))]
-    partial class FiestaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240323192209_ChangedNavigationProdFavor")]
+    partial class ChangedNavigationProdFavor
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,15 +27,15 @@ namespace FiestaMarketBackend.Infrastructure.Migrations
 
             modelBuilder.Entity("FavoriteProduct", b =>
                 {
-                    b.Property<Guid>("FavoritesId")
-                        .HasColumnType("uuid");
-
                     b.Property<Guid>("ProductsId")
                         .HasColumnType("uuid");
 
-                    b.HasKey("FavoritesId", "ProductsId");
+                    b.Property<Guid>("favoritesId")
+                        .HasColumnType("uuid");
 
-                    b.HasIndex("ProductsId");
+                    b.HasKey("ProductsId", "favoritesId");
+
+                    b.HasIndex("favoritesId");
 
                     b.ToTable("FavoriteProduct");
                 });
@@ -228,15 +231,15 @@ namespace FiestaMarketBackend.Infrastructure.Migrations
 
             modelBuilder.Entity("FavoriteProduct", b =>
                 {
-                    b.HasOne("FiestaMarketBackend.Core.Entities.Favorite", null)
-                        .WithMany()
-                        .HasForeignKey("FavoritesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("FiestaMarketBackend.Core.Entities.Product", null)
                         .WithMany()
                         .HasForeignKey("ProductsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FiestaMarketBackend.Core.Entities.Favorite", null)
+                        .WithMany()
+                        .HasForeignKey("favoritesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

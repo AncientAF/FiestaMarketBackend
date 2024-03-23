@@ -45,14 +45,11 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
 
         public async Task<News> UpdateAsync(News updatedNews)
         {
-            await _dbContext.News
-                .Where(p => p.Id == updatedNews.Id)
-                .ExecuteUpdateAsync(update => update
-                    .SetProperty(n => n.Name, updatedNews.Name)
-                    .SetProperty(n => n.ShortDescription, updatedNews.ShortDescription)
-                    .SetProperty(n => n.DescriptionMarkDown, updatedNews.DescriptionMarkDown));
+            var news = await _dbContext.News.FirstOrDefaultAsync(p => p.Id == updatedNews.Id);
 
-            var news = await _dbContext.News.AsNoTracking().FirstOrDefaultAsync(n => n.Id ==  updatedNews.Id);
+            _dbContext.Entry(news).CurrentValues.SetValues(updatedNews);
+            await _dbContext.SaveChangesAsync();
+
             return news;
         }
 

@@ -16,6 +16,7 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
         {
             return await _dbContext.Users
                 .Include(u => u.Favorite)
+                .ThenInclude(f => f.Products)
                 .Include(u => u.Orders)
                 .Include(u => u.Cart)
                 .Include(u => u.Addresses)
@@ -27,10 +28,22 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
         {
             return await _dbContext.Users
                 .Include(u => u.Favorite)
+                .ThenInclude(f => f.Products)
                 .Include(u => u.Orders)
                 .Include(u => u.Cart)
                 .Include(u => u.Addresses)
                 .AsNoTracking()
+                .FirstOrDefaultAsync(u => u.Id == id);
+        }
+
+        private async Task<User?> GetByIdTrackingAsync(Guid id)
+        {
+            return await _dbContext.Users
+                .Include(u => u.Favorite)
+                .ThenInclude(f => f.Products)
+                .Include(u => u.Orders)
+                .Include(u => u.Cart)
+                .Include(u => u.Addresses)
                 .FirstOrDefaultAsync(u => u.Id == id);
         }
 
@@ -48,20 +61,10 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
 
         public async Task<User> UpdateAsync(User updatedUser)
         {
-            await _dbContext.Users
-                .Where(u => u.Id == updatedUser.Id)
-                .ExecuteUpdateAsync(update => update
-                    .SetProperty(u => u.Name, updatedUser.Name)
-                    .SetProperty(u => u.SurName, updatedUser.SurName)
-                    .SetProperty(u => u.Email, updatedUser.Email)
-                    .SetProperty(u => u.Addresses, updatedUser.Addresses)
-                    .SetProperty(u => u.Orders, updatedUser.Orders)
-                    .SetProperty(u => u.Cart, updatedUser.Cart)
-                    .SetProperty(u => u.Password, updatedUser.Password)
-                    .SetProperty(u => u.PhoneNumber, updatedUser.PhoneNumber)
-                    .SetProperty(u => u.Favorite, updatedUser.Favorite));
+            var user = await GetByIdTrackingAsync(updatedUser.Id);
 
-            var user = await _dbContext.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == updatedUser.Id);
+            _dbContext.Entry(user).CurrentValues.SetValues(updatedUser);
+            await _dbContext.SaveChangesAsync();
 
             return user;
         }
@@ -96,7 +99,9 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
 
         public async Task<Favorite> AddProductsToFavoriteAsync(Guid id, List<Product> products)
         {
-            var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == id);
+            var user = await GetByIdTrackingAsync(id);
+            if (user.Favorite == null)
+                user.Favorite = new Favorite();
             user.Favorite.Products.AddRange(products);
             await _dbContext.SaveChangesAsync();
 
@@ -105,14 +110,14 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
 
         public async Task DeleteProductsFromFavoriteAsync(Guid id, List<Guid> productsToRemove)
         {
-            var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == id);
+            var user = await GetByIdTrackingAsync(id);
             user.Favorite.Products.RemoveAll(p => productsToRemove.Contains(p.Id));
             await _dbContext.SaveChangesAsync();
         }
 
         public async Task<Cart> AddProductsToCartAsync(Guid id, List<CartItem> cartItems)
         {
-            var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == id);
+            var user = await GetByIdTrackingAsync(id);
             user.Cart.Items.AddRange(cartItems);
             await _dbContext.SaveChangesAsync();
 
@@ -121,14 +126,14 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
 
         public async Task DeleteProductsFromCartAsync(Guid id, List<Guid> productsToRemove)
         {
-            var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == id);
+            var user = await GetByIdTrackingAsync(id);
             user.Cart.Items.RemoveAll(ci => productsToRemove.Contains(ci.Product.Id));
             await _dbContext.SaveChangesAsync();
         }
 
         public async Task UpdateQtyInCartAsync(Guid id, List<CartItem> itemsToChange)
         {
-            var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == id);
+            var user = await GetByIdTrackingAsync(id);
             foreach (var item in itemsToChange)
             {
                 var itemInCart = user.Cart.Items.FirstOrDefault(i => i.Product.Id == item.Product.Id);
