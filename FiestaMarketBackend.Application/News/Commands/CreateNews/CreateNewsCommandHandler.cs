@@ -5,7 +5,7 @@ using MediatR;
 namespace FiestaMarketBackend.Application.News.Commands.CreateNews
 {
     using FiestaMarketBackend.Core.Entities;
-    public class CreateNewsCommandHandler : IRequestHandler<CreateNewsCommand>
+    public class CreateNewsCommandHandler : IRequestHandler<CreateNewsCommand, Guid>
     {
         private readonly NewsRepository _newsRepository;
 
@@ -14,11 +14,11 @@ namespace FiestaMarketBackend.Application.News.Commands.CreateNews
             _newsRepository = newsRepository;
         }
 
-        public async Task Handle(CreateNewsCommand request, CancellationToken cancellationToken)
+        public async Task<Guid> Handle(CreateNewsCommand request, CancellationToken cancellationToken)
         {
-            await _newsRepository.AddAsync(request.Adapt<News>());
+            var id = await _newsRepository.AddAsync(request.Adapt<News>());
 
-            return;
+            return id;
         }
     }
 }

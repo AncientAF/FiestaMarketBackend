@@ -70,17 +70,15 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
         }
         #endregion
 
-        public async Task AddAsync(Product product)
+        public async Task<Guid> AddAsync(Product product)
         {
-            //var productToAdd = new Product
-            //{
-            //    Id = product.Id,
-            //    Name = product.Name,
-            //    Description = product.Description
-            //};
+            var id = Guid.NewGuid();
+            product.Id = id;
 
             await _dbContext.AddAsync(product);
             await _dbContext.SaveChangesAsync();
+
+            return id;
         }
 
         public async Task UpdateAsync(Product updatedProduct)

@@ -39,9 +39,9 @@ namespace FiestaMarketBackend.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CreateNewsCommand command)
         {
-            await _mediator.Send(command);
+            var id = await _mediator.Send(command);
 
-            return Ok();
+            return CreatedAtAction(nameof(Create), id);
         }
 
         [HttpDelete]

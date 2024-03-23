@@ -5,7 +5,7 @@ using MediatR;
 
 namespace FiestaMarketBackend.Application.Product.Commands
 {
-    public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand>
+    public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, Guid>
     {
         private readonly ProductsRepository _productRepository;
         private readonly CategoryRepository _categoryRepository;
@@ -18,7 +18,7 @@ namespace FiestaMarketBackend.Application.Product.Commands
             _fileService = fileService;
         }
 
-        public async Task Handle(CreateProductCommand request, CancellationToken cancellationToken)
+        public async Task<Guid> Handle(CreateProductCommand request, CancellationToken cancellationToken)
         {
             var productToAdd = request.Adapt<Core.Entities.Product>();
 
@@ -28,9 +28,9 @@ namespace FiestaMarketBackend.Application.Product.Commands
             if (request.CategoryId != null)
                 productToAdd.Category = await _categoryRepository.GetByIdAsync(request.CategoryId);
 
-            await _productRepository.AddAsync(productToAdd);
+            var id = await _productRepository.AddAsync(productToAdd);
 
-            return;
+            return id;
         }
     }
 }

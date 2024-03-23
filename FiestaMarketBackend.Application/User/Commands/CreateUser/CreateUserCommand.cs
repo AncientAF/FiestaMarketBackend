@@ -3,7 +3,7 @@ using MediatR;
 
 namespace FiestaMarketBackend.Application.User.Commands
 {
-    public class CreateUserCommand : IRequest
+    public class CreateUserCommand : IRequest<Guid>
     {
         public string Name { get; set; }
         public string SurName { get; set; }

@@ -32,18 +32,15 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public async Task AddAsync(News news)
+        public async Task<Guid> AddAsync(News news)
         {
-            var newsToAdd = new News
-            {
-                Id = news.Id,
-                Name = news.Name,
-                ShortDescription = news.ShortDescription,
-                DescriptionMarkDown = news.DescriptionMarkDown
-            };
+            var id = Guid.NewGuid();
+            news.Id = id;
 
-            await _dbContext.News.AddAsync(newsToAdd);
+            await _dbContext.News.AddAsync(news);
             await _dbContext.SaveChangesAsync();
+
+            return id;
         }
 
         public async Task UpdateAsync(News updatedNews)

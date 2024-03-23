@@ -3,7 +3,7 @@ using MediatR;
 
 namespace FiestaMarketBackend.Application.Category
 {
-    public class CreateCategoryCommandHandler : IRequestHandler<CreateCategoryCommand>
+    public class CreateCategoryCommandHandler : IRequestHandler<CreateCategoryCommand, Guid>
     {
         private readonly CategoryRepository _categoryRepository;
 
@@ -12,11 +12,11 @@ namespace FiestaMarketBackend.Application.Category
             _categoryRepository = categoryRepository;
         }
 
-        public async Task Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
+        public async Task<Guid> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
         {
-            await _categoryRepository.AddAsync(request.Name, request.ParentCategoryID);
+            var id = await _categoryRepository.AddAsync(request.Name, request.ParentCategoryID);
 
-            return;
+            return id;
         }
     }
 }

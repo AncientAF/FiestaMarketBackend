@@ -19,7 +19,7 @@ namespace FiestaMarketBackend.API.Controllers
 
         [HttpPost]
         [Route("Filter")]
-        public async Task<ActionResult<ProductResponse>> GetByFilter([FromBody] GetProductsByFilterQuery query)
+        public async Task<ActionResult<List<ProductResponse>>> GetByFilter([FromBody] GetProductsByFilterQuery query)
         {
             var result = await _mediator.Send(query);
 
@@ -28,7 +28,7 @@ namespace FiestaMarketBackend.API.Controllers
 
         [HttpGet]
         [Route("ByPage")]
-        public async Task<ActionResult<ProductResponse>> GetByPage(int pageIndex, int pageSize)
+        public async Task<ActionResult<List<ProductResponse>>> GetByPage(int pageIndex, int pageSize)
         {
             var query = new GetProductsByPageQuery(pageIndex, pageSize);
             var result = await _mediator.Send(query);
@@ -37,7 +37,7 @@ namespace FiestaMarketBackend.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<ProductResponse>> Get([FromBody] GetProductsQuery query)
+        public async Task<ActionResult<List<ProductResponse>>> Get([FromBody] GetProductsQuery query)
         {
             var result = await _mediator.Send(query);
 
@@ -55,9 +55,9 @@ namespace FiestaMarketBackend.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateProductCommand command)
         {
-            await _mediator.Send(command);
+            var id = await _mediator.Send(command);
 
-            return Ok();
+            return CreatedAtAction(nameof(Create), id);
         }
 
         [HttpDelete]

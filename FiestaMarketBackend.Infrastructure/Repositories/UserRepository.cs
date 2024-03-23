@@ -35,10 +35,15 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
         }
 
 
-        public async Task AddAsync(User user)
+        public async Task<Guid> AddAsync(User user)
         {
+            var id = Guid.NewGuid();
+            user.Id = id;
+
             await _dbContext.Users.AddAsync(user);
             await _dbContext.SaveChangesAsync();
+
+            return id;
         }
 
         public async Task UpdateAsync(User updatedUser)

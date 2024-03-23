@@ -40,15 +40,15 @@ namespace FiestaMarketBackend.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateUser(CreateUserCommand command)
+        public async Task<IActionResult> Create(CreateUserCommand command)
         {
-            await _mediator.Send(command);
+            var id = await _mediator.Send(command);
 
-            return Ok();
+            return CreatedAtAction(nameof(Create), id);
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateUser(UpdateUserCommand command)
+        public async Task<IActionResult> Update(UpdateUserCommand command)
         {
             await _mediator.Send(command);
 

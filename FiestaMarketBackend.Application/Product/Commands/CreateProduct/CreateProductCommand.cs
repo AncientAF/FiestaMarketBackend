@@ -5,7 +5,7 @@ namespace FiestaMarketBackend.Application.Product.Commands
 {
     using FiestaMarketBackend.Core.Entities;
 
-    public class CreateProductCommand : IRequest
+    public class CreateProductCommand : IRequest<Guid>
     {
 
         public string Name { get; set; }

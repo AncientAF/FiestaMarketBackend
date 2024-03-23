@@ -37,9 +37,9 @@ namespace FiestaMarketBackend.API.Controllers
         public async Task<IActionResult> Create(string name, Guid? parentId)
         {
             var command = new CreateCategoryCommand { Name = name, ParentCategoryID = parentId };
-            await _mediator.Send(command);
+            var id = await _mediator.Send(command);
 
-            return Ok();
+            return CreatedAtAction(nameof(Create), id);
         }
 
         [HttpDelete]

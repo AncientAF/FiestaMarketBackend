@@ -36,16 +36,20 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public async Task AddAsync(string name, Guid? parentCategoryId)
+        public async Task<Guid> AddAsync(string name, Guid? parentCategoryId)
         {
+            var id = Guid.NewGuid();
             var categoryToAdd = new Category
             {
+                Id = id,
                 Name = name,
                 ParentCategory = await _dbContext.Categories.FirstOrDefaultAsync(c => c.Id == parentCategoryId) ?? null,
             };
 
             await _dbContext.Categories.AddAsync(categoryToAdd);
             await _dbContext.SaveChangesAsync();
+
+            return id;
         }
 
         public async Task UpdateAsync(Category updatedCategory)

@@ -11,7 +11,7 @@ namespace FiestaMarketBackend.Application.Order.Commands
     using FiestaMarketBackend.Core.Entities;
     using Mapster;
 
-    public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand>
+    public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Guid>
     {
         private readonly UserRepository _userRepository;
         private readonly OrderRepository _orderRepository;
@@ -22,16 +22,16 @@ namespace FiestaMarketBackend.Application.Order.Commands
             _userRepository = userRepository;
         }
 
-        public async Task Handle(CreateOrderCommand request, CancellationToken cancellationToken)
+        public async Task<Guid> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
         {
             var order = request.Adapt<Order>();
 
             var user = await _userRepository.GetByIdAsync(request.UserId);
             order.User = user;
 
-            await _orderRepository.AddAsync(order);
+            var id = await _orderRepository.AddAsync(order);
 
-            return;
+            return id;
         }
     }
 }

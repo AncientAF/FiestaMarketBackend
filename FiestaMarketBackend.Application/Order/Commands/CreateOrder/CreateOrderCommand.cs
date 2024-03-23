@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace FiestaMarketBackend.Application.Order.Commands
 {
     using FiestaMarketBackend.Core.Entities;
-    public class CreateOrderCommand : IRequest
+    public class CreateOrderCommand : IRequest<Guid>
     {
         public Guid UserId { get; set; }
         public OrderStatus Status { get; set; }

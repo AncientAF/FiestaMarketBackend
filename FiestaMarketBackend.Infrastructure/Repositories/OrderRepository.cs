@@ -32,10 +32,15 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
                 .FirstOrDefaultAsync(c => c.Id == id);
         }
 
-        public async Task AddAsync(Order order)
+        public async Task<Guid> AddAsync(Order order)
         {
+            var id = Guid.NewGuid();
+            order.Id = id;
+
             await _dbContext.Orders.AddAsync(order);
             await _dbContext.SaveChangesAsync();
+
+            return id;
         }
 
         public async Task UpdateAsync(Order updatedOrder)
