@@ -46,7 +46,7 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
             return id;
         }
 
-        public async Task UpdateAsync(User updatedUser)
+        public async Task<User> UpdateAsync(User updatedUser)
         {
             await _dbContext.Users
                 .Where(u => u.Id == updatedUser.Id)
@@ -61,7 +61,9 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
                     .SetProperty(u => u.PhoneNumber, updatedUser.PhoneNumber)
                     .SetProperty(u => u.Favorite, updatedUser.Favorite));
 
+            var user = await _dbContext.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == updatedUser.Id);
 
+            return user;
         }
 
         public async Task DeleteAsync(Guid id)
@@ -92,11 +94,13 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
             return user.Orders;
         }
 
-        public async Task AddProductsToFavoriteAsync(Guid id, List<Product> products)
+        public async Task<Favorite> AddProductsToFavoriteAsync(Guid id, List<Product> products)
         {
             var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == id);
             user.Favorite.Products.AddRange(products);
             await _dbContext.SaveChangesAsync();
+
+            return user.Favorite;
         }
 
         public async Task DeleteProductsFromFavoriteAsync(Guid id, List<Guid> productsToRemove)
@@ -106,11 +110,13 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task AddProductsToCartAsync(Guid id, List<CartItem> cartItems)
+        public async Task<Cart> AddProductsToCartAsync(Guid id, List<CartItem> cartItems)
         {
             var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == id);
             user.Cart.Items.AddRange(cartItems);
             await _dbContext.SaveChangesAsync();
+
+            return user.Cart;
         }
 
         public async Task DeleteProductsFromCartAsync(Guid id, List<Guid> productsToRemove)

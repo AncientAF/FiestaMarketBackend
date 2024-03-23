@@ -52,13 +52,17 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
             return id;
         }
 
-        public async Task UpdateAsync(Category updatedCategory)
+        public async Task<Category> UpdateAsync(Category updatedCategory)
         {
             await _dbContext.Categories
                 .Where(p => p.Id == updatedCategory.Id)
                 .ExecuteUpdateAsync(update => update
                     .SetProperty(p => p.Name, updatedCategory.Name)
                     .SetProperty(p => p.ParentCategory, updatedCategory.ParentCategory));
+
+            var category = await _dbContext.Categories.AsNoTracking().FirstOrDefaultAsync(c => c.Id == updatedCategory.Id);
+            return category;
+
         }
 
         public async Task DeleteAsync(Guid id)

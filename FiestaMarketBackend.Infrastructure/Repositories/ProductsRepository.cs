@@ -81,7 +81,7 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
             return id;
         }
 
-        public async Task UpdateAsync(Product updatedProduct)
+        public async Task<Product> UpdateAsync(Product updatedProduct)
         {
             await _dbContext.Products
                 .Where(p => p.Id == updatedProduct.Id)
@@ -96,6 +96,10 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
                     .SetProperty(p => p.Description.Games, updatedProduct.Description.Games)
                     .SetProperty(p => p.Description.Material, updatedProduct.Description.Material)
                     .SetProperty(p => p.Description.Size, updatedProduct.Description.Size));
+
+            var product = await _dbContext.Products.AsNoTracking().FirstOrDefaultAsync(p => p.Id == updatedProduct.Id);
+
+            return product;
         }
 
         public async Task DeleteAsync(Guid id)

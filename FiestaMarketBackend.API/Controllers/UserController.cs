@@ -50,9 +50,9 @@ namespace FiestaMarketBackend.API.Controllers
         [HttpPut]
         public async Task<IActionResult> Update(UpdateUserCommand command)
         {
-            await _mediator.Send(command);
+            var user = await _mediator.Send(command);
 
-            return Ok();
+            return Ok(user);
         }
 
 
@@ -81,9 +81,9 @@ namespace FiestaMarketBackend.API.Controllers
         [Route("favorite")]
         public async Task<IActionResult> AddToFavorite(AddToFavoriteCommand command)
         {
-            await _mediator.Send(command);
+            var favorite = await _mediator.Send(command);
 
-            return Ok();
+            return Ok(favorite);
         }
 
         [HttpDelete]
@@ -111,9 +111,9 @@ namespace FiestaMarketBackend.API.Controllers
         [Route("cart")]
         public async Task<IActionResult> AddToCart(AddToCartCommand command)
         {
-            await _mediator.Send(command);
+            var cart = await _mediator.Send(command);
 
-            return Ok();
+            return Ok(cart);
         }
 
         [HttpPatch]

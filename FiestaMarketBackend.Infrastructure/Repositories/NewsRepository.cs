@@ -43,7 +43,7 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
             return id;
         }
 
-        public async Task UpdateAsync(News updatedNews)
+        public async Task<News> UpdateAsync(News updatedNews)
         {
             await _dbContext.News
                 .Where(p => p.Id == updatedNews.Id)
@@ -51,6 +51,9 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
                     .SetProperty(n => n.Name, updatedNews.Name)
                     .SetProperty(n => n.ShortDescription, updatedNews.ShortDescription)
                     .SetProperty(n => n.DescriptionMarkDown, updatedNews.DescriptionMarkDown));
+
+            var news = await _dbContext.News.AsNoTracking().FirstOrDefaultAsync(n => n.Id ==  updatedNews.Id);
+            return news;
         }
 
         public async Task DeleteAsync(Guid id)

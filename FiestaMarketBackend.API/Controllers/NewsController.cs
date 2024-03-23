@@ -31,9 +31,9 @@ namespace FiestaMarketBackend.API.Controllers
         [HttpPut]
         public async Task<IActionResult> Update(UpdateNewsCommand command)
         {
-            await _mediator.Send(command);
+            var news = await _mediator.Send(command);
 
-            return Ok();
+            return Ok(news);
         }
 
         [HttpPost]

@@ -43,7 +43,7 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
             return id;
         }
 
-        public async Task UpdateAsync(Order updatedOrder)
+        public async Task<Order> UpdateAsync(Order updatedOrder)
         {
             await _dbContext.Orders
                 .Where(p => p.Id == updatedOrder.Id)
@@ -53,6 +53,10 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
                     .SetProperty(o => o.Status, updatedOrder.Status)
                     .SetProperty(o => o.TotalPrice, updatedOrder.TotalPrice)
                     .SetProperty(o => o.User, updatedOrder.User));
+
+            var order = await _dbContext.Orders.AsNoTracking().FirstOrDefaultAsync(o => o.Id == updatedOrder.Id);
+
+            return order;
         }
 
         public async Task DeleteAsync(Guid id)

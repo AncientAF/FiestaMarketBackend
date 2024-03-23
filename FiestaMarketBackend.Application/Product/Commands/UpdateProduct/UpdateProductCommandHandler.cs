@@ -1,10 +1,12 @@
-﻿using FiestaMarketBackend.Infrastructure.Repositories;
+﻿using FiestaMarketBackend.Application.Responses;
+using FiestaMarketBackend.Infrastructure.Repositories;
 using Mapster;
 using MediatR;
 
 namespace FiestaMarketBackend.Application.Product.Commands
 {
-    public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand>
+    using FiestaMarketBackend.Core.Entities;
+    public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand, ProductResponse>
     {
         private readonly ProductsRepository _productsRepository;
 
@@ -13,11 +15,11 @@ namespace FiestaMarketBackend.Application.Product.Commands
             _productsRepository = productsRepository;
         }
 
-        public async Task Handle(UpdateProductCommand request, CancellationToken cancellationToken)
+        public async Task<ProductResponse> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
         {
-            await _productsRepository.AddAsync(request.Adapt<Core.Entities.Product>());
+            var product = await _productsRepository.UpdateAsync(request.Adapt<Product>());
 
-            return;
+            return product.Adapt<ProductResponse>();
         }
     }
 }

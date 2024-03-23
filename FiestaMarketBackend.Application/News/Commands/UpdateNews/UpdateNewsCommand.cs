@@ -1,18 +1,10 @@
-﻿using MediatR;
+﻿using FiestaMarketBackend.Application.Responses;
+using MediatR;
 
 namespace FiestaMarketBackend.Application.News.Commands.UpdateNews
 {
-    public class UpdateNewsCommand : IRequest
+    public class UpdateNewsCommand : IRequest<NewsResponse>
     {
-        public UpdateNewsCommand(Guid id, string name, string shortDescription, string descriptionMarkDown, DateTime datePublished)
-        {
-            Id = id;
-            Name = name;
-            ShortDescription = shortDescription;
-            DescriptionMarkDown = descriptionMarkDown;
-            DatePublished = datePublished;
-        }
-
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string ShortDescription { get; set; }

@@ -2,8 +2,9 @@
 
 namespace FiestaMarketBackend.Application.User.Commands
 {
+    using FiestaMarketBackend.Application.Responses;
     using FiestaMarketBackend.Core.Entities;
-    public class UpdateUserCommand : IRequest
+    public class UpdateUserCommand : IRequest<UserResponse>
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

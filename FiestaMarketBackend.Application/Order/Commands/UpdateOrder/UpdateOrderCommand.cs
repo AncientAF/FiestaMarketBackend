@@ -1,4 +1,5 @@
-﻿using FiestaMarketBackend.Core.Entities;
+﻿using FiestaMarketBackend.Application.Responses;
+using FiestaMarketBackend.Core.Entities;
 using FiestaMarketBackend.Core.Enums;
 using MediatR;
 using System;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace FiestaMarketBackend.Application.Order.Commands
 {
-    public class UpdateOrderCommand : IRequest
+    public class UpdateOrderCommand : IRequest<OrderResponse>
     {
         public Guid Id { get; set; }
         public Guid UserId { get; set; }

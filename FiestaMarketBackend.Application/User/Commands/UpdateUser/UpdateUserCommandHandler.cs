@@ -4,8 +4,9 @@ using MediatR;
 
 namespace FiestaMarketBackend.Application.User.Commands
 {
+    using FiestaMarketBackend.Application.Responses;
     using FiestaMarketBackend.Core.Entities;
-    internal class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand>
+    internal class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, UserResponse>
     {
         private readonly UserRepository _userRepository;
 
@@ -14,11 +15,11 @@ namespace FiestaMarketBackend.Application.User.Commands
             _userRepository = userRepository;
         }
 
-        public async Task Handle(UpdateUserCommand request, CancellationToken cancellationToken)
+        public async Task<UserResponse> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
         {
-            await _userRepository.UpdateAsync(request.Adapt<User>());
+            var user = await _userRepository.UpdateAsync(request.Adapt<User>());
 
-            return;
+            return user.Adapt<UserResponse>();
         }
     }
 }
