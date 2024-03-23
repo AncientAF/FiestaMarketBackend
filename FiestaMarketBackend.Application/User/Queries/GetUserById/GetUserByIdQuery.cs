@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace FiestaMarketBackend.Application.User.Queries
 {
-    public class GetByIdQuery : IRequest<UserResponse>
+    public class GetUserByIdQuery : IRequest<UserResponse>
     {
         public Guid Id { get; set; }
     }

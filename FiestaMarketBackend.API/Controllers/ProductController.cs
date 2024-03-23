@@ -18,8 +18,8 @@ namespace FiestaMarketBackend.API.Controllers
         }
 
         [HttpPost]
-        [Route("[action]")]
-        public async Task<ActionResult<ProductResponse>> GetByFilter(GetProductsByFilterQuery query)
+        [Route("Filter")]
+        public async Task<ActionResult<ProductResponse>> GetByFilter([FromBody] GetProductsByFilterQuery query)
         {
             var result = await _mediator.Send(query);
 
@@ -27,7 +27,7 @@ namespace FiestaMarketBackend.API.Controllers
         }
 
         [HttpGet]
-        [Route("[action]")]
+        [Route("ByPage")]
         public async Task<ActionResult<ProductResponse>> GetByPage(int pageIndex, int pageSize)
         {
             var query = new GetProductsByPageQuery(pageIndex, pageSize);
@@ -37,18 +37,15 @@ namespace FiestaMarketBackend.API.Controllers
         }
 
         [HttpGet]
-        [Route("[action]")]
-        public async Task<ActionResult<ProductResponse>> Get()
+        public async Task<ActionResult<ProductResponse>> Get([FromBody] GetProductsQuery query)
         {
-            var query = new GetProductsQuery();
             var result = await _mediator.Send(query);
 
             return Ok(result);
         }
 
         [HttpPut]
-        [Route("[action]")]
-        public async Task<IActionResult> Put(UpdateProductCommand command)
+        public async Task<IActionResult> Update([FromBody] UpdateProductCommand command)
         {
             await _mediator.Send(command);
 
@@ -56,8 +53,7 @@ namespace FiestaMarketBackend.API.Controllers
         }
 
         [HttpPost]
-        [Route("[action]")]
-        public async Task<IActionResult> Post(CreateProductCommand command)
+        public async Task<IActionResult> Create([FromBody] CreateProductCommand command)
         {
             await _mediator.Send(command);
 
@@ -65,7 +61,6 @@ namespace FiestaMarketBackend.API.Controllers
         }
 
         [HttpDelete]
-        [Route("[action]")]
         public async Task<IActionResult> Delete(Guid id)
         {
             var command = new DeleteProductCommand { Id = id };

@@ -17,7 +17,6 @@ namespace FiestaMarketBackend.API.Controllers
         }
 
         [HttpGet]
-        [Route("[action]")]
         public async Task<ActionResult<List<CategoryResponse>>> Get()
         {
             var query = new GetCategoryWithSubCategoriesQuery();
@@ -27,8 +26,7 @@ namespace FiestaMarketBackend.API.Controllers
         }
 
         [HttpPut]
-        [Route("[action]")]
-        public async Task<IActionResult> Put(UpdateCategoryCommand command)
+        public async Task<IActionResult> Update(UpdateCategoryCommand command)
         {
             await _mediator.Send(command);
 
@@ -36,8 +34,7 @@ namespace FiestaMarketBackend.API.Controllers
         }
 
         [HttpPost]
-        [Route("[action]")]
-        public async Task<IActionResult> Post(string name, Guid? parentId)
+        public async Task<IActionResult> Create(string name, Guid? parentId)
         {
             var command = new CreateCategoryCommand { Name = name, ParentCategoryID = parentId };
             await _mediator.Send(command);
@@ -46,7 +43,7 @@ namespace FiestaMarketBackend.API.Controllers
         }
 
         [HttpDelete]
-        [Route("[action]")]
+        [Route("{id:guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
             var command = new DeleteCategoryCommand { Id = id };

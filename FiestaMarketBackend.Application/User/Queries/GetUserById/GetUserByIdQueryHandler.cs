@@ -10,16 +10,16 @@ using System.Threading.Tasks;
 
 namespace FiestaMarketBackend.Application.User.Queries
 {
-    public class GetByIdQueryHandler : IRequestHandler<GetByIdQuery, UserResponse>
+    public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, UserResponse>
     {
         private readonly UserRepository _userRepository;
 
-        public GetByIdQueryHandler(UserRepository userRepository)
+        public GetUserByIdQueryHandler(UserRepository userRepository)
         {
             _userRepository = userRepository;
         }
 
-        public async Task<UserResponse> Handle(GetByIdQuery request, CancellationToken cancellationToken)
+        public async Task<UserResponse> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
         {
             var result = await _userRepository.GetByIdAsync(request.Id);
 

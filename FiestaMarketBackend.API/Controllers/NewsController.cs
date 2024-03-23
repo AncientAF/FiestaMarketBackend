@@ -20,7 +20,6 @@ namespace FiestaMarketBackend.API.Controllers
         }
 
         [HttpGet]
-        [Route("[action]")]
         public async Task<ActionResult<NewsResponse>> Get(int pageIndex, int pageSize)
         {
             var query = new GetNewsByPageQuery(pageIndex, pageSize);
@@ -30,8 +29,7 @@ namespace FiestaMarketBackend.API.Controllers
         }
 
         [HttpPut]
-        [Route("[action]")]
-        public async Task<IActionResult> Put(UpdateNewsCommand command)
+        public async Task<IActionResult> Update(UpdateNewsCommand command)
         {
             await _mediator.Send(command);
 
@@ -39,8 +37,7 @@ namespace FiestaMarketBackend.API.Controllers
         }
 
         [HttpPost]
-        [Route("[action]")]
-        public async Task<IActionResult> Post(CreateNewsCommand command)
+        public async Task<IActionResult> Create(CreateNewsCommand command)
         {
             await _mediator.Send(command);
 
@@ -48,7 +45,7 @@ namespace FiestaMarketBackend.API.Controllers
         }
 
         [HttpDelete]
-        [Route("[action]")]
+        [Route("{id:guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
             var command = new DeleteNewsCommand { Id = id };

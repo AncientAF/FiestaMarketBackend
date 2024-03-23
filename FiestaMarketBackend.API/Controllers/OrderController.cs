@@ -20,7 +20,7 @@ namespace FiestaMarketBackend.API.Controllers
         }
 
         [HttpGet]
-        [Route("[action]")]
+        [Route("{id:guid}")]
         public async Task<IActionResult> GetById(Guid id)
         {
             var query = new GetOrderByIdQuery { Id = id };
@@ -29,9 +29,8 @@ namespace FiestaMarketBackend.API.Controllers
             return Ok(result);
         }
 
-        [HttpPost]
-        [Route("[action]")]
-        public async Task<IActionResult> Get(GetOrdersQuery query)
+        [HttpGet]
+        public async Task<IActionResult> Get([FromBody] GetOrdersQuery query)
         {
             await _mediator.Send(query);
             var result = await _mediator.Send(query);
@@ -39,27 +38,26 @@ namespace FiestaMarketBackend.API.Controllers
             return Ok(result);
         }
 
-        [HttpPatch]
-        [Route("[action]")]
-        public async Task<IActionResult> Update(UpdateOrderCommand command)
+        [HttpPut]
+        public async Task<IActionResult> Update([FromBody] UpdateOrderCommand command)
         {
             await _mediator.Send(command);
 
             return Ok();
         }
 
-        [HttpPatch]
-        [Route("[action]")]
-        public async Task<IActionResult> Delete(DeleteOrderCommand command)
+        [HttpDelete]
+        [Route("{id:guid}")]
+        public async Task<IActionResult> Delete(Guid id)
         {
+            var command = new DeleteOrderCommand { Id = id };
             await _mediator.Send(command);
 
             return Ok();
         }
 
-        [HttpPatch]
-        [Route("[action]")]
-        public async Task<IActionResult> DeleteFromFavorite(CreateOrderCommand command)
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] CreateOrderCommand command)
         {
             await _mediator.Send(command);
 
