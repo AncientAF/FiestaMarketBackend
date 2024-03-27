@@ -1,7 +1,7 @@
 ﻿using FiestaMarketBackend.Application.News.Commands.CreateNews;
 using FiestaMarketBackend.Application.News.Commands.DeleteNews;
 using FiestaMarketBackend.Application.News.Commands.UpdateNews;
-using FiestaMarketBackend.Application.News.Queries.GetNewsByPage;
+using FiestaMarketBackend.Application.News.Queries;
 using FiestaMarketBackend.Application.Responses;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -23,6 +23,16 @@ namespace FiestaMarketBackend.API.Controllers
         public async Task<ActionResult<NewsResponse>> GetByPage(int pageIndex, int pageSize)
         {
             var query = new GetNewsByPageQuery(pageIndex, pageSize);
+            var result = await _mediator.Send(query);
+
+            return Ok(result);
+        }
+
+        [HttpGet]
+        [Route("{id:guid}")]
+        public async Task<ActionResult<NewsResponse>> GetById(Guid id)
+        {
+            var query = new GetNewsByIdQuery { Id = id};
             var result = await _mediator.Send(query);
 
             return Ok(result);

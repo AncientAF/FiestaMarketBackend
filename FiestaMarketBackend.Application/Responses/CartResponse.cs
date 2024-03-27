@@ -1,9 +1,11 @@
-﻿namespace FiestaMarketBackend.Application.Responses
+﻿using FiestaMarketBackend.Core.Entities;
+
+namespace FiestaMarketBackend.Application.Responses
 {
     public record CartResponse
     {
-        public required ProductResponse Product { get; set; }
-        public required int Quantity { get; set; }
-        public required decimal Price { get; set; }
+        public Guid Id { get; set; }
+        public List<CartItemResponse>? Items { get; set; }
+        public decimal? TotalPrice { get; set; }
     }
 }

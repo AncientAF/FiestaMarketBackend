@@ -1,6 +1,6 @@
 ﻿namespace FiestaMarketBackend.Core.Entities
 {
-    public record Address
+    public class Address
     {
         public string? Details { get; set; }
         public string? ContactPerson { get; set; }

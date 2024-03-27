@@ -12,6 +12,8 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
             _dbContext = dbContext;
         }
 
+        #region Get
+
         public async Task<List<User>> GetAsync()
         {
             return await _dbContext.Users
@@ -77,31 +79,24 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
                 .ExecuteDeleteAsync();
         }
 
+        #endregion
+
+        #region Favorite
+
         public async Task<Favorite> GetFavoriteAsync(Guid id)
         {
             var user = await GetByIdAsync(id);
 
             return user.Favorite;
         }
-        public async Task<Cart> GetCartAsync(Guid id)
-        {
-            var user = await GetByIdAsync(id);
 
-            return user.Cart;
-        }
-
-        public async Task<List<Order>> GetOrdersAsync(Guid id)
-        {
-            var user = await GetByIdAsync(id);
-
-            return user.Orders;
-        }
-
-        public async Task<Favorite> AddProductsToFavoriteAsync(Guid id, List<Product> products)
+        public async Task<Favorite> AddProductsToFavoriteAsync(Guid id, List<Guid> productsId)
         {
             var user = await GetByIdTrackingAsync(id);
             if (user.Favorite == null)
                 user.Favorite = new Favorite();
+
+            var products = _dbContext.Products.AsNoTracking().Where(p => productsId.Contains(p.Id)).ToList();
             user.Favorite.Products.AddRange(products);
             await _dbContext.SaveChangesAsync();
 
@@ -115,6 +110,17 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
+        #endregion
+
+        #region Cart
+
+        public async Task<Cart> GetCartAsync(Guid id)
+        {
+            var user = await GetByIdAsync(id);
+
+            return user.Cart;
+        }
+
         public async Task<Cart> AddProductsToCartAsync(Guid id, List<CartItem> cartItems)
         {
             var user = await GetByIdTrackingAsync(id);
@@ -123,14 +129,6 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
 
             return user.Cart;
         }
-
-        public async Task DeleteProductsFromCartAsync(Guid id, List<Guid> productsToRemove)
-        {
-            var user = await GetByIdTrackingAsync(id);
-            user.Cart.Items.RemoveAll(ci => productsToRemove.Contains(ci.Product.Id));
-            await _dbContext.SaveChangesAsync();
-        }
-
         public async Task UpdateQtyInCartAsync(Guid id, List<CartItem> itemsToChange)
         {
             var user = await GetByIdTrackingAsync(id);
@@ -141,5 +139,24 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
             }
             await _dbContext.SaveChangesAsync();
         }
+
+        public async Task DeleteProductsFromCartAsync(Guid id, List<Guid> productsToRemove)
+        {
+            var user = await GetByIdTrackingAsync(id);
+            user.Cart.Items.RemoveAll(ci => productsToRemove.Contains(ci.Product.Id));
+            await _dbContext.SaveChangesAsync();
+        }
+
+
+        #endregion
+
+        public async Task<List<Order>> GetOrdersAsync(Guid id)
+        {
+            var user = await GetByIdAsync(id);
+
+            return user.Orders;
+        }
+
+
     }
 }

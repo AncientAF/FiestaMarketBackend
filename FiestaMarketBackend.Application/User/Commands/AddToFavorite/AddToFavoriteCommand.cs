@@ -7,6 +7,6 @@ namespace FiestaMarketBackend.Application.User.Commands
     public class AddToFavoriteCommand : IRequest<FavoriteResponse>
     {
         public Guid UserId { get; set; }
-        public List<Product> Products { get; set; }
+        public List<Guid> Products { get; set; }
     }
 }

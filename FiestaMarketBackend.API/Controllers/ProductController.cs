@@ -17,6 +17,8 @@ namespace FiestaMarketBackend.API.Controllers
             _mediator = mediator;
         }
 
+        #region Get
+
         [HttpPost]
         [Route("Filter")]
         public async Task<ActionResult<List<ProductResponse>>> GetByFilter([FromBody] GetProductsByFilterQuery query)
@@ -37,12 +39,24 @@ namespace FiestaMarketBackend.API.Controllers
         }
 
         [HttpGet]
+        [Route("{id:guid}")]
+        public async Task<ActionResult<ProductResponse>> GetById(Guid id)
+        {
+            var query = new GetProductByIdQuery { Id = id};
+            var result = await _mediator.Send(query);
+
+            return Ok(result);
+        }
+
+        [HttpGet]
         public async Task<ActionResult<List<ProductResponse>>> Get()
         {
             var result = await _mediator.Send(new GetProductsQuery());
 
             return Ok(result);
         }
+
+        #endregion
 
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] UpdateProductCommand command)

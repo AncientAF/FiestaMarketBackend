@@ -12,6 +12,11 @@ namespace FiestaMarketBackend.Infrastructure.Configurations
 
             builder.OwnsOne(o => o.Address);
 
+            //builder.OwnsMany(o => o.Items, owned =>
+            //                            {
+            //                                owned.HasOne<Product>().WithMany().HasForeignKey(o => o.ProductId);
+            //                            });
+
             builder.OwnsMany(o => o.Items);
 
             builder.HasOne(o => o.User).WithMany(u => u.Orders);

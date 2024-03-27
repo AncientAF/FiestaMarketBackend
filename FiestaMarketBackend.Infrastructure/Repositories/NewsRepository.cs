@@ -43,11 +43,12 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
             return id;
         }
 
-        public async Task<News> UpdateAsync(News updatedNews)
+        public async Task<News?> UpdateAsync(News updatedNews)
         {
             var news = await _dbContext.News.FirstOrDefaultAsync(p => p.Id == updatedNews.Id);
 
-            _dbContext.Entry(news).CurrentValues.SetValues(updatedNews);
+            _dbContext.Entry(news).CurrentValues
+                      .SetValues(updatedNews);
             await _dbContext.SaveChangesAsync();
 
             return news;

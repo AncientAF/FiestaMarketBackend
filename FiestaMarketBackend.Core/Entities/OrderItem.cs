@@ -1,9 +1,10 @@
 ﻿namespace FiestaMarketBackend.Core.Entities
 {
-    public record OrderItem
+    public class OrderItem
     {
-        public required Product Product { get; set; }
-        public required int Quantity { get; set; }
-        public required decimal Price { get; set; }
+        public Guid ProductId { get; set; }
+        public Product Product { get; set; }
+        public int Quantity { get; set; }
+        public decimal Price { get; set; }
     }
 }

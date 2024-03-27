@@ -1,7 +1,7 @@
 ﻿using FiestaMarketBackend.Application.Responses;
 using MediatR;
 
-namespace FiestaMarketBackend.Application.News.Queries.GetNewsByPage
+namespace FiestaMarketBackend.Application.News.Queries
 {
     public class GetNewsByPageQuery : IRequest<List<NewsResponse>>
     {

@@ -1,5 +1,4 @@
 ﻿using FiestaMarketBackend.Application.Responses;
-using FiestaMarketBackend.Core.Entities;
 using MediatR;
 
 namespace FiestaMarketBackend.Application.User.Commands
@@ -8,5 +7,14 @@ namespace FiestaMarketBackend.Application.User.Commands
     {
         public Guid UserId { get; set; }
         public List<CartItem> Items { get; set; }
+
+        public class CartItem
+        {
+            public Guid ProductId { get; set; }
+            public int Quantity { get; set; }
+            public decimal Price { get; set; }
+        }
     }
+
+
 }

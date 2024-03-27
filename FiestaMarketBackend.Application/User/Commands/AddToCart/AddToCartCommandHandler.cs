@@ -1,4 +1,5 @@
 ﻿using FiestaMarketBackend.Application.Responses;
+using FiestaMarketBackend.Core.Entities;
 using FiestaMarketBackend.Infrastructure.Repositories;
 using Mapster;
 using MediatR;
@@ -16,7 +17,7 @@ namespace FiestaMarketBackend.Application.User.Commands
 
         public async Task<CartResponse> Handle(AddToCartCommand request, CancellationToken cancellationToken)
         {
-            var cart = await _userRepository.AddProductsToCartAsync(request.UserId, request.Items);
+            var cart = await _userRepository.AddProductsToCartAsync(request.UserId, request.Items.Adapt<List<CartItem>>());
 
             return cart.Adapt<CartResponse>();
         }

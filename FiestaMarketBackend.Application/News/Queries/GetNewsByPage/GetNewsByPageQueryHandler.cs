@@ -3,7 +3,7 @@ using FiestaMarketBackend.Infrastructure.Repositories;
 using Mapster;
 using MediatR;
 
-namespace FiestaMarketBackend.Application.News.Queries.GetNewsByPage
+namespace FiestaMarketBackend.Application.News.Queries
 {
     public class GetNewsByPageQueryHandler : IRequestHandler<GetNewsByPageQuery, List<NewsResponse>>
     {

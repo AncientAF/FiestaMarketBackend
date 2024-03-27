@@ -17,8 +17,6 @@ namespace FiestaMarketBackend.API.Controllers
             _mediator = mediator;
         }
 
-
-
         [HttpGet]
         public async Task<ActionResult<List<UserResponse>>> GetAllUsers()
         {
@@ -66,6 +64,7 @@ namespace FiestaMarketBackend.API.Controllers
         }
 
         #region Favorite
+
         [HttpGet]
         [Route("favorite{id:guid}")]
         public async Task<ActionResult<FavoriteResponse>> GetFavorites(Guid id)
@@ -93,9 +92,11 @@ namespace FiestaMarketBackend.API.Controllers
 
             return Ok();
         }
+
         #endregion
 
         #region Cart
+
         [HttpGet]
         [Route("cart{id:guid}")]
         public async Task<ActionResult<CartResponse>> GetCart(Guid id)
@@ -132,6 +133,7 @@ namespace FiestaMarketBackend.API.Controllers
 
             return Ok();
         }
+
         #endregion
 
         [HttpGet]

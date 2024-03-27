@@ -12,10 +12,13 @@ namespace FiestaMarketBackend.Infrastructure.Configurations
 
             builder.HasMany(u => u.Orders).WithOne(o => o.User);
 
-            builder.HasOne(u => u.Cart);
-            builder.HasOne(u => u.Favorite);
+            //builder.HasOne(u => u.Cart).WithOne(c => c.User).HasForeignKey<Cart>(c => c.UserId);
+            //builder.HasOne(u => u.Favorite).WithOne(f => f.User).HasForeignKey<Favorite>(c => c.UserId);
 
-            builder.OwnsMany(u => u.Addresses);
+            builder.HasOne(u => u.Cart).WithOne(c => c.User);
+            builder.HasOne(u => u.Favorite).WithOne(f => f.User);
+
+            builder.OwnsMany(u => u.Addresses).WithOwner(a => a.User);
 
         }
     }
