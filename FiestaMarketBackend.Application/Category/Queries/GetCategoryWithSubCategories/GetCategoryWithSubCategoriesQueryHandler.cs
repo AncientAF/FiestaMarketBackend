@@ -5,8 +5,9 @@ using MediatR;
 
 namespace FiestaMarketBackend.Application.Category
 {
+    using CSharpFunctionalExtensions;
     using FiestaMarketBackend.Core.Entities;
-    public class GetCategoryWithSubCategoriesQueryHandler : IRequestHandler<GetCategoryWithSubCategoriesQuery, List<CategoryResponse>>
+    public class GetCategoryWithSubCategoriesQueryHandler : IRequestHandler<GetCategoryWithSubCategoriesQuery, Result<List<CategoryResponse>>>
     {
         
         private readonly CategoryRepository _categoryRepository;
@@ -16,12 +17,15 @@ namespace FiestaMarketBackend.Application.Category
             _categoryRepository = categoryRepository;
         }
 
-        public async Task<List<CategoryResponse>> Handle(GetCategoryWithSubCategoriesQuery request, CancellationToken cancellationToken)
+        public async Task<Result<List<CategoryResponse>>> Handle(GetCategoryWithSubCategoriesQuery request, CancellationToken cancellationToken)
         {
             var result = await _categoryRepository.GetWithSubCategoriesAsync();
+            if (result.IsFailure)
+                return Result.Failure<List<CategoryResponse>>(result.Error);
+            
 
             //TypeAdapterConfig<Category, CategoryResponse>.NewConfig().MaxDepth(5);
-            return result.Adapt<List<CategoryResponse>>();
+            return Result.Success(result.Value.Adapt<List<CategoryResponse>>());
         }
     }
 }

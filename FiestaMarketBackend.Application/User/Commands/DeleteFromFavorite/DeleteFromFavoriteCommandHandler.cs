@@ -1,9 +1,10 @@
-﻿using FiestaMarketBackend.Infrastructure.Repositories;
+﻿using CSharpFunctionalExtensions;
+using FiestaMarketBackend.Infrastructure.Repositories;
 using MediatR;
 
 namespace FiestaMarketBackend.Application.User.Commands
 {
-    public class DeleteFromFavoriteCommandHandler : IRequestHandler<DeleteFromFavoriteCommand>
+    public class DeleteFromFavoriteCommandHandler : IRequestHandler<DeleteFromFavoriteCommand, Result>
     {
         private readonly UserRepository _userRepository;
 
@@ -12,11 +13,14 @@ namespace FiestaMarketBackend.Application.User.Commands
             _userRepository = userRepository;
         }
 
-        public async Task Handle(DeleteFromFavoriteCommand request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(DeleteFromFavoriteCommand request, CancellationToken cancellationToken)
         {
-            await _userRepository.DeleteProductsFromFavoriteAsync(request.UserId, request.ItemsId);
+            var result = await _userRepository.DeleteProductsFromFavoriteAsync(request.UserId, request.ItemsId);
 
-            return;
+            if (result.IsFailure)
+                return Result.Failure(result.Error);
+
+            return Result.Success();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using FiestaMarketBackend.Core.Entities;
+﻿using CSharpFunctionalExtensions;
+using FiestaMarketBackend.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace FiestaMarketBackend.Infrastructure.Repositories
@@ -13,33 +14,48 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
         }
 
         #region Get методы
-        public async Task<List<Product>> GetAsync()
+        public async Task<Result<List<Product>>> GetAsync()
         {
-            return await _dbContext.Products
+            var result = await _dbContext.Products
                 .AsNoTracking()
                 .Include(p => p.Description)
                 .Include(p => p.Category)
                 .ToListAsync();
+
+            if (result.Count == 0)
+                return Result.Failure<List<Product>>("No products to return");
+
+            return Result.Success(result);
         }
 
-        public async Task<List<Product>> GetWithImagesAsync()
+        public async Task<Result<List<Product>>> GetWithImagesAsync()
         {
-            return await _dbContext.Products
+            var result = await _dbContext.Products
                 .AsNoTracking()
                 .Include(p => p.Description)
                 .Include(p => p.Images)
                 .ToListAsync();
+
+            if (result.Count == 0)
+                return Result.Failure<List<Product>>("No products to return");
+
+            return Result.Success(result);
         }
 
-        public async Task<Product?> GetByIdAsync(Guid id)
+        public async Task<Result<Product>> GetByIdAsync(Guid id)
         {
-            return await _dbContext.Products
+            var result = await _dbContext.Products
                 .AsNoTracking()
                 .Include(p => p.Description)
-                .FirstOrDefaultAsync(p => p.Id == id);
+                .SingleOrDefaultAsync(p => p.Id == id);
+
+            if (result is null)
+                return Result.Failure<Product>($"No products with id {id}");
+
+            return Result.Success(result);
         }
 
-        public async Task<List<Product>> GetByFilterAsync(string? name, Guid? categoryId)
+        public async Task<Result<List<Product>>> GetByFilterAsync(string? name, Guid? categoryId)
         {
             var query = _dbContext.Products
                 .Include(p => p.Category)
@@ -51,15 +67,19 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
                 query = query.Where(p => p.Name.Contains(name));
 
             if (categoryId != null)
-                query = query.Where(p => p.Category.Id == categoryId);
+                query = query.Where(p => p.Category != null && p.Category.Id == categoryId);
 
-            var res = await query.ToListAsync();
-            return res;
+            var result = await query.ToListAsync();
+
+            if (result.Count == 0)
+                return Result.Failure<List<Product>>("No products to return");
+
+            return Result.Success(result);
         }
 
-        public async Task<List<Product>> GetByPageAsync(int pageIndex, int pageSize)
+        public async Task<Result<List<Product>>> GetByPageAsync(int pageIndex, int pageSize)
         {
-            return await _dbContext.Products
+            var result = await _dbContext.Products
                 .Include(p => p.Images)
                 .Include(p => p.Description)
                 .Include(p => p.Category)
@@ -67,57 +87,105 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
                 .Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
+
+            if (result.Count == 0)
+                return Result.Failure<List<Product>>("No products to return");
+
+            return Result.Success(result);
         }
         #endregion
 
-        public async Task<Guid> AddAsync(Product product)
+        public async Task<Result<Guid>> AddAsync(Product product)
         {
-            var id = Guid.NewGuid();
-            product.Id = id;
+            try
+            {
+                var id = Guid.NewGuid();
+                product.Id = id;
 
-            await _dbContext.AddAsync(product);
-            await _dbContext.SaveChangesAsync();
+                await _dbContext.AddAsync(product);
+                await _dbContext.SaveChangesAsync();
 
-            return id;
+                return Result.Success(id);
+            }
+            catch (Exception)
+            {
+                return Result.Failure<Guid>("Error adding product");
+            }
         }
 
-        public async Task<Product> UpdateAsync(Product updatedProduct)
+        public async Task<Result<Product>> UpdateAsync(Product updatedProduct)
         {
-            var product = await _dbContext.Products.FirstOrDefaultAsync(p => p.Id == updatedProduct.Id);
+            var result = await _dbContext.Products.SingleOrDefaultAsync(p => p.Id == updatedProduct.Id);
 
-            _dbContext.Entry(product).CurrentValues.SetValues(updatedProduct);
-            await _dbContext.SaveChangesAsync();
+            if(result is null)
+                return Result.Failure<Product>($"No products to update with id {updatedProduct.Id}");
 
-            return product;
+            try
+            {
+                _dbContext.Entry(result).CurrentValues.SetValues(updatedProduct);
+                await _dbContext.SaveChangesAsync();
+
+                return Result.Success(result);
+            }
+            catch (Exception)
+            {
+                return Result.Failure<Product>("Error updating product");
+            }
         }
 
-        public async Task DeleteAsync(Guid id)
+        public async Task<Result> DeleteAsync(Guid id)
         {
             await _dbContext.Products
                 .Where(p => p.Id == id)
                 .ExecuteDeleteAsync();
+
+            return Result.Success();
         }
 
-        public async Task<List<Image>> GetImagesAsync(Guid id)
+        public async Task<Result<List<Image>>> GetImagesAsync(Guid id)
         {
-            return (await _dbContext.Products
+            var result = await _dbContext.Products
                 .Include(p => p.Images)
                 .AsNoTracking()
-                .FirstOrDefaultAsync(p => p.Id == id)).Images;
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            if(result is null)
+                return Result.Failure<List<Image>>($"No products with id {id}");
+
+            if(result.Images is null || result.Images.Count == 0)
+                return Result.Failure<List<Image>>($"No images associated with product with id {id}");
+
+            return Result.Success(result.Images);
         }
 
-        public async Task DeleteImagesAsync(Guid productId, List<Guid> images)
+        public async Task<Result> DeleteImagesAsync(Guid id, List<Guid> images)
         {
-            var product = await _dbContext.Products.Include(p => p.Images).FirstOrDefaultAsync(p => p.Id == productId);
-            product.Images.RemoveAll(i => images.Contains(i.Id));
+            var result = await _dbContext.Products.Include(p => p.Images).SingleOrDefaultAsync(p => p.Id == id);
+
+            if (result is null)
+                return Result.Failure($"No products with id {id}");
+
+            if (result.Images is null || result.Images.Count == 0)
+                return Result.Failure($"No images associated with product with id {id}");
+
+            result.Images.RemoveAll(i => images.Contains(i.Id));
+
             await _dbContext.SaveChangesAsync();
+
+            return Result.Success();
         }
 
-        public async Task AddImagesAsync(Guid productId, List<Image> images)
+        public async Task<Result> AddImagesAsync(Guid id, List<Image> images)
         {
-            var product = await _dbContext.Products.Include(p => p.Images).FirstOrDefaultAsync(p => p.Id == productId);
-            product.Images.AddRange(images);
+            var result = await _dbContext.Products.Include(p => p.Images).SingleOrDefaultAsync(p => p.Id == id);
+
+            if (result is null)
+                return Result.Failure($"No products with id {id}");
+
+            result.Images?.AddRange(images);
             await _dbContext.SaveChangesAsync();
+
+            return Result.Success();
         }
     }
 }

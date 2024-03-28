@@ -1,9 +1,10 @@
-﻿using FiestaMarketBackend.Infrastructure.Repositories;
+﻿using CSharpFunctionalExtensions;
+using FiestaMarketBackend.Infrastructure.Repositories;
 using MediatR;
 
 namespace FiestaMarketBackend.Application.Category
 {
-    public class DeleteCategoryCommandHandler : IRequestHandler<DeleteCategoryCommand>
+    public class DeleteCategoryCommandHandler : IRequestHandler<DeleteCategoryCommand, Result>
     {
         private readonly CategoryRepository _categoryRepository;
 
@@ -12,11 +13,14 @@ namespace FiestaMarketBackend.Application.Category
             _categoryRepository = categoryRepository;
         }
 
-        public async Task Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
         {
-            await _categoryRepository.DeleteAsync(request.Id);
+            var result = await _categoryRepository.DeleteAsync(request.Id);
 
-            return;
+            if (result.IsFailure)
+                return Result.Failure(result.Error);
+
+            return Result.Success();
         }
     }
 }

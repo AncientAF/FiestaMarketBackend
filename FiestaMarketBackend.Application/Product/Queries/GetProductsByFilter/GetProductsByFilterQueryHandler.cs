@@ -1,11 +1,12 @@
-﻿using FiestaMarketBackend.Application.Responses;
+﻿using CSharpFunctionalExtensions;
+using FiestaMarketBackend.Application.Responses;
 using FiestaMarketBackend.Infrastructure.Repositories;
 using Mapster;
 using MediatR;
 
 namespace FiestaMarketBackend.Application.Product.Queries
 {
-    public class GetProductsByFilterQueryHandler : IRequestHandler<GetProductsByFilterQuery, List<ProductResponse>>
+    public class GetProductsByFilterQueryHandler : IRequestHandler<GetProductsByFilterQuery, Result<List<ProductResponse>>>
     {
         private readonly ProductsRepository _productsRepository;
 
@@ -14,11 +15,14 @@ namespace FiestaMarketBackend.Application.Product.Queries
             _productsRepository = productsRepository;
         }
 
-        public async Task<List<ProductResponse>> Handle(GetProductsByFilterQuery request, CancellationToken cancellationToken)
+        public async Task<Result<List<ProductResponse>>> Handle(GetProductsByFilterQuery request, CancellationToken cancellationToken)
         {
             var result = await _productsRepository.GetByFilterAsync(request.Name, request.Category);
 
-            return result.Adapt<List<ProductResponse>>();
+            if (result.IsFailure)
+                return Result.Failure<List<ProductResponse>>(result.Error);
+
+            return Result.Success(result.Value.Adapt<List<ProductResponse>>());
         }
     }
 }

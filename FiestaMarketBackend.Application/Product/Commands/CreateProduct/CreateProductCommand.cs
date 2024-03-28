@@ -3,14 +3,15 @@ using Microsoft.AspNetCore.Http;
 
 namespace FiestaMarketBackend.Application.Product.Commands
 {
+    using CSharpFunctionalExtensions;
     using FiestaMarketBackend.Core.Entities;
 
-    public class CreateProductCommand : IRequest<Guid>
+    public class CreateProductCommand : IRequest<Result<Guid>>
     {
 
         public string Name { get; set; }
         public string FullName { get; set; }
-        public Guid CategoryId { get; set; }
+        public Guid? CategoryId { get; set; }
         public decimal Price { get; set; }
         public int MinQuantity { get; set; }
         public bool Relevant { get; set; }

@@ -18,7 +18,7 @@ namespace FiestaMarketBackend.Infrastructure.Configurations
             builder.HasOne(u => u.Cart).WithOne(c => c.User);
             builder.HasOne(u => u.Favorite).WithOne(f => f.User);
 
-            builder.OwnsMany(u => u.Addresses).WithOwner(a => a.User);
+            builder.OwnsMany(u => u.Addresses).WithOwner().HasForeignKey(a => a.UserId);
 
         }
     }

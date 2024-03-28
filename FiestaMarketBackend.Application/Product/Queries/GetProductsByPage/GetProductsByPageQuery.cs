@@ -1,9 +1,10 @@
-﻿using FiestaMarketBackend.Application.Responses;
+﻿using CSharpFunctionalExtensions;
+using FiestaMarketBackend.Application.Responses;
 using MediatR;
 
 namespace FiestaMarketBackend.Application.Product.Queries
 {
-    public class GetProductsByPageQuery : IRequest<List<ProductResponse>>
+    public class GetProductsByPageQuery : IRequest<Result<List<ProductResponse>>>
     {
         public GetProductsByPageQuery(int pageIndex, int pageSize)
         {

@@ -1,9 +1,10 @@
-﻿using FiestaMarketBackend.Infrastructure.Repositories;
+﻿using CSharpFunctionalExtensions;
+using FiestaMarketBackend.Infrastructure.Repositories;
 using MediatR;
 
 namespace FiestaMarketBackend.Application.User.Commands
 {
-    public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand>
+    public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, Result>
     {
         private readonly UserRepository _userRepository;
 
@@ -12,11 +13,14 @@ namespace FiestaMarketBackend.Application.User.Commands
             _userRepository = userRepository;
         }
 
-        public async Task Handle(DeleteUserCommand request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
         {
-            await _userRepository.DeleteAsync(request.Id);
+            var result = await _userRepository.DeleteAsync(request.Id);
 
-            return;
+            if (result.IsFailure)
+                return Result.Failure(result.Error);
+
+            return Result.Success();
         }
     }
 }

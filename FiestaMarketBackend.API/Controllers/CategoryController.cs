@@ -20,26 +20,35 @@ namespace FiestaMarketBackend.API.Controllers
         public async Task<ActionResult<List<CategoryResponse>>> Get()
         {
             var query = new GetCategoryWithSubCategoriesQuery();
-            var result = await _mediator.Send(query);
+            var categories = await _mediator.Send(query);
 
-            return Ok(result);
+            if (categories.IsFailure)
+                return BadRequest(categories.Error);
+
+            return Ok(categories);
         }
 
         [HttpPut]
         public async Task<IActionResult> Update(UpdateCategoryCommand command)
         {
-            var category = await _mediator.Send(command);
+            var result = await _mediator.Send(command);
 
-            return Ok(category);
+            if (result.IsFailure)
+                return BadRequest(result.Error);
+
+            return Ok(result.Value);
         }
 
         [HttpPost]
         public async Task<IActionResult> Create(string name, Guid? parentId)
         {
             var command = new CreateCategoryCommand { Name = name, ParentCategoryID = parentId };
-            var id = await _mediator.Send(command);
+            var result = await _mediator.Send(command);
 
-            return CreatedAtAction(nameof(Create), id);
+            if (result.IsFailure)
+                return BadRequest(result.Error);
+
+            return CreatedAtAction(nameof(Create), result.Value);
         }
 
         [HttpDelete]
@@ -47,7 +56,10 @@ namespace FiestaMarketBackend.API.Controllers
         public async Task<IActionResult> Delete(Guid id)
         {
             var command = new DeleteCategoryCommand { Id = id };
-            await _mediator.Send(command);
+            var result = await _mediator.Send(command);
+
+            if (result.IsFailure)
+                return BadRequest(result.Error);
 
             return Ok();
         }

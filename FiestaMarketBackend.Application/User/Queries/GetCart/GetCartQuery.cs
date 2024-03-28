@@ -1,4 +1,5 @@
-﻿using FiestaMarketBackend.Application.Responses;
+﻿using CSharpFunctionalExtensions;
+using FiestaMarketBackend.Application.Responses;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace FiestaMarketBackend.Application.User.Queries
 {
-    public class GetCartQuery : IRequest<CartResponse>
+    public class GetCartQuery : IRequest<Result<CartResponse>>
     {
         public Guid Id { get; set; }
     }

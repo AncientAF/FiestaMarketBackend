@@ -9,9 +9,10 @@ using System.Threading.Tasks;
 
 namespace FiestaMarketBackend.Application.Order.Commands
 {
+    using CSharpFunctionalExtensions;
     using FiestaMarketBackend.Application.Responses;
     using FiestaMarketBackend.Core.Entities;
-    public class UpdateOrderCommandHandler : IRequestHandler<UpdateOrderCommand, OrderResponse>
+    public class UpdateOrderCommandHandler : IRequestHandler<UpdateOrderCommand, Result<OrderResponse>>
     {
         private readonly UserRepository _userRepository;
         private readonly OrderRepository _orderRepository;
@@ -22,16 +23,23 @@ namespace FiestaMarketBackend.Application.Order.Commands
             _userRepository = userRepository;
         }
 
-        public async Task<OrderResponse> Handle(UpdateOrderCommand request, CancellationToken cancellationToken)
+        public async Task<Result<OrderResponse>> Handle(UpdateOrderCommand request, CancellationToken cancellationToken)
         {
             var order = request.Adapt<Order>();
 
             var user = await _userRepository.GetByIdAsync(request.UserId);
-            order.User = user;
 
-            var updatedOrder = await _orderRepository.UpdateAsync(order);
+            if (user.IsFailure)
+                return Result.Failure<OrderResponse>(user.Error);
 
-            return updatedOrder.Adapt<OrderResponse>();
+            order.User = user.Value;
+
+            var result = await _orderRepository.UpdateAsync(order);
+
+            if (result.IsFailure)
+                return Result.Failure<OrderResponse>(result.Error);
+
+            return Result.Success(result.Value.Adapt<OrderResponse>());
         }
     }
 }

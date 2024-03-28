@@ -1,4 +1,5 @@
-﻿using FiestaMarketBackend.Infrastructure.Repositories;
+﻿using CSharpFunctionalExtensions;
+using FiestaMarketBackend.Infrastructure.Repositories;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace FiestaMarketBackend.Application.Order.Commands
 {
-    public class DeleteOrderCommandHandler : IRequestHandler<DeleteOrderCommand>
+    public class DeleteOrderCommandHandler : IRequestHandler<DeleteOrderCommand, Result>
     {
         private readonly OrderRepository _orderRepository;
 
@@ -17,11 +18,14 @@ namespace FiestaMarketBackend.Application.Order.Commands
             _orderRepository = orderRepository;
         }
 
-        public async Task Handle(DeleteOrderCommand request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(DeleteOrderCommand request, CancellationToken cancellationToken)
         {
-            await _orderRepository.DeleteAsync(request.Id);
+            var result = await _orderRepository.DeleteAsync(request.Id);
 
-            return;
+            if (result.IsFailure)
+                return Result.Failure(result.Error);
+
+            return Result.Success();
         }
     }
 }

@@ -1,11 +1,12 @@
-﻿using FiestaMarketBackend.Application.Responses;
+﻿using CSharpFunctionalExtensions;
+using FiestaMarketBackend.Application.Responses;
 using FiestaMarketBackend.Infrastructure.Repositories;
 using Mapster;
 using MediatR;
 
 namespace FiestaMarketBackend.Application.News.Queries
 {
-    public class GetNewsByPageQueryHandler : IRequestHandler<GetNewsByPageQuery, List<NewsResponse>>
+    public class GetNewsByPageQueryHandler : IRequestHandler<GetNewsByPageQuery, Result<List<NewsResponse>>>
     {
         private readonly NewsRepository _newsRepository;
 
@@ -14,11 +15,14 @@ namespace FiestaMarketBackend.Application.News.Queries
             _newsRepository = newsRepository;
         }
 
-        public async Task<List<NewsResponse>> Handle(GetNewsByPageQuery request, CancellationToken cancellationToken)
+        public async Task<Result<List<NewsResponse>>> Handle(GetNewsByPageQuery request, CancellationToken cancellationToken)
         {
             var result = await _newsRepository.GetByPageAsync(request.PageIndex, request.PageSize);
 
-            return result.Adapt<List<NewsResponse>>();
+            if (result.IsFailure)
+                return Result.Failure<List<NewsResponse>>(result.Error);
+
+            return Result.Success(result.Value.Adapt<List<NewsResponse>>());
         }
     }
 }

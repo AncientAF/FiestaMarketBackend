@@ -1,4 +1,5 @@
-﻿using FiestaMarketBackend.Application.Responses;
+﻿using CSharpFunctionalExtensions;
+using FiestaMarketBackend.Application.Responses;
 using FiestaMarketBackend.Infrastructure.Repositories;
 using Mapster;
 using MediatR;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace FiestaMarketBackend.Application.Order.Queries
 {
-    public class GetOrderByIdQueryHandler : IRequestHandler<GetOrderByIdQuery, OrderResponse>
+    public class GetOrderByIdQueryHandler : IRequestHandler<GetOrderByIdQuery, Result<OrderResponse>>
     {
         private readonly OrderRepository _orderRepository;
 
@@ -19,11 +20,14 @@ namespace FiestaMarketBackend.Application.Order.Queries
             _orderRepository = orderRepository;
         }
 
-        public async Task<OrderResponse> Handle(GetOrderByIdQuery request, CancellationToken cancellationToken)
+        public async Task<Result<OrderResponse>> Handle(GetOrderByIdQuery request, CancellationToken cancellationToken)
         {
             var result = await _orderRepository.GetByIdAsync(request.Id);
 
-            return result.Adapt<OrderResponse>();
+            if (result.IsFailure)
+                return Result.Failure<OrderResponse>(result.Error);
+
+            return Result.Success(result.Value.Adapt<OrderResponse>());
         }
     }
 }

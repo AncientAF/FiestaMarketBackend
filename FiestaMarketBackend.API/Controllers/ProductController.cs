@@ -1,4 +1,5 @@
-﻿using FiestaMarketBackend.Application.Product.Commands;
+﻿using CSharpFunctionalExtensions;
+using FiestaMarketBackend.Application.Product.Commands;
 using FiestaMarketBackend.Application.Product.Queries;
 using FiestaMarketBackend.Application.Responses;
 using MediatR;
@@ -25,7 +26,10 @@ namespace FiestaMarketBackend.API.Controllers
         {
             var result = await _mediator.Send(query);
 
-            return Ok(result);
+            if (result.IsFailure)
+                return BadRequest(result.Error);
+
+            return Ok(result.Value);
         }
 
         [HttpGet]
@@ -35,7 +39,10 @@ namespace FiestaMarketBackend.API.Controllers
             var query = new GetProductsByPageQuery(pageIndex, pageSize);
             var result = await _mediator.Send(query);
 
-            return Ok(result);
+            if (result.IsFailure)
+                return BadRequest(result.Error);
+
+            return Ok(result.Value);
         }
 
         [HttpGet]
@@ -45,7 +52,10 @@ namespace FiestaMarketBackend.API.Controllers
             var query = new GetProductByIdQuery { Id = id};
             var result = await _mediator.Send(query);
 
-            return Ok(result);
+            if (result.IsFailure)
+                return BadRequest(result.Error);
+
+            return Ok(result.Value);
         }
 
         [HttpGet]
@@ -53,7 +63,10 @@ namespace FiestaMarketBackend.API.Controllers
         {
             var result = await _mediator.Send(new GetProductsQuery());
 
-            return Ok(result);
+            if (result.IsFailure)
+                return BadRequest(result.Error);
+
+            return Ok(result.Value);
         }
 
         #endregion
@@ -61,24 +74,33 @@ namespace FiestaMarketBackend.API.Controllers
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] UpdateProductCommand command)
         {
-            var product = await _mediator.Send(command);
+            var result = await _mediator.Send(command);
 
-            return Ok(product);
+            if (result.IsFailure)
+                return BadRequest(result.Error);
+
+            return Ok(result.Value);
         }
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateProductCommand command)
         {
-            var id = await _mediator.Send(command);
+            var result = await _mediator.Send(command);
 
-            return CreatedAtAction(nameof(Create), id);
+            if (result.IsFailure)
+                return BadRequest(result.Error);
+
+            return CreatedAtAction(nameof(Create), result.Value);
         }
 
         [HttpDelete]
         public async Task<IActionResult> Delete(Guid id)
         {
             var command = new DeleteProductCommand { Id = id };
-            await _mediator.Send(command);
+            var result = await _mediator.Send(command);
+
+            if (result.IsFailure)
+                return BadRequest(result.Error);
 
             return Ok();
         }

@@ -1,4 +1,5 @@
-﻿using FiestaMarketBackend.Application.Responses;
+﻿using CSharpFunctionalExtensions;
+using FiestaMarketBackend.Application.Responses;
 using FiestaMarketBackend.Application.User.Commands;
 using FiestaMarketBackend.Application.User.Queries;
 using MediatR;
@@ -22,7 +23,10 @@ namespace FiestaMarketBackend.API.Controllers
         {
             var result = await _mediator.Send(new GetAllUsersQuery());
 
-            return Ok(result);
+            if (result.IsFailure)
+                return BadRequest(result.Error);
+
+            return Ok(result.Value);
         }
 
         [HttpGet]
@@ -30,26 +34,34 @@ namespace FiestaMarketBackend.API.Controllers
         public async Task<ActionResult<UserResponse>> GetById(Guid id)
         {
             var query = new GetUserByIdQuery { Id = id };
-            await _mediator.Send(query);
             var result = await _mediator.Send(query);
 
-            return Ok(result);
+            if (result.IsFailure)
+                return BadRequest(result.Error);
+
+            return Ok(result.Value);
         }
 
         [HttpPost]
         public async Task<IActionResult> Create(CreateUserCommand command)
         {
-            var id = await _mediator.Send(command);
+            var result = await _mediator.Send(command);
 
-            return CreatedAtAction(nameof(Create), id);
+            if (result.IsFailure)
+                return BadRequest(result.Error);
+
+            return CreatedAtAction(nameof(Create), result.Value);
         }
 
         [HttpPut]
         public async Task<IActionResult> Update(UpdateUserCommand command)
         {
-            var user = await _mediator.Send(command);
+            var result = await _mediator.Send(command);
 
-            return Ok(user);
+            if (result.IsFailure)
+                return BadRequest(result.Error);
+
+            return Ok(result.Value);
         }
 
 
@@ -58,7 +70,10 @@ namespace FiestaMarketBackend.API.Controllers
         public async Task<IActionResult> Delete(Guid id)
         {
             var command = new DeleteUserCommand { Id = id};
-            await _mediator.Send(command);
+            var result = await _mediator.Send(command);
+
+            if (result.IsFailure)
+                return BadRequest(result.Error);
 
             return Ok();
         }
@@ -72,23 +87,32 @@ namespace FiestaMarketBackend.API.Controllers
             var query = new GetFavoritesQuery { Id = id };
             var result = await _mediator.Send(query);
 
-            return Ok(result);
+            if (result.IsFailure)
+                return BadRequest(result.Error);
+
+            return Ok(result.Value);
         }
 
         [HttpPost]
         [Route("favorite")]
         public async Task<IActionResult> AddToFavorite(AddToFavoriteCommand command)
         {
-            var favorite = await _mediator.Send(command);
+            var result = await _mediator.Send(command);
 
-            return Ok(favorite);
+            if (result.IsFailure)
+                return BadRequest(result.Error);
+
+            return Ok(result.Value);
         }
 
         [HttpDelete]
         [Route("favorite")]
         public async Task<IActionResult> DeleteFromFavorite(DeleteFromFavoriteCommand command)
         {
-            await _mediator.Send(command);
+            var result = await _mediator.Send(command);
+
+            if (result.IsFailure)
+                return BadRequest(result.Error);
 
             return Ok();
         }
@@ -104,23 +128,32 @@ namespace FiestaMarketBackend.API.Controllers
             var query = new GetCartQuery { Id = id };
             var result = await _mediator.Send(query);
 
-            return Ok(result);
+            if (result.IsFailure)
+                return BadRequest(result.Error);
+
+            return Ok(result.Value);
         }
 
         [HttpPost]
         [Route("cart")]
         public async Task<IActionResult> AddToCart(AddToCartCommand command)
         {
-            var cart = await _mediator.Send(command);
+            var result = await _mediator.Send(command);
 
-            return Ok(cart);
+            if (result.IsFailure)
+                return BadRequest(result.Error);
+
+            return Ok(result.Value);
         }
 
         [HttpPatch]
         [Route("cart")]
         public async Task<IActionResult> UpdateQtyInCart(UpdateQtyInCartCommand command)
         {
-            await _mediator.Send(command);
+            var result = await _mediator.Send(command);
+
+            if (result.IsFailure)
+                return BadRequest(result.Error);
 
             return Ok();
         }
@@ -129,7 +162,10 @@ namespace FiestaMarketBackend.API.Controllers
         [Route("cart")]
         public async Task<IActionResult> DeleteFromCart(DeleteFromCartCommand command)
         {
-            await _mediator.Send(command);
+            var result = await _mediator.Send(command);
+
+            if (result.IsFailure)
+                return BadRequest(result.Error);
 
             return Ok();
         }
@@ -141,10 +177,12 @@ namespace FiestaMarketBackend.API.Controllers
         public async Task<ActionResult<List<OrderResponse>>> GetOrders(Guid id)
         {
             var query = new GetUserOrdersQuery { Id = id };
-            await _mediator.Send(query);
             var result = await _mediator.Send(query);
 
-            return Ok(result);
+            if (result.IsFailure)
+                return BadRequest(result.Error);
+
+            return Ok(result.Value);
         }
 
     }

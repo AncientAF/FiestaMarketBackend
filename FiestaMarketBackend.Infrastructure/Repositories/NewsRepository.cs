@@ -1,4 +1,5 @@
-﻿using FiestaMarketBackend.Core.Entities;
+﻿using CSharpFunctionalExtensions;
+using FiestaMarketBackend.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace FiestaMarketBackend.Infrastructure.Repositories
@@ -12,54 +13,89 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<List<News>> GetAsync()
+        public async Task<Result<List<News>>> GetAsync()
         {
-            return await _dbContext.News.AsNoTracking().ToListAsync();
+            var result =  await _dbContext.News.AsNoTracking().ToListAsync();
+
+            if (result.Count == 0)
+                return Result.Failure<List<News>>("No news to return");
+
+            return Result.Success(result);
         }
 
 
-        public async Task<News?> GetByIdAsync(Guid id)
+        public async Task<Result<News>> GetByIdAsync(Guid id)
         {
-            return await _dbContext.News.AsNoTracking().FirstOrDefaultAsync(n => n.Id == id);
+            var result =  await _dbContext.News.AsNoTracking().SingleOrDefaultAsync(n => n.Id == id);
+
+            if(result is null)
+                return Result.Failure<News>($"No news with id {id}");
+
+            return Result.Success(result);
         }
 
-        public async Task<List<News>> GetByPageAsync(int page, int pageSize)
+        public async Task<Result<List<News>>> GetByPageAsync(int page, int pageSize)
         {
-            return await _dbContext.News
+            var result = await _dbContext.News
                 .AsNoTracking()
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
+
+            if (result.Count == 0)
+                return Result.Failure<List<News>>("No news to return");
+
+            return Result.Success(result);
         }
 
-        public async Task<Guid> AddAsync(News news)
+        public async Task<Result<Guid>> AddAsync(News news)
         {
-            var id = Guid.NewGuid();
-            news.Id = id;
+            try
+            {
+                var id = Guid.NewGuid();
+                news.Id = id;
 
-            await _dbContext.News.AddAsync(news);
-            await _dbContext.SaveChangesAsync();
+                await _dbContext.News.AddAsync(news);
+                await _dbContext.SaveChangesAsync();
 
-            return id;
+                return id;
+            }
+            catch (Exception)
+            {
+                return Result.Failure<Guid>("Error adding news");
+            }
+            
         }
 
-        public async Task<News?> UpdateAsync(News updatedNews)
+        public async Task<Result<News>> UpdateAsync(News updatedNews)
         {
-            var news = await _dbContext.News.FirstOrDefaultAsync(p => p.Id == updatedNews.Id);
+            var result = await _dbContext.News.SingleOrDefaultAsync(p => p.Id == updatedNews.Id);
 
-            _dbContext.Entry(news).CurrentValues
+            if (result is null)
+                return Result.Failure<News>($"No news found with id {updatedNews.Id}");
+
+            try
+            {
+                _dbContext.Entry(result).CurrentValues
                       .SetValues(updatedNews);
-            await _dbContext.SaveChangesAsync();
+                await _dbContext.SaveChangesAsync();
 
-            return news;
+                return Result.Success(result);
+            }
+            catch (Exception)
+            {
+                return Result.Failure<News>("Error updating news");
+            }
         }
 
-        public async Task DeleteAsync(Guid id)
+        public async Task<Result> DeleteAsync(Guid id)
         {
             await _dbContext.News
                 .AsNoTracking()
                 .Where(p => p.Id == id)
                 .ExecuteDeleteAsync();
+
+            return Result.Success();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using FiestaMarketBackend.Core.Entities;
+﻿using CSharpFunctionalExtensions;
+using FiestaMarketBackend.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace FiestaMarketBackend.Infrastructure.Repositories
@@ -12,52 +13,82 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<List<Order>> GetAsync()
+        public async Task<Result<List<Order>>> GetAsync()
         {
-            return await _dbContext.Orders
+            var result = await _dbContext.Orders
                 .Include(o => o.Address)
                 .Include(o => o.Items)
                 .Include(o => o.User)
                 .AsNoTracking()
                 .ToListAsync();
+
+            if (result.Count == 0)
+                return Result.Failure<List<Order>>("No orders to return");
+
+            return Result.Success(result);
+
         }
 
-        public async Task<Order?> GetByIdAsync(Guid id)
+        public async Task<Result<Order>> GetByIdAsync(Guid id)
         {
-            return await _dbContext.Orders
+            var result = await _dbContext.Orders
                 .Include(o => o.Address)
                 .Include(o => o.Items)
                 .Include(o => o.User)
                 .AsNoTracking()
-                .FirstOrDefaultAsync(c => c.Id == id);
+                .SingleOrDefaultAsync(c => c.Id == id);
+
+            if (result is null)
+                return Result.Failure<Order>($"Can't find order with id {id}");
+
+            return Result.Success(result);
         }
 
-        public async Task<Guid> AddAsync(Order order)
+        public async Task<Result<Guid>> AddAsync(Order order)
         {
-            var id = Guid.NewGuid();
-            order.Id = id;
+            try
+            {
+                var id = Guid.NewGuid();
+                order.Id = id;
 
-            await _dbContext.Orders.AddAsync(order);
-            await _dbContext.SaveChangesAsync();
+                await _dbContext.Orders.AddAsync(order);
+                await _dbContext.SaveChangesAsync();
 
-            return id;
+                return Result.Success(id);
+            }
+            catch (Exception)
+            {
+                return Result.Failure<Guid>("Error adding order");
+            }
         }
 
-        public async Task<Order> UpdateAsync(Order updatedOrder)
+        public async Task<Result<Order>> UpdateAsync(Order updatedOrder)
         {
-            var order = await _dbContext.Orders.FirstOrDefaultAsync(p => p.Id == updatedOrder.Id);
+            var result = await _dbContext.Orders.SingleOrDefaultAsync(p => p.Id == updatedOrder.Id);
 
-            _dbContext.Entry(order).CurrentValues.SetValues(updatedOrder);
-            await _dbContext.SaveChangesAsync();
+            if (result is null)
+                return Result.Failure<Order>($"Can't find order with id {updatedOrder.Id}");
 
-            return order;
+            try
+            {
+                _dbContext.Entry(result).CurrentValues.SetValues(updatedOrder);
+                await _dbContext.SaveChangesAsync();
+
+                return Result.Success(result);
+            }
+            catch (Exception)
+            {
+                return Result.Failure<Order>("Error updating order");
+            }
         }
 
-        public async Task DeleteAsync(Guid id)
+        public async Task<Result> DeleteAsync(Guid id)
         {
             await _dbContext.Orders
                 .Where(o => o.Id == id)
                 .ExecuteDeleteAsync();
+
+            return Result.Success();
         }
     }
 }

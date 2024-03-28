@@ -25,7 +25,10 @@ namespace FiestaMarketBackend.API.Controllers
             var query = new GetNewsByPageQuery(pageIndex, pageSize);
             var result = await _mediator.Send(query);
 
-            return Ok(result);
+            if (result.IsFailure)
+                return BadRequest(result.Error);
+
+            return Ok(result.Value);
         }
 
         [HttpGet]
@@ -35,23 +38,32 @@ namespace FiestaMarketBackend.API.Controllers
             var query = new GetNewsByIdQuery { Id = id};
             var result = await _mediator.Send(query);
 
-            return Ok(result);
+            if (result.IsFailure)
+                return BadRequest(result.Error);
+
+            return Ok(result.Value);
         }
 
         [HttpPut]
         public async Task<IActionResult> Update(UpdateNewsCommand command)
         {
-            var news = await _mediator.Send(command);
+            var result = await _mediator.Send(command);
 
-            return Ok(news);
+            if (result.IsFailure)
+                return BadRequest(result.Error);
+
+            return Ok(result.Value);
         }
 
         [HttpPost]
         public async Task<IActionResult> Create(CreateNewsCommand command)
         {
-            var id = await _mediator.Send(command);
+            var result = await _mediator.Send(command);
 
-            return CreatedAtAction(nameof(Create), id);
+            if (result.IsFailure)
+                return BadRequest(result.Error);
+
+            return CreatedAtAction(nameof(Create), result.Value);
         }
 
         [HttpDelete]
@@ -59,7 +71,10 @@ namespace FiestaMarketBackend.API.Controllers
         public async Task<IActionResult> Delete(Guid id)
         {
             var command = new DeleteNewsCommand { Id = id };
-            await _mediator.Send(command);
+            var result = await _mediator.Send(command);
+
+            if (result.IsFailure)
+                return BadRequest(result.Error);
 
             return Ok();
         }

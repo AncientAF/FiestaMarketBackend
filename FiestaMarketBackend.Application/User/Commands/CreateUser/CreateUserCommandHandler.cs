@@ -4,8 +4,9 @@ using MediatR;
 
 namespace FiestaMarketBackend.Application.User.Commands
 {
+    using CSharpFunctionalExtensions;
     using FiestaMarketBackend.Core.Entities;
-    public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Guid>
+    public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Result<Guid>>
     {
         private readonly UserRepository _userRepository;
 
@@ -14,11 +15,14 @@ namespace FiestaMarketBackend.Application.User.Commands
             _userRepository = userRepository;
         }
 
-        public async Task<Guid> Handle(CreateUserCommand request, CancellationToken cancellationToken)
+        public async Task<Result<Guid>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
-            var id = await _userRepository.AddAsync(request.Adapt<User>());
+            var result = await _userRepository.AddAsync(request.Adapt<User>());
 
-            return id;
+            if (result.IsFailure)
+                return Result.Failure<Guid>(result.Error);
+
+            return Result.Success(result.Value);
         }
     }
 }

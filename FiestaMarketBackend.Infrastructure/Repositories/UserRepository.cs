@@ -1,5 +1,7 @@
-﻿using FiestaMarketBackend.Core.Entities;
+﻿using CSharpFunctionalExtensions;
+using FiestaMarketBackend.Core.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata.Ecma335;
 
 namespace FiestaMarketBackend.Infrastructure.Repositories
 {
@@ -14,9 +16,9 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
 
         #region Get
 
-        public async Task<List<User>> GetAsync()
+        public async Task<Result<List<User>>> GetAsync()
         {
-            return await _dbContext.Users
+            var result = await _dbContext.Users
                 .Include(u => u.Favorite)
                 .ThenInclude(f => f.Products)
                 .Include(u => u.Orders)
@@ -24,137 +26,207 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
                 .Include(u => u.Addresses)
                 .AsNoTracking()
                 .ToListAsync();
+
+            if (result.Count == 0)
+                return Result.Failure<List<User>>("No users to return");
+
+            return Result.Success(result);
         }
 
-        public async Task<User?> GetByIdAsync(Guid id)
+        public async Task<Result<User>> GetByIdAsync(Guid id)
         {
-            return await _dbContext.Users
+            var result = await _dbContext.Users
                 .Include(u => u.Favorite)
                 .ThenInclude(f => f.Products)
                 .Include(u => u.Orders)
                 .Include(u => u.Cart)
                 .Include(u => u.Addresses)
                 .AsNoTracking()
-                .FirstOrDefaultAsync(u => u.Id == id);
+                .SingleOrDefaultAsync(u => u.Id == id);
+
+            if (result is null)
+                return Result.Failure<User>($"No users with id {id} was found");
+
+            return Result.Success(result);
         }
 
-        private async Task<User?> GetByIdTrackingAsync(Guid id)
+        private async Task<Result<User>> GetByIdTrackingAsync(Guid id)
         {
-            return await _dbContext.Users
+            var result = await _dbContext.Users
                 .Include(u => u.Favorite)
                 .ThenInclude(f => f.Products)
                 .Include(u => u.Orders)
                 .Include(u => u.Cart)
                 .Include(u => u.Addresses)
-                .FirstOrDefaultAsync(u => u.Id == id);
+                .SingleOrDefaultAsync(u => u.Id == id);
+
+            if (result is null)
+                return Result.Failure<User>($"No users with id {id} was found");
+
+            return Result.Success(result);
         }
 
 
-        public async Task<Guid> AddAsync(User user)
+        public async Task<Result<Guid>> AddAsync(User user)
         {
-            var id = Guid.NewGuid();
-            user.Id = id;
+            try
+            {
+                var id = Guid.NewGuid();
+                user.Id = id;
 
-            await _dbContext.Users.AddAsync(user);
-            await _dbContext.SaveChangesAsync();
+                await _dbContext.Users.AddAsync(user);
+                await _dbContext.SaveChangesAsync();
 
-            return id;
+                return Result.Success(id);
+            }
+            catch (Exception)
+            {
+                return Result.Failure<Guid>("Error adding user");
+            }
         }
 
-        public async Task<User> UpdateAsync(User updatedUser)
+        public async Task<Result<User>> UpdateAsync(User updatedUser)
         {
-            var user = await GetByIdTrackingAsync(updatedUser.Id);
+            var result = await GetByIdTrackingAsync(updatedUser.Id);
 
-            _dbContext.Entry(user).CurrentValues.SetValues(updatedUser);
-            await _dbContext.SaveChangesAsync();
+            if (result.IsFailure)
+                return Result.Failure<User>(result.Error);
 
-            return user;
+            try
+            {
+                _dbContext.Entry(result).CurrentValues.SetValues(updatedUser);
+                await _dbContext.SaveChangesAsync();
+
+                return Result.Success(result.Value);
+            }
+            catch (Exception)
+            {
+                return Result.Failure<User>("Error updating user");
+            }
         }
 
-        public async Task DeleteAsync(Guid id)
+        public async Task<Result> DeleteAsync(Guid id)
         {
             await _dbContext.Users
                 .AsNoTracking()
                 .Where(u => u.Id == id)
                 .ExecuteDeleteAsync();
+
+            return Result.Success();
         }
 
         #endregion
 
         #region Favorite
 
-        public async Task<Favorite> GetFavoriteAsync(Guid id)
+        public async Task<Result<Favorite>> GetFavoriteAsync(Guid id)
         {
-            var user = await GetByIdAsync(id);
+            var result = await GetByIdAsync(id);
 
-            return user.Favorite;
+            if (result.IsFailure)
+                return Result.Failure<Favorite>(result.Error);
+
+            if(result.Value.Favorite is null)
+                return Result.Failure<Favorite>("No favorite items to return");
+
+            return Result.Success(result.Value.Favorite);
         }
 
-        public async Task<Favorite> AddProductsToFavoriteAsync(Guid id, List<Guid> productsId)
+        public async Task<Result<Favorite>> AddProductsToFavoriteAsync(Guid id, List<Guid> productsId)
         {
-            var user = await GetByIdTrackingAsync(id);
-            if (user.Favorite == null)
-                user.Favorite = new Favorite();
+            var result = await GetByIdTrackingAsync(id);
+
+            if (result.IsFailure)
+                return Result.Failure<Favorite>(result.Error);
 
             var products = _dbContext.Products.AsNoTracking().Where(p => productsId.Contains(p.Id)).ToList();
-            user.Favorite.Products.AddRange(products);
+
+            if (products.Count == 0)
+                return Result.Failure<Favorite>("No products with associated id's was found");
+
+            result.Value.Favorite.Products.AddRange(products);
             await _dbContext.SaveChangesAsync();
 
-            return user.Favorite;
+            return Result.Success(result.Value.Favorite);
         }
 
-        public async Task DeleteProductsFromFavoriteAsync(Guid id, List<Guid> productsToRemove)
+        public async Task<Result> DeleteProductsFromFavoriteAsync(Guid id, List<Guid> productsToRemove)
         {
-            var user = await GetByIdTrackingAsync(id);
-            user.Favorite.Products.RemoveAll(p => productsToRemove.Contains(p.Id));
+            var result = await GetByIdTrackingAsync(id);
+
+            if (result.IsFailure)
+                return Result.Failure(result.Error);
+
+            result.Value.Favorite.Products.RemoveAll(p => productsToRemove.Contains(p.Id));
             await _dbContext.SaveChangesAsync();
+
+            return Result.Success();
         }
 
         #endregion
 
         #region Cart
 
-        public async Task<Cart> GetCartAsync(Guid id)
+        public async Task<Result<Cart>> GetCartAsync(Guid id)
         {
-            var user = await GetByIdAsync(id);
+            var result = await GetByIdAsync(id);
 
-            return user.Cart;
+            if (result.IsFailure)
+                return Result.Failure<Cart>(result.Error);
+
+            return Result.Success(result.Value.Cart);
         }
 
-        public async Task<Cart> AddProductsToCartAsync(Guid id, List<CartItem> cartItems)
+        public async Task<Result<Cart>> AddProductsToCartAsync(Guid id, List<CartItem> cartItems)
         {
             var user = await GetByIdTrackingAsync(id);
-            user.Cart.Items.AddRange(cartItems);
+
+            if (user.IsFailure)
+                return Result.Failure<Cart>(user.Error);
+
+            user.Value.Cart.Items.AddRange(cartItems);
             await _dbContext.SaveChangesAsync();
 
-            return user.Cart;
+            return Result.Success(user.Value.Cart);
         }
-        public async Task UpdateQtyInCartAsync(Guid id, List<CartItem> itemsToChange)
+        public async Task<Result> UpdateQtyInCartAsync(Guid id, List<CartItem> itemsToChange)
         {
-            var user = await GetByIdTrackingAsync(id);
+            var result = await GetByIdTrackingAsync(id);
+
+            if (result.IsFailure)
+                return Result.Failure<User>(result.Error);
+
             foreach (var item in itemsToChange)
             {
-                var itemInCart = user.Cart.Items.FirstOrDefault(i => i.Product.Id == item.Product.Id);
+                var itemInCart = result.Value.Cart.Items.FirstOrDefault(i => i.Product.Id == item.Product.Id);
                 itemInCart.Quantity = item.Quantity;
             }
             await _dbContext.SaveChangesAsync();
+
+            return Result.Success();
         }
 
-        public async Task DeleteProductsFromCartAsync(Guid id, List<Guid> productsToRemove)
+        public async Task<Result> DeleteProductsFromCartAsync(Guid id, List<Guid> productsToRemove)
         {
-            var user = await GetByIdTrackingAsync(id);
-            user.Cart.Items.RemoveAll(ci => productsToRemove.Contains(ci.Product.Id));
+            var result = await GetByIdTrackingAsync(id);
+
+            if (result.IsFailure)
+                return Result.Failure<User>(result.Error);
+
+            result.Value.Cart.Items.RemoveAll(ci => productsToRemove.Contains(ci.Product.Id));
             await _dbContext.SaveChangesAsync();
+
+            return Result.Success();
         }
 
 
         #endregion
 
-        public async Task<List<Order>> GetOrdersAsync(Guid id)
+        public async Task<Result<List<Order>>> GetOrdersAsync(Guid id)
         {
-            var user = await GetByIdAsync(id);
+            var result = await GetByIdAsync(id);
 
-            return user.Orders;
+            return Result.Success(result.Value.Orders);
         }
 
 

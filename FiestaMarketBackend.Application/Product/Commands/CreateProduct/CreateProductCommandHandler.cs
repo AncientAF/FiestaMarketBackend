@@ -1,11 +1,13 @@
-﻿using FiestaMarketBackend.Application.Services;
+﻿using CSharpFunctionalExtensions;
+using FiestaMarketBackend.Application.Services;
 using FiestaMarketBackend.Infrastructure.Repositories;
 using Mapster;
 using MediatR;
 
 namespace FiestaMarketBackend.Application.Product.Commands
 {
-    public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, Guid>
+    using FiestaMarketBackend.Core.Entities;
+    public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, Result<Guid>>
     {
         private readonly ProductsRepository _productRepository;
         private readonly CategoryRepository _categoryRepository;
@@ -18,19 +20,36 @@ namespace FiestaMarketBackend.Application.Product.Commands
             _fileService = fileService;
         }
 
-        public async Task<Guid> Handle(CreateProductCommand request, CancellationToken cancellationToken)
+        public async Task<Result<Guid>> Handle(CreateProductCommand request, CancellationToken cancellationToken)
         {
-            var productToAdd = request.Adapt<Core.Entities.Product>();
+            var productToAdd = request.Adapt<Product>();
 
             if (request.Images != null)
-                productToAdd.Images = await _fileService.AddImages(request.Images);
+            {
+                var resultTemp = await _fileService.AddImages(request.Images);
+
+                if (resultTemp.IsFailure)
+                    return Result.Failure<Guid>(resultTemp.Error);
+
+                productToAdd.Images = resultTemp.Value;
+            }
 
             if (request.CategoryId != null)
-                productToAdd.Category = await _categoryRepository.GetByIdAsync(request.CategoryId);
+            {
+                var resultTemp = await _categoryRepository.GetByIdAsync(request.CategoryId);
 
-            var id = await _productRepository.AddAsync(productToAdd);
+                if (resultTemp.IsFailure)
+                    return Result.Failure<Guid>(resultTemp.Error);
 
-            return id;
+                productToAdd.Category = resultTemp.Value;
+            }
+
+            var result = await _productRepository.AddAsync(productToAdd);
+
+            if (result.IsFailure)
+                return Result.Failure<Guid>(result.Error);
+
+            return Result.Success(result.Value);
         }
     }
 }

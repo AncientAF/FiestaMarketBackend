@@ -1,4 +1,5 @@
-﻿using FiestaMarketBackend.Application.Responses;
+﻿using CSharpFunctionalExtensions;
+using FiestaMarketBackend.Application.Responses;
 using FiestaMarketBackend.Infrastructure.Repositories;
 using Mapster;
 using MediatR;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace FiestaMarketBackend.Application.User.Queries
 {
-    public class GetFavoritesQueryHandler : IRequestHandler<GetFavoritesQuery, FavoriteResponse>
+    public class GetFavoritesQueryHandler : IRequestHandler<GetFavoritesQuery, Result<FavoriteResponse>>
     {
         private readonly UserRepository _userRepository;
 
@@ -19,11 +20,14 @@ namespace FiestaMarketBackend.Application.User.Queries
             _userRepository = userRepository;
         }
 
-        public async Task<FavoriteResponse> Handle(GetFavoritesQuery request, CancellationToken cancellationToken)
+        public async Task<Result<FavoriteResponse>> Handle(GetFavoritesQuery request, CancellationToken cancellationToken)
         {
             var result = await _userRepository.GetFavoriteAsync(request.Id);
 
-            return result.Adapt<FavoriteResponse>();
+            if (result.IsFailure)
+                return Result.Failure<FavoriteResponse>(result.Error);
+
+            return Result.Success(result.Value.Adapt<FavoriteResponse>());
         }
     }
 }
