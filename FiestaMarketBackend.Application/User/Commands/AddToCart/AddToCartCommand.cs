@@ -11,6 +11,4 @@ namespace FiestaMarketBackend.Application.User.Commands
         public List<CartItem> Items { get; set; }
 
     }
-
-
 }

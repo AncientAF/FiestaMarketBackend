@@ -1,12 +1,17 @@
+using FiestaMarketBackend.API.Middleware;
 using FiestaMarketBackend.Application.Product.Commands;
 using FiestaMarketBackend.Application.Services;
 using FiestaMarketBackend.Infrastructure;
 using FiestaMarketBackend.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
+using Serilog;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseSerilog((context, loggerConfig) => 
+    loggerConfig.ReadFrom.Configuration(context.Configuration));
 
 // Add services to the container.
 
@@ -49,6 +54,11 @@ if (app.Environment.IsDevelopment())
 
 
 app.UseHttpsRedirection();
+
+app.UseMiddleware<RequestLogContextMiddleware>();
+
+app.UseSerilogRequestLogging();
+
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(staticFilesPath),
