@@ -1,4 +1,5 @@
 using FiestaMarketBackend.API.Middleware;
+using FiestaMarketBackend.Application.Behaviors;
 using FiestaMarketBackend.Application.Product.Commands;
 using FiestaMarketBackend.Application.Services;
 using FiestaMarketBackend.Infrastructure;
@@ -33,6 +34,7 @@ builder.Services.AddScoped<NewsRepository>();
 builder.Services.AddScoped<CategoryRepository>();
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<OrderRepository>();
+builder.Services.AddTransient<GlobalExceptionHandlingMiddleware>();
 
 var requestPath = "/StaticFiles";
 var staticFilesPath = Path.Combine(builder.Environment.ContentRootPath, "StaticFiles");
@@ -41,6 +43,8 @@ builder.Services.AddScoped<FileService>(_ => new FileService(staticFilesPath, re
 builder.Services.AddMediatR(cfg =>
     {
         cfg.RegisterServicesFromAssembly(typeof(CreateProductCommandHandler).Assembly);
+
+        cfg.AddOpenBehavior(typeof(RequestLoggingPipelineBehavior<,>));
     });
 
 var app = builder.Build();
@@ -66,6 +70,8 @@ app.UseStaticFiles(new StaticFileOptions
 });
 
 app.UseAuthorization();
+
+app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 
 app.MapControllers();
 

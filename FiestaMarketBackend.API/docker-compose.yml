@@ -12,7 +12,7 @@ services:
         - "5432:5432"
     runtrackr-seq:
         image: datalust/seq:latest
-        container_name: runtrackr.seq
+        container_name: seq
         environment:
             - ACCEPT_EULA=Y
         ports:
