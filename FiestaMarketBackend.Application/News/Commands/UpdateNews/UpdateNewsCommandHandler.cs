@@ -6,8 +6,9 @@ namespace FiestaMarketBackend.Application.News.Commands.UpdateNews
 {
     using CSharpFunctionalExtensions;
     using FiestaMarketBackend.Application.Responses;
+    using FiestaMarketBackend.Core;
     using FiestaMarketBackend.Core.Entities;
-    public class UpdateNewsCommandHandler : IRequestHandler<UpdateNewsCommand, Result<NewsResponse>>
+    public class UpdateNewsCommandHandler : IRequestHandler<UpdateNewsCommand, Result<NewsResponse, Error>>
     {
         private readonly NewsRepository _newsRepository;
 
@@ -16,14 +17,14 @@ namespace FiestaMarketBackend.Application.News.Commands.UpdateNews
             _newsRepository = newsRepository;
         }
 
-        public async Task<Result<NewsResponse>> Handle(UpdateNewsCommand request, CancellationToken cancellationToken)
+        public async Task<Result<NewsResponse, Error>> Handle(UpdateNewsCommand request, CancellationToken cancellationToken)
         {
             var result = await _newsRepository.UpdateAsync(request.Adapt<News>());
 
             if (result.IsFailure)
-                return Result.Failure<NewsResponse>(result.Error);
+                return Result.Failure<NewsResponse, Error>(result.Error);
 
-            return Result.Success(result.Value.Adapt<NewsResponse>());
+            return Result.Success<NewsResponse, Error>(result.Value.Adapt<NewsResponse>());
         }
     }
 }

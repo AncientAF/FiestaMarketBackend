@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using FiestaMarketBackend.Application.Responses;
+using FiestaMarketBackend.Core;
 using FiestaMarketBackend.Infrastructure.Repositories;
 using Mapster;
 using MediatR;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace FiestaMarketBackend.Application.User.Queries
 {
-    public class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, Result<List<UserResponse>>>
+    public class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, Result<List<UserResponse>, Error>>
     {
         private readonly UserRepository _userRepository;
 
@@ -20,14 +21,14 @@ namespace FiestaMarketBackend.Application.User.Queries
             _userRepository = userRepository;
         }
 
-        public async Task<Result<List<UserResponse>>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
+        public async Task<Result<List<UserResponse>, Error>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
         {
             var result = await _userRepository.GetAsync();
 
             if (result.IsFailure)
-                return Result.Failure<List<UserResponse>>(result.Error);
+                return Result.Failure<List<UserResponse>, Error>(result.Error);
 
-            return Result.Success(result.Value.Adapt<List<UserResponse>>());
+            return Result.Success<List<UserResponse>, Error>(result.Value.Adapt<List<UserResponse>>());
         }
     }
 }

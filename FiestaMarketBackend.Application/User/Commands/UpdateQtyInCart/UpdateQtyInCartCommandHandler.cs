@@ -1,10 +1,13 @@
 ﻿using CSharpFunctionalExtensions;
+using FiestaMarketBackend.Application.Responses;
+using FiestaMarketBackend.Core;
 using FiestaMarketBackend.Infrastructure.Repositories;
+using Mapster;
 using MediatR;
 
 namespace FiestaMarketBackend.Application.User.Commands
 {
-    public class UpdateQtyInCartCommandHandler : IRequestHandler<UpdateQtyInCartCommand, Result>
+    public class UpdateQtyInCartCommandHandler : IRequestHandler<UpdateQtyInCartCommand, Result<CartResponse, Error>>
     {
         private readonly UserRepository _userRepository;
 
@@ -13,14 +16,14 @@ namespace FiestaMarketBackend.Application.User.Commands
             _userRepository = userRepository;
         }
 
-        public async Task<Result> Handle(UpdateQtyInCartCommand request, CancellationToken cancellationToken)
+        public async Task<Result<CartResponse, Error>> Handle(UpdateQtyInCartCommand request, CancellationToken cancellationToken)
         {
             var result = await _userRepository.UpdateQtyInCartAsync(request.UserId, request.Items);
 
             if (result.IsFailure)
-                return Result.Failure(result.Error);
+                return Result.Failure<CartResponse, Error>(result.Error);
 
-            return Result.Success();
+            return Result.Success<CartResponse, Error>(result.Value.Adapt<CartResponse>());
         }
     }
 }

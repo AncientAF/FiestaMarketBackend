@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using FiestaMarketBackend.Core;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace FiestaMarketBackend.Application.Order.Commands
 {
-    public class DeleteOrderCommand : IRequest<Result>
+    public class DeleteOrderCommand : IRequest<UnitResult<Error>>
     {
         public Guid Id { get; set; }
     }

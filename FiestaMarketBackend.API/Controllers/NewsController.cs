@@ -1,8 +1,10 @@
-﻿using FiestaMarketBackend.Application.News.Commands.CreateNews;
+﻿using FiestaMarketBackend.API.Extensions;
+using FiestaMarketBackend.Application.News.Commands.CreateNews;
 using FiestaMarketBackend.Application.News.Commands.DeleteNews;
 using FiestaMarketBackend.Application.News.Commands.UpdateNews;
 using FiestaMarketBackend.Application.News.Queries;
 using FiestaMarketBackend.Application.Responses;
+using FiestaMarketBackend.Core.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,63 +22,69 @@ namespace FiestaMarketBackend.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<NewsResponse>> GetByPage(int pageIndex, int pageSize)
+        [ProducesResponseType<List<NewsResponse>>(200)]
+        public async Task<IResult> GetByPage(int pageIndex, int pageSize)
         {
             var query = new GetNewsByPageQuery(pageIndex, pageSize);
             var result = await _mediator.Send(query);
 
             if (result.IsFailure)
-                return BadRequest(result.Error);
+                return result.ToProblemDetails();
 
-            return Ok(result.Value);
+            return Results.Ok(result.Value);
         }
 
         [HttpGet]
         [Route("{id:guid}")]
-        public async Task<ActionResult<NewsResponse>> GetById(Guid id)
+        [ProducesResponseType<NewsResponse>(200)]
+        public async Task<IResult> GetById(Guid id)
         {
             var query = new GetNewsByIdQuery { Id = id};
             var result = await _mediator.Send(query);
 
             if (result.IsFailure)
-                return BadRequest(result.Error);
+                return result.ToProblemDetails();
 
-            return Ok(result.Value);
+            return Results.Ok(result.Value);
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update(UpdateNewsCommand command)
+        [ProducesResponseType<NewsResponse>(200)]
+        public async Task<IResult> Update(UpdateNewsCommand command)
         {
             var result = await _mediator.Send(command);
 
             if (result.IsFailure)
-                return BadRequest(result.Error);
+                return result.ToProblemDetails();
 
-            return Ok(result.Value);
+            return Results.Ok(result.Value);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CreateNewsCommand command)
+        [ProducesResponseType<Guid>(201)]
+        public async Task<IResult> Create(CreateNewsCommand command)
         {
             var result = await _mediator.Send(command);
 
             if (result.IsFailure)
-                return BadRequest(result.Error);
+                return result.ToProblemDetails();
 
-            return CreatedAtAction(nameof(Create), result.Value);
+            var location = Url.Action("",nameof(NewsController));
+            return Results.Created(location ,result.Value);
         }
 
         [HttpDelete]
         [Route("{id:guid}")]
-        public async Task<IActionResult> Delete(Guid id)
+        [ProducesResponseType(204)]
+        public async Task<IResult> Delete(Guid id)
         {
             var command = new DeleteNewsCommand { Id = id };
             var result = await _mediator.Send(command);
 
             if (result.IsFailure)
-                return BadRequest(result.Error);
+                return result.ToProblemDetails();
 
-            return Ok();
+            return Results.Ok();
         }
     }
 }

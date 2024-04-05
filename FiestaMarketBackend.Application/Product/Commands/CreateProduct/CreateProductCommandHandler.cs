@@ -6,8 +6,9 @@ using MediatR;
 
 namespace FiestaMarketBackend.Application.Product.Commands
 {
+    using FiestaMarketBackend.Core;
     using FiestaMarketBackend.Core.Entities;
-    public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, Result<Guid>>
+    public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, Result<Guid, Error>>
     {
         private readonly ProductsRepository _productRepository;
         private readonly CategoryRepository _categoryRepository;
@@ -20,7 +21,7 @@ namespace FiestaMarketBackend.Application.Product.Commands
             _fileService = fileService;
         }
 
-        public async Task<Result<Guid>> Handle(CreateProductCommand request, CancellationToken cancellationToken)
+        public async Task<Result<Guid, Error>> Handle(CreateProductCommand request, CancellationToken cancellationToken)
         {
             var productToAdd = request.Adapt<Product>();
 
@@ -29,7 +30,7 @@ namespace FiestaMarketBackend.Application.Product.Commands
                 var resultTemp = await _fileService.AddImages(request.Images);
 
                 if (resultTemp.IsFailure)
-                    return Result.Failure<Guid>(resultTemp.Error);
+                    return Result.Failure<Guid, Error>(resultTemp.Error);
 
                 productToAdd.Images = resultTemp.Value;
             }
@@ -39,7 +40,7 @@ namespace FiestaMarketBackend.Application.Product.Commands
                 var resultTemp = await _categoryRepository.GetByIdAsync(request.CategoryId);
 
                 if (resultTemp.IsFailure)
-                    return Result.Failure<Guid>(resultTemp.Error);
+                    return Result.Failure<Guid, Error>(resultTemp.Error);
 
                 productToAdd.Category = resultTemp.Value;
             }
@@ -47,9 +48,9 @@ namespace FiestaMarketBackend.Application.Product.Commands
             var result = await _productRepository.AddAsync(productToAdd);
 
             if (result.IsFailure)
-                return Result.Failure<Guid>(result.Error);
+                return Result.Failure<Guid, Error>(result.Error);
 
-            return Result.Success(result.Value);
+            return Result.Success<Guid, Error>(result.Value);
         }
     }
 }

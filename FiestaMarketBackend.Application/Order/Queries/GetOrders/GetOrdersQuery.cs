@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using FiestaMarketBackend.Application.Responses;
+using FiestaMarketBackend.Core;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace FiestaMarketBackend.Application.Order.Queries
 {
-    public class GetOrdersQuery : IRequest<Result<List<OrderResponse>>>
+    public class GetOrdersQuery : IRequest<Result<List<OrderResponse>, Error>>
     {
 
     }

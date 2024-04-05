@@ -11,8 +11,9 @@ namespace FiestaMarketBackend.Application.Order.Commands
 {
     using CSharpFunctionalExtensions;
     using FiestaMarketBackend.Application.Responses;
+    using FiestaMarketBackend.Core;
     using FiestaMarketBackend.Core.Entities;
-    public class UpdateOrderCommandHandler : IRequestHandler<UpdateOrderCommand, Result<OrderResponse>>
+    public class UpdateOrderCommandHandler : IRequestHandler<UpdateOrderCommand, Result<OrderResponse, Error>>
     {
         private readonly UserRepository _userRepository;
         private readonly OrderRepository _orderRepository;
@@ -23,23 +24,23 @@ namespace FiestaMarketBackend.Application.Order.Commands
             _userRepository = userRepository;
         }
 
-        public async Task<Result<OrderResponse>> Handle(UpdateOrderCommand request, CancellationToken cancellationToken)
+        public async Task<Result<OrderResponse, Error>> Handle(UpdateOrderCommand request, CancellationToken cancellationToken)
         {
             var order = request.Adapt<Order>();
 
             var user = await _userRepository.GetByIdAsync(request.UserId);
 
             if (user.IsFailure)
-                return Result.Failure<OrderResponse>(user.Error);
+                return Result.Failure<OrderResponse, Error>(user.Error);
 
             order.User = user.Value;
 
             var result = await _orderRepository.UpdateAsync(order);
 
             if (result.IsFailure)
-                return Result.Failure<OrderResponse>(result.Error);
+                return Result.Failure<OrderResponse, Error>(result.Error);
 
-            return Result.Success(result.Value.Adapt<OrderResponse>());
+            return Result.Success<OrderResponse, Error>(result.Value.Adapt<OrderResponse>());
         }
     }
 }

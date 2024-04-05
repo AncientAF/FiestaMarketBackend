@@ -6,9 +6,10 @@ namespace FiestaMarketBackend.Application.Category
 {
     using CSharpFunctionalExtensions;
     using FiestaMarketBackend.Application.Responses;
+    using FiestaMarketBackend.Core;
     using FiestaMarketBackend.Core.Entities;
 
-    public class UpdateCategoryCommandHandler : IRequestHandler<UpdateCategoryCommand, Result<CategoryResponse>>
+    public class UpdateCategoryCommandHandler : IRequestHandler<UpdateCategoryCommand, Result<CategoryResponse, Error>>
     {
         private readonly CategoryRepository _categoryRepository;
 
@@ -17,14 +18,14 @@ namespace FiestaMarketBackend.Application.Category
             _categoryRepository = categoryRepository;
         }
 
-        public async Task<Result<CategoryResponse>> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
+        public async Task<Result<CategoryResponse, Error>> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
         {
             var category = await _categoryRepository.UpdateAsync(request.Adapt<Category>());
 
             if (category.IsFailure)
-                return Result.Failure<CategoryResponse>(category.Error);
+                return Result.Failure<CategoryResponse, Error>(category.Error);
 
-            return category.Adapt<CategoryResponse>();
+            return Result.Success<CategoryResponse, Error>(category.Adapt<CategoryResponse>());
         }
     }
 }

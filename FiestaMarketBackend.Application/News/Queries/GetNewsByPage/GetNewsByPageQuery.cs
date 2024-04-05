@@ -1,10 +1,11 @@
 ﻿using CSharpFunctionalExtensions;
 using FiestaMarketBackend.Application.Responses;
+using FiestaMarketBackend.Core;
 using MediatR;
 
 namespace FiestaMarketBackend.Application.News.Queries
 {
-    public class GetNewsByPageQuery : IRequest<Result<List<NewsResponse>>>
+    public class GetNewsByPageQuery : IRequest<Result<List<NewsResponse>, Error>>
     {
         public GetNewsByPageQuery(int pageIndex, int pageSize)
         {

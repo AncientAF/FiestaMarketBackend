@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using FiestaMarketBackend.Core;
 using FiestaMarketBackend.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,31 +14,31 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<Result<List<Category>>> GetAsync()
+        public async Task<Result<List<Category>, Error>> GetAsync()
         {
             var categories = await _dbContext.Categories
                 .AsNoTracking()
                 .ToListAsync();
 
             if(categories.Count == 0)
-                return Result.Failure<List<Category>>("No categories to return");
+                return Result.Failure<List<Category>, Error>(Error.NotFound("Category.NoCategoryToReturn", "No categories to return"));
 
-            return Result.Success(categories);
+            return Result.Success<List<Category>, Error>(categories);
         }
 
-        public async Task<Result<Category>> GetByIdAsync(Guid? id)
+        public async Task<Result<Category, Error>> GetByIdAsync(Guid? id)
         {
             var category = await _dbContext.Categories
                 .AsNoTracking()
                 .SingleOrDefaultAsync(c => c.Id == id);
 
             if(category is null)
-                return Result.Failure<Category>($"Can't find category with {id}");
+                return Result.Failure<Category, Error>(Error.NotFound("Category.NotFoundById", $"Can't find category with id {id}"));
 
-            return Result.Success(category);
+            return Result.Success<Category, Error>(category);
         }
 
-        public async Task<Result<List<Category>>> GetWithSubCategoriesAsync()
+        public async Task<Result<List<Category>, Error>> GetWithSubCategoriesAsync()
         {
             var categories = await _dbContext.Categories
                 .Where(c => c.ParentCategory == null)
@@ -46,12 +47,12 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
                 .ToListAsync();
 
             if (categories.Count == 0)
-                return Result.Failure<List<Category>>("No categories to return");
+                return Result.Failure<List<Category>, Error>(Error.NotFound("Category.NoCategoryToReturn", "No categories to return"));
 
-            return Result.Success(categories);
+            return Result.Success<List<Category>, Error>(categories);
         }
 
-        public async Task<Result<Guid>> AddAsync(string name, Guid? parentCategoryId)
+        public async Task<Result<Guid, Error>> AddAsync(string name, Guid? parentCategoryId)
         {
             try
             {
@@ -67,43 +68,43 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
                 await _dbContext.Categories.AddAsync(categoryToAdd);
                 await _dbContext.SaveChangesAsync();
 
-                return Result.Success(id);
+                return Result.Success<Guid, Error>(id);
             }
             catch (Exception)
             {
-                return Result.Failure<Guid>("Error adding category");
+                return Result.Failure<Guid, Error>(Error.Failure("Category.ErrorAdding", "Error adding category"));
             }
             
         }
 
-        public async Task<Result<Category>> UpdateAsync(Category updatedCategory)
+        public async Task<Result<Category, Error>> UpdateAsync(Category updatedCategory)
         {
             var category = await _dbContext.Categories.SingleOrDefaultAsync(p => p.Id == updatedCategory.Id);
             
             if(category is null)
-                return Result.Failure<Category>($"Can't find category with {updatedCategory.Id}");
+                return Result.Failure<Category,Error>(Error.NotFound("Category.NotFoundForUpdate", $"Can't find category with id {updatedCategory.Id}"));
 
             try
             {
                 _dbContext.Entry(category).CurrentValues.SetValues(updatedCategory);
                 await _dbContext.SaveChangesAsync();
 
-                return Result.Success(category);
+                return Result.Success<Category, Error>(category);
             }
             catch (Exception)
             {
-                return Result.Failure<Category>($"Error updating category");
+                return Result.Failure<Category, Error>(Error.Failure("Category.ErrorUpdating", "Error updating category"));
             }
             
         }
 
-        public async Task<Result> DeleteAsync(Guid id)
+        public async Task<UnitResult<Error>> DeleteAsync(Guid id)
         {
             await _dbContext.Categories
                 .Where(p => p.Id == id)
                 .ExecuteDeleteAsync();
 
-            return Result.Success();
+            return UnitResult.Success<Error>();
         }
 
 

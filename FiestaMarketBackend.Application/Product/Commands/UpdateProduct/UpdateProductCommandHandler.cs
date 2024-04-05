@@ -6,8 +6,9 @@ using MediatR;
 namespace FiestaMarketBackend.Application.Product.Commands
 {
     using CSharpFunctionalExtensions;
+    using FiestaMarketBackend.Core;
     using FiestaMarketBackend.Core.Entities;
-    public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand, Result<ProductResponse>>
+    public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand, Result<ProductResponse, Error>>
     {
         private readonly ProductsRepository _productsRepository;
 
@@ -16,14 +17,14 @@ namespace FiestaMarketBackend.Application.Product.Commands
             _productsRepository = productsRepository;
         }
 
-        public async Task<Result<ProductResponse>> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
+        public async Task<Result<ProductResponse, Error>> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
         {
             var result = await _productsRepository.UpdateAsync(request.Adapt<Product>());
 
             if (result.IsFailure)
-                return Result.Failure<ProductResponse>(result.Error);
+                return Result.Failure<ProductResponse, Error>(result.Error);
 
-            return Result.Success(result.Value.Adapt<ProductResponse>());
+            return Result.Success<ProductResponse, Error>(result.Value.Adapt<ProductResponse>());
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using FiestaMarketBackend.Core;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Serilog.Context;
@@ -13,7 +14,7 @@ namespace FiestaMarketBackend.Application.Behaviors
     public sealed class RequestLoggingPipelineBehavior<TRequest, TResponse>
         : IPipelineBehavior<TRequest, TResponse>
         where TRequest : class
-        where TResponse : IUnitResult<string>
+        where TResponse : IUnitResult<object>
     {
 
         private readonly ILogger<RequestLoggingPipelineBehavior<TRequest, TResponse>> _logger;

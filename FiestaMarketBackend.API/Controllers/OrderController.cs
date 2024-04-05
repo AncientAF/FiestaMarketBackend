@@ -1,11 +1,14 @@
 ﻿using CSharpFunctionalExtensions;
+using FiestaMarketBackend.API.Extensions;
 using FiestaMarketBackend.Application.Order.Commands;
 using FiestaMarketBackend.Application.Order.Queries;
+using FiestaMarketBackend.Application.Responses;
 using FiestaMarketBackend.Application.User.Commands;
 using FiestaMarketBackend.Application.User.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using IResult = Microsoft.AspNetCore.Http.IResult;
 
 namespace FiestaMarketBackend.API.Controllers
 {
@@ -22,61 +25,67 @@ namespace FiestaMarketBackend.API.Controllers
 
         [HttpGet]
         [Route("{id:guid}")]
-        public async Task<IActionResult> GetById(Guid id)
+        [ProducesResponseType<OrderResponse>(200)]
+        public async Task<IResult> GetById(Guid id)
         {
             var query = new GetOrderByIdQuery { Id = id };
             var result = await _mediator.Send(query);
 
             if (result.IsFailure)
-                return BadRequest(result.Error);
+                return result.ToProblemDetails();
 
-            return Ok(result.Value);
+            return Results.Ok(result.Value);
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        [ProducesResponseType<List<OrderResponse>>(200)]
+        public async Task<IResult> Get()
         {
             var result = await _mediator.Send(new GetOrdersQuery());
 
             if (result.IsFailure)
-                return BadRequest(result.Error);
+                return result.ToProblemDetails();
 
-            return Ok(result.Value);
+            return Results.Ok(result.Value);
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] UpdateOrderCommand command)
+        [ProducesResponseType<OrderResponse>(200)]
+        public async Task<IResult> Update([FromBody] UpdateOrderCommand command)
         {
             var result = await _mediator.Send(command);
 
             if (result.IsFailure)
-                return BadRequest(result.Error);
+                return result.ToProblemDetails();
 
-            return Ok(result.Value);
+            return Results.Ok(result.Value);
         }
 
         [HttpDelete]
         [Route("{id:guid}")]
-        public async Task<IActionResult> Delete(Guid id)
+        [ProducesResponseType(204)]
+        public async Task<IResult> Delete(Guid id)
         {
             var command = new DeleteOrderCommand { Id = id };
             var result = await _mediator.Send(command);
 
             if (result.IsFailure)
-                return BadRequest(result.Error);
+                return result.ToProblemDetails();
 
-            return Ok();
+            return Results.Ok();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateOrderCommand command)
+        [ProducesResponseType<Guid>(201)]
+        public async Task<IResult> Create([FromBody] CreateOrderCommand command)
         {
             var result = await _mediator.Send(command);
 
             if (result.IsFailure)
-                return BadRequest(result.Error);
+                return result.ToProblemDetails();
 
-            return CreatedAtAction(nameof(Create), result.Value);
+            var location = Url.Action("", nameof(NewsController));
+            return Results.Created(location, result.Value);
         }
     }
 }

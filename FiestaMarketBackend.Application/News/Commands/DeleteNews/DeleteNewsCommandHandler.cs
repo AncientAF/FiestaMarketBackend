@@ -1,10 +1,11 @@
 ﻿using CSharpFunctionalExtensions;
+using FiestaMarketBackend.Core;
 using FiestaMarketBackend.Infrastructure.Repositories;
 using MediatR;
 
 namespace FiestaMarketBackend.Application.News.Commands.DeleteNews
 {
-    internal class DeleteNewsCommandHandler : IRequestHandler<DeleteNewsCommand, Result>
+    internal class DeleteNewsCommandHandler : IRequestHandler<DeleteNewsCommand, UnitResult<Error>>
     {
         private readonly NewsRepository _newsRepository;
 
@@ -13,14 +14,14 @@ namespace FiestaMarketBackend.Application.News.Commands.DeleteNews
             _newsRepository = newsRepository;
         }
 
-        public async Task<Result> Handle(DeleteNewsCommand request, CancellationToken cancellationToken)
+        public async Task<UnitResult<Error>> Handle(DeleteNewsCommand request, CancellationToken cancellationToken)
         {
             var result = await _newsRepository.DeleteAsync(request.Id);
 
             if (result.IsFailure)
-                return Result.Failure(result.Error);
+                return UnitResult.Failure(result.Error);
 
-            return Result.Success();
+            return UnitResult.Success<Error>();
         }
     }
 }

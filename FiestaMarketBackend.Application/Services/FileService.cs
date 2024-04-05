@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using FiestaMarketBackend.Core;
 using FiestaMarketBackend.Core.Entities;
 using Microsoft.AspNetCore.Http;
 
@@ -15,7 +16,7 @@ namespace FiestaMarketBackend.Application.Services
             _requestPath = requestPath;
         }
 
-        public async Task<Result<List<Image>>> AddImages(List<IFormFile> images)
+        public async Task<Result<List<Image>, Error>> AddImages(List<IFormFile> images)
         {
             List<Image> addedImages = new();
 
@@ -39,24 +40,24 @@ namespace FiestaMarketBackend.Application.Services
             }
             catch (Exception)
             {
-                return Result.Failure<List<Image>>("Error adding images");
+                return Result.Failure<List<Image>, Error>(Error.Failure("FileService.ErrorAddingImages","Error adding images"));
             }
 
-            return Result.Success(addedImages);
+            return Result.Success<List<Image>, Error>(addedImages);
         }
 
-        public Result DeleteImages(List<Image> images)
+        public UnitResult<Error> DeleteImages(List<Image> images)
         {
             try
             {
                 foreach (var image in images)
                     File.Delete(image.Path);
 
-                return Result.Success();
+                return UnitResult.Success<Error>();
             }
             catch (Exception)
             {
-                return Result.Failure("Error deleting images");
+                return UnitResult.Failure(Error.Failure("FileService.ErrorDeletingImages", "Error deleting images"));
             }
         }
 

@@ -1,4 +1,5 @@
-﻿using FiestaMarketBackend.Application.Category;
+﻿using FiestaMarketBackend.API.Extensions;
+using FiestaMarketBackend.Application.Category;
 using FiestaMarketBackend.Application.Responses;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -17,51 +18,56 @@ namespace FiestaMarketBackend.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<CategoryResponse>>> Get()
+        [ProducesResponseType<List<CategoryResponse>>(200)]
+        public async Task<IResult> Get()
         {
             var query = new GetCategoryWithSubCategoriesQuery();
-            var categories = await _mediator.Send(query);
+            var result = await _mediator.Send(query);
 
-            if (categories.IsFailure)
-                return BadRequest(categories.Error);
+            if (result.IsFailure)
+                return result.ToProblemDetails();
 
-            return Ok(categories);
+            return Results.Ok(result);
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update(UpdateCategoryCommand command)
+        [ProducesResponseType<CategoryResponse>(200)]
+        public async Task<IResult> Update(UpdateCategoryCommand command)
         {
             var result = await _mediator.Send(command);
 
             if (result.IsFailure)
-                return BadRequest(result.Error);
+                return result.ToProblemDetails();
 
-            return Ok(result.Value);
+            return Results.Ok(result);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(string name, Guid? parentId)
+        [ProducesResponseType<Guid>(201)]
+        public async Task<IResult> Create(string name, Guid? parentId)
         {
             var command = new CreateCategoryCommand { Name = name, ParentCategoryID = parentId };
             var result = await _mediator.Send(command);
 
             if (result.IsFailure)
-                return BadRequest(result.Error);
+                return result.ToProblemDetails();
 
-            return CreatedAtAction(nameof(Create), result.Value);
+            var location = Url.Action("", nameof(NewsController));
+            return Results.Created(location, result.Value);
         }
 
         [HttpDelete]
         [Route("{id:guid}")]
-        public async Task<IActionResult> Delete(Guid id)
+        [ProducesResponseType(204)]
+        public async Task<IResult> Delete(Guid id)
         {
             var command = new DeleteCategoryCommand { Id = id };
             var result = await _mediator.Send(command);
 
             if (result.IsFailure)
-                return BadRequest(result.Error);
+                return result.ToProblemDetails();
 
-            return Ok();
+            return Results.Ok(result);
         }
     }
 }

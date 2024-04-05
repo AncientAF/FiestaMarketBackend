@@ -1,10 +1,11 @@
 ﻿using CSharpFunctionalExtensions;
+using FiestaMarketBackend.Core;
 using FiestaMarketBackend.Core.Entities;
 using MediatR;
 
 namespace FiestaMarketBackend.Application.User.Commands
 {
-    public class CreateUserCommand : IRequest<Result<Guid>>
+    public class CreateUserCommand : IRequest<Result<Guid, Error>>
     {
         public string Name { get; set; }
         public string SurName { get; set; }

@@ -1,10 +1,11 @@
 ﻿using CSharpFunctionalExtensions;
+using FiestaMarketBackend.Core;
 using FiestaMarketBackend.Infrastructure.Repositories;
 using MediatR;
 
 namespace FiestaMarketBackend.Application.Category
 {
-    public class CreateCategoryCommandHandler : IRequestHandler<CreateCategoryCommand, Result<Guid>>
+    public class CreateCategoryCommandHandler : IRequestHandler<CreateCategoryCommand, Result<Guid, Error>>
     {
         private readonly CategoryRepository _categoryRepository;
 
@@ -13,14 +14,14 @@ namespace FiestaMarketBackend.Application.Category
             _categoryRepository = categoryRepository;
         }
 
-        public async Task<Result<Guid>> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
+        public async Task<Result<Guid, Error>> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
         {
             var id = await _categoryRepository.AddAsync(request.Name, request.ParentCategoryID);
 
             if (id.IsFailure)
-                return Result.Failure<Guid>(id.Error);
+                return Result.Failure<Guid, Error>(id.Error);
 
-            return Result.Success(id.Value);
+            return Result.Success<Guid, Error>(id.Value);
         }
     }
 }
