@@ -7,8 +7,8 @@ namespace FiestaMarketBackend.Application.News.Commands.CreateNews
 {
     public class CreateNewsCommand : ICommand<Result<Guid, Error>>
     {
-        public string Name { get; set; }
-        public string ShortDescription { get; set; }
-        public string DescriptionMarkDown { get; set; }
+        public required string Name { get; set; }
+        public required string ShortDescription { get; set; }
+        public required string DescriptionMarkDown { get; set; }
     }
 }
