@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using FiestaMarketBackend.Application.Abstractions.Messaging;
 using FiestaMarketBackend.Application.Responses;
 using FiestaMarketBackend.Core;
 using MediatR;
@@ -10,7 +11,8 @@ using System.Threading.Tasks;
 
 namespace FiestaMarketBackend.Application.User.Queries
 {
-    public class GetUserByIdQuery : IRequest<Result<UserResponse, Error>>
+    public class GetUserByIdQuery : ICommand
+        <Result<UserResponse, Error>>
     {
         public Guid Id { get; set; }
     }

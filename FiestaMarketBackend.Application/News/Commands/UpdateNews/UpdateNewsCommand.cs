@@ -1,11 +1,12 @@
 ﻿using CSharpFunctionalExtensions;
+using FiestaMarketBackend.Application.Abstractions.Messaging;
 using FiestaMarketBackend.Application.Responses;
 using FiestaMarketBackend.Core;
 using MediatR;
 
 namespace FiestaMarketBackend.Application.News.Commands.UpdateNews
 {
-    public class UpdateNewsCommand : IRequest<Result<NewsResponse, Error>>
+    public class UpdateNewsCommand : ICommand<Result<NewsResponse, Error>>
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

@@ -16,7 +16,7 @@ namespace FiestaMarketBackend.Application.User.Commands
 
         public async Task<UnitResult<Error>> Handle(DeleteFromFavoriteCommand request, CancellationToken cancellationToken)
         {
-            var result = await _userRepository.DeleteProductsFromFavoriteAsync(request.UserId, request.ItemsId);
+            var result = await _userRepository.DeleteProductsFromFavoriteAsync(request.UserId, request.Items);
 
             if (result.IsFailure)
                 return UnitResult.Failure(result.Error);

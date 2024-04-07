@@ -3,10 +3,11 @@
 namespace FiestaMarketBackend.Application.Product.Commands
 {
     using CSharpFunctionalExtensions;
+    using FiestaMarketBackend.Application.Abstractions.Messaging;
     using FiestaMarketBackend.Application.Responses;
     using FiestaMarketBackend.Core;
     using FiestaMarketBackend.Core.Entities;
-    public class UpdateProductCommand : IRequest<Result<ProductResponse, Error>>
+    public class UpdateProductCommand : ICommand<Result<ProductResponse, Error>>
     {
         public Guid Id { get; set; }
         public string? Name { get; set; }

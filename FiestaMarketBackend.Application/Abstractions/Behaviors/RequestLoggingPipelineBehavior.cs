@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FiestaMarketBackend.Application.Behaviors
+namespace FiestaMarketBackend.Application.Abstractions.Behaviors
 {
     public sealed class RequestLoggingPipelineBehavior<TRequest, TResponse>
         : IPipelineBehavior<TRequest, TResponse>
@@ -32,7 +32,7 @@ namespace FiestaMarketBackend.Application.Behaviors
 
             var result = await next();
 
-            if(result.IsSuccess)
+            if (result.IsSuccess)
             {
                 _logger.LogInformation("Completed request {RequestName}", requestName);
             }

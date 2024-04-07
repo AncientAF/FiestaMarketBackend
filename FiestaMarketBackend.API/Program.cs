@@ -1,9 +1,12 @@
+using CSharpFunctionalExtensions;
 using FiestaMarketBackend.API.Middleware;
-using FiestaMarketBackend.Application.Behaviors;
+using FiestaMarketBackend.Application.Abstractions.Behaviors;
 using FiestaMarketBackend.Application.Product.Commands;
 using FiestaMarketBackend.Application.Services;
+using FiestaMarketBackend.Application.User.Commands;
 using FiestaMarketBackend.Infrastructure;
 using FiestaMarketBackend.Infrastructure.Repositories;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Serilog;
@@ -44,8 +47,11 @@ builder.Services.AddMediatR(cfg =>
     {
         cfg.RegisterServicesFromAssembly(typeof(CreateProductCommandHandler).Assembly);
 
+        cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
         cfg.AddOpenBehavior(typeof(RequestLoggingPipelineBehavior<,>));
     });
+
+builder.Services.AddValidatorsFromAssemblyContaining<CreateUserCommandValidator>();
 
 var app = builder.Build();
 

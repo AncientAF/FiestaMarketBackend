@@ -15,11 +15,11 @@ namespace FiestaMarketBackend.API.Extensions
                 statusCode: GetStatusCode(result.Error.ErrorType),
                 title: GetTitle(result.Error.ErrorType),
                 type: GetType(result.Error.ErrorType),
-                detail: result.Error.Description);
-                //extensions: new Dictionary<string, Object?>
-                //{
-                //    { "errors", new [] {result.Error} }
-                //});
+                detail: result.Error.Description,
+                extensions: new Dictionary<string, Object?>
+                {
+                    { "errors", new [] {result.Error.Extensions} }
+                });
         }
 
         public static IResult ToProblemDetails(this UnitResult<Error> result)

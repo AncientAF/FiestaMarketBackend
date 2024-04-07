@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using FiestaMarketBackend.Application.Abstractions.Messaging;
 using FiestaMarketBackend.Application.Responses;
 using FiestaMarketBackend.Core;
 using MediatR;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace FiestaMarketBackend.Application.News.Queries
 {
-    public class GetNewsByIdQuery : IRequest<Result<NewsResponse, Error>>
+    public class GetNewsByIdQuery : ICommand<Result<NewsResponse, Error>>
     {
         public Guid Id { get; set; }
     }
