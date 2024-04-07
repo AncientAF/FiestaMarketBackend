@@ -17,7 +17,6 @@ namespace FiestaMarketBackend.Application.Product.Commands
         public int? MinQuantity { get; set; }
         public bool? Relevant { get; set; }
         public bool? Recommended { get; set; }
-        public List<Image>? Images { get; set; }
         public ProductDescription? Description { get; set; }
     }
 }

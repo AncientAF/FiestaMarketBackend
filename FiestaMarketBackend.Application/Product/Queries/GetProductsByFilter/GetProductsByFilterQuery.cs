@@ -10,6 +10,5 @@ namespace FiestaMarketBackend.Application.Product.Queries
     {
         public string? Name { get; set; }
         public Guid? Category { get; set; }
-
     }
 }

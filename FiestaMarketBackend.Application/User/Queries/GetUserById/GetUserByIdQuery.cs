@@ -11,8 +11,7 @@ using System.Threading.Tasks;
 
 namespace FiestaMarketBackend.Application.User.Queries
 {
-    public class GetUserByIdQuery : ICommand
-        <Result<UserResponse, Error>>
+    public class GetUserByIdQuery : ICommand<Result<UserResponse, Error>>
     {
         public Guid Id { get; set; }
     }
