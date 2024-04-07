@@ -3,6 +3,8 @@ using FiestaMarketBackend.Application.Abstractions.Messaging;
 using FiestaMarketBackend.Core;
 using FluentValidation;
 using MediatR;
+using Microsoft.Extensions.Logging;
+using Serilog.Context;
 
 namespace FiestaMarketBackend.Application.Abstractions.Behaviors
 {
@@ -11,10 +13,12 @@ namespace FiestaMarketBackend.Application.Abstractions.Behaviors
         where TResponse : IResult
     {
         private readonly IEnumerable<IValidator<TRequest>> _validators;
+        private readonly ILogger<ValidationBehavior<TRequest, TResponse>> _logger;
 
-        public ValidationBehavior(IEnumerable<IValidator<TRequest>> validators)
+        public ValidationBehavior(IEnumerable<IValidator<TRequest>> validators, ILogger<ValidationBehavior<TRequest, TResponse>> logger)
         {
             _validators = validators;
+            _logger = logger;
         }
 
         public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
@@ -29,7 +33,13 @@ namespace FiestaMarketBackend.Application.Abstractions.Behaviors
 
             if (errors.Any())
             {
-                return CreateValidationResult<TResponse>(errors);
+                var error = CreateValidationResult<TResponse>(errors);
+                using (LogContext.PushProperty("Error", ((UnitResult<Error>)(object)error).Error, true))
+                {
+                    _logger.LogError("Completed request {RequestName} with errors", typeof(TRequest).Name);
+                }
+                return error;
+
             }
 
             var result = await next();

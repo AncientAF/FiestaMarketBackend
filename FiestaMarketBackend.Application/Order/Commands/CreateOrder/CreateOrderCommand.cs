@@ -17,8 +17,8 @@ namespace FiestaMarketBackend.Application.Order.Commands
     {
         public Guid UserId { get; set; }
         public OrderStatus Status { get; set; }
-        public Address Address { get; set; }
-        public List<OrderItem> Items { get; set; }
+        public required Address Address { get; set; }
+        public required List<OrderItem> Items { get; set; }
         public decimal TotalPrice { get; set; }
     }
 }
