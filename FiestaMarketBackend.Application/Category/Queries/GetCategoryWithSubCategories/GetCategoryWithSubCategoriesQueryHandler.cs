@@ -7,10 +7,9 @@ namespace FiestaMarketBackend.Application.Category
 {
     using CSharpFunctionalExtensions;
     using FiestaMarketBackend.Core;
-    using FiestaMarketBackend.Core.Entities;
     public class GetCategoryWithSubCategoriesQueryHandler : IRequestHandler<GetCategoryWithSubCategoriesQuery, Result<List<CategoryResponse>, Error>>
     {
-        
+
         private readonly CategoryRepository _categoryRepository;
 
         public GetCategoryWithSubCategoriesQueryHandler(CategoryRepository categoryRepository)
@@ -23,7 +22,7 @@ namespace FiestaMarketBackend.Application.Category
             var result = await _categoryRepository.GetWithSubCategoriesAsync();
             if (result.IsFailure)
                 return Result.Failure<List<CategoryResponse>, Error>(result.Error);
-            
+
 
             //TypeAdapterConfig<Category, CategoryResponse>.NewConfig().MaxDepth(5);
             return Result.Success<List<CategoryResponse>, Error>(result.Value.Adapt<List<CategoryResponse>>());

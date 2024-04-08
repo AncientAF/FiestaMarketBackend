@@ -1,13 +1,9 @@
-﻿using CSharpFunctionalExtensions;
-using FiestaMarketBackend.API.Extensions;
+﻿using FiestaMarketBackend.API.Extensions;
 using FiestaMarketBackend.Application.Order.Commands;
 using FiestaMarketBackend.Application.Order.Queries;
 using FiestaMarketBackend.Application.Responses;
-using FiestaMarketBackend.Application.User.Commands;
-using FiestaMarketBackend.Application.User.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using IResult = Microsoft.AspNetCore.Http.IResult;
 
 namespace FiestaMarketBackend.API.Controllers

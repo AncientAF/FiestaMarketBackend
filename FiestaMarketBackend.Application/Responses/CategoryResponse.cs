@@ -1,7 +1,5 @@
 ﻿namespace FiestaMarketBackend.Application.Responses
 {
-    using FiestaMarketBackend.Core.Entities;
-
     public class CategoryResponse
     {
         public Guid Id { get; set; }

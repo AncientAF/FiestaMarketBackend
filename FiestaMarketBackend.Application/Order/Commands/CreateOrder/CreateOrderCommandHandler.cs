@@ -1,10 +1,5 @@
 ﻿using FiestaMarketBackend.Infrastructure.Repositories;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FiestaMarketBackend.Application.Order.Commands
 {
@@ -37,7 +32,7 @@ namespace FiestaMarketBackend.Application.Order.Commands
 
             var result = await _orderRepository.AddAsync(order);
 
-            if(result.IsFailure)
+            if (result.IsFailure)
                 return Result.Failure<Guid, Error>(result.Error);
 
             return Result.Success<Guid, Error>(result.Value);

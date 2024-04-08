@@ -3,7 +3,6 @@ using FiestaMarketBackend.Application.Abstractions.Messaging;
 using FiestaMarketBackend.Application.Responses;
 using FiestaMarketBackend.Core;
 using FiestaMarketBackend.Core.Entities;
-using MediatR;
 
 namespace FiestaMarketBackend.Application.User.Commands
 {

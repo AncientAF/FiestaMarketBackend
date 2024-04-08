@@ -2,7 +2,6 @@
 using FiestaMarketBackend.Core;
 using FiestaMarketBackend.Core.Entities;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Metadata.Ecma335;
 
 namespace FiestaMarketBackend.Infrastructure.Repositories
 {

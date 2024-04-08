@@ -4,7 +4,6 @@ using FiestaMarketBackend.Application.News.Commands.DeleteNews;
 using FiestaMarketBackend.Application.News.Commands.UpdateNews;
 using FiestaMarketBackend.Application.News.Queries;
 using FiestaMarketBackend.Application.Responses;
-using FiestaMarketBackend.Core.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -39,7 +38,7 @@ namespace FiestaMarketBackend.API.Controllers
         [ProducesResponseType<NewsResponse>(200)]
         public async Task<IResult> GetById(Guid id)
         {
-            var query = new GetNewsByIdQuery { Id = id};
+            var query = new GetNewsByIdQuery { Id = id };
             var result = await _mediator.Send(query);
 
             if (result.IsFailure)
@@ -69,8 +68,8 @@ namespace FiestaMarketBackend.API.Controllers
             if (result.IsFailure)
                 return result.ToProblemDetails();
 
-            var location = Url.Action("",nameof(NewsController));
-            return Results.Created(location ,result.Value);
+            var location = Url.Action("", nameof(NewsController));
+            return Results.Created(location, result.Value);
         }
 
         [HttpDelete]

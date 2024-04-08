@@ -1,4 +1,3 @@
-using CSharpFunctionalExtensions;
 using FiestaMarketBackend.API.Middleware;
 using FiestaMarketBackend.Application.Abstractions.Behaviors;
 using FiestaMarketBackend.Application.Product.Commands;
@@ -10,11 +9,10 @@ using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Serilog;
-using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Host.UseSerilog((context, loggerConfig) => 
+builder.Host.UseSerilog((context, loggerConfig) =>
     loggerConfig.ReadFrom.Configuration(context.Configuration));
 
 // Add services to the container.

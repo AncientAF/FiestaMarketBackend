@@ -1,5 +1,4 @@
-﻿using CSharpFunctionalExtensions;
-using FiestaMarketBackend.API.Extensions;
+﻿using FiestaMarketBackend.API.Extensions;
 using FiestaMarketBackend.Application.Responses;
 using FiestaMarketBackend.Application.User.Commands;
 using FiestaMarketBackend.Application.User.Queries;
@@ -77,7 +76,7 @@ namespace FiestaMarketBackend.API.Controllers
         [ProducesResponseType(204)]
         public async Task<IResult> Delete(Guid id)
         {
-            var command = new DeleteUserCommand { Id = id};
+            var command = new DeleteUserCommand { Id = id };
             var result = await _mediator.Send(command);
 
             if (result.IsFailure)

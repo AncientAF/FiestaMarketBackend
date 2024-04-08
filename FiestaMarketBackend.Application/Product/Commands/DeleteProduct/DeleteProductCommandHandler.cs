@@ -26,7 +26,7 @@ namespace FiestaMarketBackend.Application.Product.Commands
 
             var repoResult = await _productsRepository.DeleteAsync(request.Id);
 
-            if (repoResult.IsFailure) 
+            if (repoResult.IsFailure)
                 return UnitResult.Failure(repoResult.Error);
 
             var fileResult = _fileService.DeleteImages(imagesResult.Value);

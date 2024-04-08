@@ -118,7 +118,7 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
         {
             var result = await _dbContext.Products.SingleOrDefaultAsync(p => p.Id == updatedProduct.Id);
 
-            if(result is null)
+            if (result is null)
                 return Result.Failure<Product, Error>(Error.NotFound("Products.NotFoundForUpdating", $"No products to update with id {updatedProduct.Id}"));
 
             try
@@ -150,10 +150,10 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
                 .AsNoTracking()
                 .FirstOrDefaultAsync(p => p.Id == id);
 
-            if(result is null)
+            if (result is null)
                 return Result.Failure<List<Image>, Error>(Error.NotFound("Products.NotFoundById", $"No products with id {id}"));
 
-            if(result.Images is null || result.Images.Count == 0)
+            if (result.Images is null || result.Images.Count == 0)
                 return Result.Failure<List<Image>, Error>(Error.NotFound("Products.NotFoundImages", $"No images associated with product with id {id}"));
 
             return Result.Success<List<Image>, Error>(result.Images);

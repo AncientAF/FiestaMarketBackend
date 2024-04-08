@@ -1,6 +1,4 @@
-﻿using FiestaMarketBackend.Core.Entities;
-
-namespace FiestaMarketBackend.Application.Responses
+﻿namespace FiestaMarketBackend.Application.Responses
 {
     public record CartResponse
     {

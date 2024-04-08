@@ -20,7 +20,7 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
                 .AsNoTracking()
                 .ToListAsync();
 
-            if(categories.Count == 0)
+            if (categories.Count == 0)
                 return Result.Failure<List<Category>, Error>(Error.NotFound("Category.NoCategoryToReturn", "No categories to return"));
 
             return Result.Success<List<Category>, Error>(categories);
@@ -32,7 +32,7 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
                 .AsNoTracking()
                 .SingleOrDefaultAsync(c => c.Id == id);
 
-            if(category is null)
+            if (category is null)
                 return Result.Failure<Category, Error>(Error.NotFound("Category.NotFoundById", $"Can't find category with id {id}"));
 
             return Result.Success<Category, Error>(category);
@@ -74,15 +74,15 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
             {
                 return Result.Failure<Guid, Error>(Error.Failure("Category.ErrorAdding", "Error adding category"));
             }
-            
+
         }
 
         public async Task<Result<Category, Error>> UpdateAsync(Category updatedCategory)
         {
             var category = await _dbContext.Categories.SingleOrDefaultAsync(p => p.Id == updatedCategory.Id);
-            
-            if(category is null)
-                return Result.Failure<Category,Error>(Error.NotFound("Category.NotFoundForUpdate", $"Can't find category with id {updatedCategory.Id}"));
+
+            if (category is null)
+                return Result.Failure<Category, Error>(Error.NotFound("Category.NotFoundForUpdate", $"Can't find category with id {updatedCategory.Id}"));
 
             try
             {
@@ -95,7 +95,7 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
             {
                 return Result.Failure<Category, Error>(Error.Failure("Category.ErrorUpdating", "Error updating category"));
             }
-            
+
         }
 
         public async Task<UnitResult<Error>> DeleteAsync(Guid id)

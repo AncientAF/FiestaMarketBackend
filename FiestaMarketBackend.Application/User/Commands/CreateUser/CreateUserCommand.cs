@@ -2,8 +2,6 @@
 using FiestaMarketBackend.Application.Abstractions.Messaging;
 using FiestaMarketBackend.Core;
 using FiestaMarketBackend.Core.Entities;
-using MediatR;
-using System.Windows.Input;
 
 namespace FiestaMarketBackend.Application.User.Commands
 {

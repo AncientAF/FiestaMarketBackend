@@ -40,7 +40,7 @@ namespace FiestaMarketBackend.Application.Services
             }
             catch (Exception)
             {
-                return Result.Failure<List<Image>, Error>(Error.Failure("FileService.ErrorAddingImages","Error adding images"));
+                return Result.Failure<List<Image>, Error>(Error.Failure("FileService.ErrorAddingImages", "Error adding images"));
             }
 
             return Result.Success<List<Image>, Error>(addedImages);

@@ -1,6 +1,4 @@
-﻿using MediatR;
-
-namespace FiestaMarketBackend.Application.Category
+﻿namespace FiestaMarketBackend.Application.Category
 {
     using CSharpFunctionalExtensions;
     using FiestaMarketBackend.Application.Abstractions.Messaging;
@@ -10,7 +8,7 @@ namespace FiestaMarketBackend.Application.Category
     public class UpdateCategoryCommand : ICommand<Result<CategoryResponse, Error>>
     {
         public Guid Id { get; set; }
-        public string Name { get; set; }
+        public string? Name { get; set; }
         public Category? ParentCategory { get; set; }
     }
 }

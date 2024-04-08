@@ -1,5 +1,4 @@
-﻿using CSharpFunctionalExtensions;
-using FiestaMarketBackend.API.Extensions;
+﻿using FiestaMarketBackend.API.Extensions;
 using FiestaMarketBackend.Application.Product.Commands;
 using FiestaMarketBackend.Application.Product.Queries;
 using FiestaMarketBackend.Application.Responses;
@@ -54,7 +53,7 @@ namespace FiestaMarketBackend.API.Controllers
         [ProducesResponseType<ProductResponse>(200)]
         public async Task<IResult> GetById(Guid id)
         {
-            var query = new GetProductByIdQuery { Id = id};
+            var query = new GetProductByIdQuery { Id = id };
             var result = await _mediator.Send(query);
 
             if (result.IsFailure)

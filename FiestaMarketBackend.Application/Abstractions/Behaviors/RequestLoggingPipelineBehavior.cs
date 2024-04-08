@@ -1,13 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
-using FiestaMarketBackend.Core;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Serilog.Context;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FiestaMarketBackend.Application.Abstractions.Behaviors
 {

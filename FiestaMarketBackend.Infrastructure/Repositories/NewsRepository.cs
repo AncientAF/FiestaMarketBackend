@@ -16,7 +16,7 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
 
         public async Task<Result<List<News>, Error>> GetAsync()
         {
-            var result =  await _dbContext.News.AsNoTracking().ToListAsync();
+            var result = await _dbContext.News.AsNoTracking().ToListAsync();
 
             if (result.Count == 0)
                 return Result.Failure<List<News>, Error>(Error.NotFound("News.NotFound", "No news to return"));
@@ -27,9 +27,9 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
 
         public async Task<Result<News, Error>> GetByIdAsync(Guid id)
         {
-            var result =  await _dbContext.News.AsNoTracking().SingleOrDefaultAsync(n => n.Id == id);
+            var result = await _dbContext.News.AsNoTracking().SingleOrDefaultAsync(n => n.Id == id);
 
-            if(result is null)
+            if (result is null)
                 return Result.Failure<News, Error>(Error.NotFound("News.NotFoundById", $"no users found with id : {id}"));
 
             return Result.Success<News, Error>(result);
@@ -63,9 +63,9 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
             }
             catch (Exception)
             {
-                return Result.Failure<Guid,Error>(Error.Failure("News.ErrorAdding", "Error adding news"));
+                return Result.Failure<Guid, Error>(Error.Failure("News.ErrorAdding", "Error adding news"));
             }
-            
+
         }
 
         public async Task<Result<News, Error>> UpdateAsync(News updatedNews)

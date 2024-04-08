@@ -1,7 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using FiestaMarketBackend.Application.Abstractions.Messaging;
 using FiestaMarketBackend.Core;
-using MediatR;
 
 namespace FiestaMarketBackend.Application.User.Commands
 {

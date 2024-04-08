@@ -1,11 +1,4 @@
-﻿using FiestaMarketBackend.Core.Entities;
-using FiestaMarketBackend.Core.Enums;
-using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FiestaMarketBackend.Core.Enums;
 
 namespace FiestaMarketBackend.Application.Order.Commands
 {

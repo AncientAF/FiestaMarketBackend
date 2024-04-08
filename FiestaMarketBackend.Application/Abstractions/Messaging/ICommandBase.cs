@@ -1,9 +1,4 @@
 ﻿using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FiestaMarketBackend.Application.Abstractions.Messaging
 {
@@ -15,7 +10,7 @@ namespace FiestaMarketBackend.Application.Abstractions.Messaging
     {
     }
 
-    public interface ICommandBase 
+    public interface ICommandBase
     {
     }
 }

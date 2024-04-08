@@ -1,7 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
 using FiestaMarketBackend.Core;
-using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
 using IResult = Microsoft.AspNetCore.Http.IResult;
 
 namespace FiestaMarketBackend.API.Extensions
@@ -9,7 +7,7 @@ namespace FiestaMarketBackend.API.Extensions
     public static class ErrorExtensions
     {
 
-        public static IResult ToProblemDetails<T>(this Result<T,Error> result)
+        public static IResult ToProblemDetails<T>(this Result<T, Error> result)
         {
             return Results.Problem(
                 statusCode: GetStatusCode(result.Error.ErrorType),
