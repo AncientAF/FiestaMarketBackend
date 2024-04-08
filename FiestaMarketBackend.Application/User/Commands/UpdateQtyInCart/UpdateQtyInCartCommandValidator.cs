@@ -12,9 +12,16 @@ namespace FiestaMarketBackend.Application.User.Commands.UpdateQtyInCart
 
             RuleForEach(f => f.Items).ChildRules(i =>
             {
-                i.RuleFor(i => i.ProductId).NotEmpty().WithMessage("Product id can't be empty");
-                i.RuleFor(i => i.Quantity).GreaterThan(-1).WithMessage("Quantity can't be negative");
-                i.RuleFor(i => i.Price).GreaterThan(-1).WithMessage("Price can't be negative");
+                i.RuleFor(i => i.ProductId)
+                    .NotEmpty().WithMessage("Product id can't be empty");
+
+                i.RuleFor(i => i.Quantity)
+                    .NotEmpty().WithMessage("Enter quantity")
+                    .GreaterThan(-1).WithMessage("Quantity can't be negative");
+
+                i.RuleFor(i => i.Price)
+                    .NotEmpty().WithMessage("Enter price")
+                    .GreaterThan(-1).WithMessage("Price can't be negative");
             });
         }
     }

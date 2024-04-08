@@ -6,11 +6,14 @@ namespace FiestaMarketBackend.Application.User.Commands.AddToFavorite
     {
         public AddToFavoriteCommandValidator()
         {
-            RuleFor(c => c.UserId).NotEmpty().WithMessage("User id can't be empty");
+            RuleFor(c => c.UserId)
+                .NotEmpty().WithMessage("User id can't be empty");
 
-            RuleFor(f => f.Products).NotEmpty().WithMessage("Nothing to add");
+            RuleFor(f => f.Products)
+                .NotEmpty().WithMessage("Nothing to add");
 
-            RuleForEach(f => f.Products).NotNull().WithMessage("Null guid");
+            RuleForEach(f => f.Products)
+                .NotNull().WithMessage("Null guid");
         }
     }
 }

@@ -39,7 +39,7 @@ namespace FiestaMarketBackend.API.Controllers
         [ProducesResponseType<List<ProductResponse>>(200)]
         public async Task<IResult> GetByPage(int pageIndex, int pageSize)
         {
-            var query = new GetProductsByPageQuery(pageIndex, pageSize);
+            var query = new GetProductsByPageQuery{ PageIndex = pageIndex, PageSize = pageSize };
             var result = await _mediator.Send(query);
 
             if (result.IsFailure)

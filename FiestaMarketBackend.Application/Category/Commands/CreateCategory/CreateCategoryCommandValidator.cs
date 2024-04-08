@@ -6,7 +6,8 @@ namespace FiestaMarketBackend.Application.Category.Commands.CreateCategory
     {
         public CreateCategoryCommandValidator()
         {
-            RuleFor(c => c.Name).NotEmpty().WithMessage("Name can't be empty");
+            RuleFor(c => c.Name)
+                .NotEmpty().WithMessage("Name can't be empty");
         }
     }
 }

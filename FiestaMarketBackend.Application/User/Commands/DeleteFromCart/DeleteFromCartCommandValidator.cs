@@ -6,11 +6,14 @@ namespace FiestaMarketBackend.Application.User.Commands.DeleteFromCart
     {
         public DeleteFromCartCommandValidator()
         {
-            RuleFor(c => c.UserId).NotEmpty().WithMessage("User id can't be empty");
+            RuleFor(c => c.UserId)
+                .NotEmpty().WithMessage("User id can't be empty");
 
-            RuleFor(f => f.Items).NotEmpty().WithMessage("Nothing to delete");
+            RuleFor(f => f.Items)
+                .NotEmpty().WithMessage("Nothing to delete");
 
-            RuleForEach(f => f.Items).NotNull().WithMessage("Null guid");
+            RuleForEach(f => f.Items)
+                .NotNull().WithMessage("Null guid");
         }
     }
 }

@@ -6,9 +6,13 @@ namespace FiestaMarketBackend.Application.News.Queries.GetNewsByPage
     {
         public GetNewsByPageQueryValidator()
         {
-            RuleFor(p => p.PageIndex).GreaterThan(0).WithMessage("Page index must be greater than 0");
+            RuleFor(p => p.PageIndex)
+                .NotEmpty().WithMessage("Enter PageIndex")
+                .GreaterThan(0).WithMessage("Page index must be greater than 0");
 
-            RuleFor(p => p.PageSize).GreaterThan(0).WithMessage("Page size must be greater than 0");
+            RuleFor(p => p.PageSize)
+                .NotEmpty().WithMessage("Enter PageSize")
+                .GreaterThan(0).WithMessage("Page size must be greater than 0");
         }
     }
 }

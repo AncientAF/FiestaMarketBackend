@@ -66,6 +66,7 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
             return Result.Success<User, Error>(result);
         }
 
+        #endregion
 
         public async Task<Result<Guid, Error>> AddAsync(User user)
         {
@@ -114,8 +115,6 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
 
             return Result.Success<Error>();
         }
-
-        #endregion
 
         #region Favorite
 
