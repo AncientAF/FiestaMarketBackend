@@ -5,8 +5,12 @@ using FiestaMarketBackend.Core;
 
 namespace FiestaMarketBackend.Application.News.Queries
 {
-    public class GetNewsByIdQuery : ICommand<Result<NewsResponse, Error>>
+    public class GetNewsByIdQuery : ICachedQuery<Result<NewsResponse, Error>>
     {
         public Guid Id { get; set; }
+
+        public string Key => $"news-by-id{Id}";
+
+        public TimeSpan? Expiration => default;
     }
 }

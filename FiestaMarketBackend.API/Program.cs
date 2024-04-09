@@ -1,5 +1,6 @@
 using FiestaMarketBackend.API.Middleware;
 using FiestaMarketBackend.Application.Abstractions.Behaviors;
+using FiestaMarketBackend.Application.Abstractions.Caching;
 using FiestaMarketBackend.Application.Product.Commands;
 using FiestaMarketBackend.Application.Services;
 using FiestaMarketBackend.Application.User.Commands;
@@ -30,12 +31,17 @@ builder.Services.AddDbContext<FiestaDbContext>(
         options.UseNpgsql(builder.Configuration.GetConnectionString(nameof(FiestaDbContext)));
     });
 
+builder.Services.AddStackExchangeRedisCache(options =>
+    options.Configuration = configuration.GetConnectionString("Cache"));
+
 builder.Services.AddScoped<ProductsRepository>();
 builder.Services.AddScoped<NewsRepository>();
 builder.Services.AddScoped<CategoryRepository>();
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<OrderRepository>();
-builder.Services.AddTransient<GlobalExceptionHandlingMiddleware>();
+builder.Services.AddScoped<OrderRepository>();
+builder.Services.AddScoped<ICacheService, CacheService>();
+//builder.Services.AddTransient<GlobalExceptionHandlingMiddleware>();
 
 var requestPath = "/StaticFiles";
 var staticFilesPath = Path.Combine(builder.Environment.ContentRootPath, "StaticFiles");
@@ -47,6 +53,7 @@ builder.Services.AddMediatR(cfg =>
 
         cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
         cfg.AddOpenBehavior(typeof(RequestLoggingPipelineBehavior<,>));
+        cfg.AddOpenBehavior(typeof(QueryCachingPipelineBehavior<,>));
     });
 
 builder.Services.AddValidatorsFromAssemblyContaining<CreateUserCommandValidator>();
@@ -75,7 +82,7 @@ app.UseStaticFiles(new StaticFileOptions
 
 app.UseAuthorization();
 
-app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
+//app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 
 app.MapControllers();
 

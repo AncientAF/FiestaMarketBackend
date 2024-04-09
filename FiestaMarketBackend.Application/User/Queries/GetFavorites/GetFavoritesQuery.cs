@@ -5,7 +5,7 @@ using FiestaMarketBackend.Core;
 
 namespace FiestaMarketBackend.Application.User.Queries
 {
-    public class GetFavoritesQuery : ICommand<Result<FavoriteResponse, Error>>
+    public class GetFavoritesQuery : IQuery<Result<FavoriteResponse, Error>>
     {
         public Guid Id { get; set; }
     }

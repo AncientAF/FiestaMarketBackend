@@ -5,7 +5,7 @@ using FiestaMarketBackend.Core;
 
 namespace FiestaMarketBackend.Application.User.Queries
 {
-    public class GetAllUsersQuery : ICommand<Result<List<UserResponse>, Error>>
+    public class GetAllUsersQuery : IQuery<Result<List<UserResponse>, Error>>
     {
     }
 }

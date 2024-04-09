@@ -10,7 +10,7 @@ services:
         - postgres-data:/var/lib/postgresql/data
         ports:
         - "5432:5432"
-    runtrackr-seq:
+    seq:
         image: datalust/seq:latest
         container_name: seq
         environment:
@@ -18,6 +18,13 @@ services:
         ports:
             - 5341:5341
             - 8081:80
+    redis:
+        image: redis:latest
+        restart: always
+        container_name: redis
+        ports:
+            - '6379:6379'
+
 
 volumes:
     postgres-data:    

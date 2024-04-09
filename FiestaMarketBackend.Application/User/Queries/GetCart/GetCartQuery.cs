@@ -5,7 +5,7 @@ using FiestaMarketBackend.Core;
 
 namespace FiestaMarketBackend.Application.User.Queries
 {
-    public class GetCartQuery : ICommand<Result<CartResponse, Error>>
+    public class GetCartQuery : IQuery<Result<CartResponse, Error>>
     {
         public Guid Id { get; set; }
     }

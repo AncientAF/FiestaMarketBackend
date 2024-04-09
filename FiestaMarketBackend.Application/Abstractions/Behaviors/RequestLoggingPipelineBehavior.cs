@@ -7,7 +7,7 @@ namespace FiestaMarketBackend.Application.Abstractions.Behaviors
 {
     public sealed class RequestLoggingPipelineBehavior<TRequest, TResponse>
         : IPipelineBehavior<TRequest, TResponse>
-        where TRequest : class
+        where TRequest : IRequest<TResponse>
         where TResponse : IUnitResult<object>
     {
 

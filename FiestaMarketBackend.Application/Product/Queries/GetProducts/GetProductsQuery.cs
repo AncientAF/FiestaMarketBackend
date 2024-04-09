@@ -5,7 +5,7 @@ using FiestaMarketBackend.Core;
 
 namespace FiestaMarketBackend.Application.Product.Queries
 {
-    public class GetProductsQuery : ICommand<Result<List<ProductResponse>, Error>>
+    public class GetProductsQuery : IQuery<Result<List<ProductResponse>, Error>>
     {
     }
 }

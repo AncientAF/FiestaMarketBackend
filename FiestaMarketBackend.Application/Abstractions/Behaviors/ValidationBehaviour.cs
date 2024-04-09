@@ -9,7 +9,7 @@ using Serilog.Context;
 namespace FiestaMarketBackend.Application.Abstractions.Behaviors
 {
     public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
-        where TRequest : ICommandBase
+        where TRequest : IRequest<TResponse>
         where TResponse : IResult
     {
         private readonly IEnumerable<IValidator<TRequest>> _validators;

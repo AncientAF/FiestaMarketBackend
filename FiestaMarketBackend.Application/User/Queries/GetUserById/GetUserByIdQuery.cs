@@ -5,8 +5,12 @@ using FiestaMarketBackend.Core;
 
 namespace FiestaMarketBackend.Application.User.Queries
 {
-    public class GetUserByIdQuery : ICommand<Result<UserResponse, Error>>
+    public class GetUserByIdQuery : ICachedQuery<Result<UserResponse, Error>>
     {
         public Guid Id { get; set; }
+
+        public string Key => $"user-by-id-{Id}";
+
+        public TimeSpan? Expiration => null;
     }
 }

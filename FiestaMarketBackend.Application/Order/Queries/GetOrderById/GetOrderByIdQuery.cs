@@ -5,8 +5,12 @@ using FiestaMarketBackend.Core;
 
 namespace FiestaMarketBackend.Application.Order.Queries
 {
-    public class GetOrderByIdQuery : ICommand<Result<OrderResponse, Error>>
+    public class GetOrderByIdQuery : ICachedQuery<Result<OrderResponse, Error>>
     {
         public Guid Id { get; set; }
+
+        public string Key => $"order-by-id{Id}";
+
+        public TimeSpan? Expiration => default;
     }
 }

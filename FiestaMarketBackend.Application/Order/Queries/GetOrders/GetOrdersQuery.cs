@@ -5,7 +5,7 @@ using FiestaMarketBackend.Core;
 
 namespace FiestaMarketBackend.Application.Order.Queries
 {
-    public class GetOrdersQuery : ICommand<Result<List<OrderResponse>, Error>>
+    public class GetOrdersQuery : IQuery<Result<List<OrderResponse>, Error>>
     {
 
     }

@@ -5,9 +5,13 @@ using FiestaMarketBackend.Core;
 
 namespace FiestaMarketBackend.Application.Product.Queries
 {
-    public class GetProductsByPageQuery : ICommand<Result<List<ProductResponse>, Error>>
+    public class GetProductsByPageQuery : ICachedQuery<Result<List<ProductResponse>, Error>>
     {
         public int PageIndex { get; set; }
         public int PageSize { get; set; }
+
+        public string Key => $"products-by-page-{PageIndex}-{PageSize}";
+
+        public TimeSpan? Expiration => default;
     }
 }

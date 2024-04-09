@@ -5,7 +5,7 @@ using FiestaMarketBackend.Core;
 
 namespace FiestaMarketBackend.Application.User.Queries
 {
-    public class GetUserOrdersQuery : ICommand<Result<List<OrderResponse>, Error>>
+    public class GetUserOrdersQuery : IQuery<Result<List<OrderResponse>, Error>>
     {
         public Guid Id { get; set; }
     }
