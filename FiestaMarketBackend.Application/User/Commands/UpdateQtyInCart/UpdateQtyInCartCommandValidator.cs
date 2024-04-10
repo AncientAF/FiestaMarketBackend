@@ -6,7 +6,7 @@ namespace FiestaMarketBackend.Application.User.Commands.UpdateQtyInCart
     {
         public UpdateQtyInCartCommandValidator()
         {
-            RuleFor(c => c.UserId).NotEmpty().WithMessage("User id can't be empty");
+            RuleFor(c => c.Id).NotEmpty().WithMessage("User id can't be empty");
 
             RuleFor(f => f.Items).NotEmpty().WithMessage("Nothing to delete");
 

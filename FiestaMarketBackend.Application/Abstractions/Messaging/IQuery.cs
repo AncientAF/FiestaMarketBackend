@@ -9,7 +9,5 @@ using System.Threading.Tasks;
 
 namespace FiestaMarketBackend.Application.Abstractions.Messaging
 {
-    public interface IQuery<TResponse> : IRequest<TResponse>
-    {
-    }
+    public interface IQuery<TResponse> : IRequest<TResponse>;
 }

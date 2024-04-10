@@ -6,7 +6,7 @@ namespace FiestaMarketBackend.Application.User.Commands.AddToFavorite
     {
         public AddToFavoriteCommandValidator()
         {
-            RuleFor(c => c.UserId)
+            RuleFor(c => c.Id)
                 .NotEmpty().WithMessage("User id can't be empty");
 
             RuleFor(f => f.Products)

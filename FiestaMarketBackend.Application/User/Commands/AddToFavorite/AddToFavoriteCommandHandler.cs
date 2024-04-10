@@ -18,7 +18,7 @@ namespace FiestaMarketBackend.Application.User.Commands
 
         public async Task<Result<FavoriteResponse, Error>> Handle(AddToFavoriteCommand request, CancellationToken cancellationToken)
         {
-            var result = await _userRepository.AddProductsToFavoriteAsync(request.UserId, request.Products);
+            var result = await _userRepository.AddProductsToFavoriteAsync(request.Id, request.Products);
 
             if (result.IsFailure)
                 return Result.Failure<FavoriteResponse, Error>(result.Error);

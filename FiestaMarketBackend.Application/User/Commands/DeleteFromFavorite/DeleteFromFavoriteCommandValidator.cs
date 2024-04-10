@@ -6,7 +6,7 @@ namespace FiestaMarketBackend.Application.User.Commands.DeleteFromFavorite
     {
         public DeleteFromFavoriteCommandValidator()
         {
-            RuleFor(c => c.UserId)
+            RuleFor(c => c.Id)
                 .NotEmpty().WithMessage("User id can't be empty");
 
             RuleFor(f => f.Items)

@@ -6,7 +6,7 @@ namespace FiestaMarketBackend.Application.User.Commands.AddToCart
     {
         public AddToCartCommandValidator()
         {
-            RuleFor(c => c.UserId)
+            RuleFor(c => c.Id)
                 .NotEmpty().WithMessage("User id can't be empty");
 
             RuleFor(c => c.Items)

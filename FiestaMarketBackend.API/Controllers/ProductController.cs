@@ -111,7 +111,7 @@ namespace FiestaMarketBackend.API.Controllers
             if (result.IsFailure)
                 return result.ToProblemDetails();
 
-            return Results.Ok(result);
+            return Results.StatusCode(204);
         }
     }
 }

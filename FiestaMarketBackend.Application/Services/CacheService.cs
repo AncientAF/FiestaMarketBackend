@@ -23,6 +23,7 @@ namespace FiestaMarketBackend.Application.Services
             _distributedCache = distributedCache;
         }
 
+
         public async Task<T> GetOrCreateAsync<T>(string key, Func<CancellationToken, Task<T>> factory, TimeSpan? expiration = null, CancellationToken cancellationToken = default)
         {
             var cachedResult = await _distributedCache.GetStringAsync(key, cancellationToken);
@@ -47,6 +48,10 @@ namespace FiestaMarketBackend.Application.Services
             }
 
             return result;
+        }
+        public async Task DeleteAsync(string key, CancellationToken cancellationToken)
+        {
+            await _distributedCache.RemoveAsync(key, cancellationToken);
         }
     }
 }

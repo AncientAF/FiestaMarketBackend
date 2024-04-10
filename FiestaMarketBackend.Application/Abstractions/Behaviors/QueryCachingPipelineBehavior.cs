@@ -1,6 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
 using FiestaMarketBackend.Application.Abstractions.Caching;
-using FiestaMarketBackend.Application.Abstractions.Messaging;
 using FiestaMarketBackend.Core;
 using MediatR;
 

@@ -18,7 +18,7 @@ namespace FiestaMarketBackend.Application.User.Commands
 
         public async Task<Result<CartResponse, Error>> Handle(UpdateQtyInCartCommand request, CancellationToken cancellationToken)
         {
-            var result = await _userRepository.UpdateQtyInCartAsync(request.UserId, request.Items);
+            var result = await _userRepository.UpdateQtyInCartAsync(request.Id, request.Items);
 
             if (result.IsFailure)
                 return Result.Failure<CartResponse, Error>(result.Error);

@@ -16,7 +16,7 @@ namespace FiestaMarketBackend.Application.User.Commands
 
         public async Task<UnitResult<Error>> Handle(DeleteFromCartCommand request, CancellationToken cancellationToken)
         {
-            var result = await _userRepository.DeleteProductsFromCartAsync(request.UserId, request.Items);
+            var result = await _userRepository.DeleteProductsFromCartAsync(request.Id, request.Items);
 
             if (result.IsFailure)
                 return UnitResult.Failure(result.Error);

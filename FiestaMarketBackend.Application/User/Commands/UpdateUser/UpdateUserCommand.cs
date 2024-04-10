@@ -1,11 +1,12 @@
 ﻿namespace FiestaMarketBackend.Application.User.Commands
 {
     using CSharpFunctionalExtensions;
+    using FiestaMarketBackend.Application.Abstractions.Caching;
     using FiestaMarketBackend.Application.Abstractions.Messaging;
     using FiestaMarketBackend.Application.Responses;
     using FiestaMarketBackend.Core;
     using FiestaMarketBackend.Core.Entities;
-    public class UpdateUserCommand : ICommand<Result<UserResponse, Error>>
+    public class UpdateUserCommand : IInvalidateCacheCommand<Result<UserResponse, Error>>
     {
         public Guid Id { get; set; }
         public string? Name { get; set; }
@@ -17,5 +18,7 @@
         public Favorite? Favorite { get; set; }
         public Cart? Cart { get; set; }
         public List<Order>? Orders { get; set; }
+
+        public string[] Keys => [$"user-by-id-{Id}"];
     }
 }

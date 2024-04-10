@@ -82,7 +82,7 @@ namespace FiestaMarketBackend.API.Controllers
             if (result.IsFailure)
                 return result.ToProblemDetails();
 
-            return Results.Ok();
+            return Results.StatusCode(204);
         }
 
         #region Favorite
@@ -124,7 +124,7 @@ namespace FiestaMarketBackend.API.Controllers
             if (result.IsFailure)
                 return result.ToProblemDetails();
 
-            return Results.Ok();
+            return Results.StatusCode(204);
         }
 
         #endregion
@@ -181,7 +181,7 @@ namespace FiestaMarketBackend.API.Controllers
             if (result.IsFailure)
                 return result.ToProblemDetails();
 
-            return Results.Ok();
+            return Results.StatusCode(204);
         }
 
         #endregion

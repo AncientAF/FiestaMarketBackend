@@ -1,7 +1,8 @@
 ﻿using CSharpFunctionalExtensions;
+using FiestaMarketBackend.Application.Abstractions.Messaging;
 using FiestaMarketBackend.Core;
 
-namespace FiestaMarketBackend.Application.Abstractions.Messaging
+namespace FiestaMarketBackend.Application.Abstractions.Caching
 {
     public interface ICachedQuery
     {

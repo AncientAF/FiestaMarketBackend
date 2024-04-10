@@ -19,7 +19,7 @@ namespace FiestaMarketBackend.Application.User.Commands
 
         public async Task<Result<CartResponse, Error>> Handle(AddToCartCommand request, CancellationToken cancellationToken)
         {
-            var result = await _userRepository.AddProductsToCartAsync(request.UserId, request.Items.Adapt<List<CartItem>>());
+            var result = await _userRepository.AddProductsToCartAsync(request.Id, request.Items.Adapt<List<CartItem>>());
 
             if (result.IsFailure)
                 return Result.Failure<CartResponse, Error>(result.Error);

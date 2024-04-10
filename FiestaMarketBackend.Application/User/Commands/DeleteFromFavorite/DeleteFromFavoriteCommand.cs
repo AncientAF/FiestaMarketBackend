@@ -1,12 +1,14 @@
 ﻿using CSharpFunctionalExtensions;
+using FiestaMarketBackend.Application.Abstractions.Caching;
 using FiestaMarketBackend.Application.Abstractions.Messaging;
 using FiestaMarketBackend.Core;
 
 namespace FiestaMarketBackend.Application.User.Commands
 {
-    public class DeleteFromFavoriteCommand : ICommand<UnitResult<Error>>
+    public class DeleteFromFavoriteCommand : IInvalidateCacheCommand<UnitResult<Error>>
     {
-        public Guid UserId { get; set; }
+        public Guid Id { get; set; }
         public required List<Guid> Items { get; set; }
+        public string[] Keys => [$"user-by-id-{Id}"];
     }
 }

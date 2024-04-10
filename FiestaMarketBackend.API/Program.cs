@@ -54,6 +54,7 @@ builder.Services.AddMediatR(cfg =>
         cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
         cfg.AddOpenBehavior(typeof(RequestLoggingPipelineBehavior<,>));
         cfg.AddOpenBehavior(typeof(QueryCachingPipelineBehavior<,>));
+        cfg.AddOpenBehavior(typeof(InvalidateCachePipelineBehavior<,>));
     });
 
 builder.Services.AddValidatorsFromAssemblyContaining<CreateUserCommandValidator>();
