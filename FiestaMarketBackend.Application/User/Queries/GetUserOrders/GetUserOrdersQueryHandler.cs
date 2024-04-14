@@ -1,17 +1,17 @@
 ﻿using CSharpFunctionalExtensions;
 using FiestaMarketBackend.Application.Responses;
 using FiestaMarketBackend.Core;
-using FiestaMarketBackend.Infrastructure.Repositories;
+using FiestaMarketBackend.Core.Repositories;
 using Mapster;
 using MediatR;
 
-namespace FiestaMarketBackend.Application.User.Queries
+namespace FiestaMarketBackend.Application.User
 {
     public class GetUserOrdersQueryHandler : IRequestHandler<GetUserOrdersQuery, Result<List<OrderResponse>, Error>>
     {
-        private readonly UserRepository _userRepository;
+        private readonly IUserRepository _userRepository;
 
-        public GetUserOrdersQueryHandler(UserRepository userRepository)
+        public GetUserOrdersQueryHandler(IUserRepository userRepository)
         {
             _userRepository = userRepository;
         }

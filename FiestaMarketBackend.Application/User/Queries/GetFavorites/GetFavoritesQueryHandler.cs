@@ -1,17 +1,17 @@
 ﻿using CSharpFunctionalExtensions;
 using FiestaMarketBackend.Application.Responses;
 using FiestaMarketBackend.Core;
-using FiestaMarketBackend.Infrastructure.Repositories;
+using FiestaMarketBackend.Core.Repositories;
 using Mapster;
 using MediatR;
 
-namespace FiestaMarketBackend.Application.User.Queries
+namespace FiestaMarketBackend.Application.User
 {
     public class GetFavoritesQueryHandler : IRequestHandler<GetFavoritesQuery, Result<FavoriteResponse, Error>>
     {
-        private readonly UserRepository _userRepository;
+        private readonly IUserRepository _userRepository;
 
-        public GetFavoritesQueryHandler(UserRepository userRepository)
+        public GetFavoritesQueryHandler(IUserRepository userRepository)
         {
             _userRepository = userRepository;
         }

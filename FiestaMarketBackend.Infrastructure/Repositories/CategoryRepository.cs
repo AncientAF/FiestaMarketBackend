@@ -1,11 +1,12 @@
 ﻿using CSharpFunctionalExtensions;
 using FiestaMarketBackend.Core;
 using FiestaMarketBackend.Core.Entities;
+using FiestaMarketBackend.Core.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace FiestaMarketBackend.Infrastructure.Repositories
 {
-    public class CategoryRepository
+    public class CategoryRepository : ICategoryRepository
     {
         private readonly FiestaDbContext _dbContext;
 

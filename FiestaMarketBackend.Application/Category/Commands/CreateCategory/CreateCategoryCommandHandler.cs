@@ -1,15 +1,15 @@
 ﻿using CSharpFunctionalExtensions;
 using FiestaMarketBackend.Core;
-using FiestaMarketBackend.Infrastructure.Repositories;
+using FiestaMarketBackend.Core.Repositories;
 using MediatR;
 
 namespace FiestaMarketBackend.Application.Category
 {
     public class CreateCategoryCommandHandler : IRequestHandler<CreateCategoryCommand, Result<Guid, Error>>
     {
-        private readonly CategoryRepository _categoryRepository;
+        private readonly ICategoryRepository _categoryRepository;
 
-        public CreateCategoryCommandHandler(CategoryRepository categoryRepository)
+        public CreateCategoryCommandHandler(ICategoryRepository categoryRepository)
         {
             _categoryRepository = categoryRepository;
         }

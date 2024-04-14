@@ -3,7 +3,7 @@ using FiestaMarketBackend.Application.Abstractions.Messaging;
 using FiestaMarketBackend.Core;
 using FiestaMarketBackend.Core.Entities;
 
-namespace FiestaMarketBackend.Application.User.Commands
+namespace FiestaMarketBackend.Application.User
 {
     public class CreateUserCommand : ICommand<Result<Guid, Error>>
     {
@@ -13,5 +13,6 @@ namespace FiestaMarketBackend.Application.User.Commands
         public required string Password { get; set; }
         public required string PhoneNumber { get; set; }
         public List<Address>? Addresses { get; set; }
+        public required List<int> Roles { get; set; }
     }
 }

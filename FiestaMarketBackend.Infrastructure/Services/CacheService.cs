@@ -1,17 +1,10 @@
 ﻿using CSharpFunctionalExtensions;
 using CSharpFunctionalExtensions.Json.Serialization;
 using FiestaMarketBackend.Application.Abstractions.Caching;
-using FiestaMarketBackend.Core;
 using Microsoft.Extensions.Caching.Distributed;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.Json;
-using System.Text.Json.Serialization.Metadata;
-using System.Threading.Tasks;
 
-namespace FiestaMarketBackend.Application.Services
+namespace FiestaMarketBackend.Infrastructure.Services
 {
     public class CacheService : ICacheService
     {
@@ -42,7 +35,7 @@ namespace FiestaMarketBackend.Application.Services
 
             if (result is IResult && ((IResult)result).IsSuccess)
             {
-                DistributedCacheEntryOptions opts = new ();
+                DistributedCacheEntryOptions opts = new();
                 opts.AbsoluteExpirationRelativeToNow = expiration ?? DefaultExpiration;
                 await _distributedCache.SetStringAsync(key, JsonSerializer.Serialize(result, options), opts, cancellationToken);
             }

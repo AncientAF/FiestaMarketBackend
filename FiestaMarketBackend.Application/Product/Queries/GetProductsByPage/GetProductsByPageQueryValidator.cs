@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace FiestaMarketBackend.Application.Product.Queries.GetProductsByPage
+namespace FiestaMarketBackend.Application.Product
 {
     public class GetProductsByPageQueryValidator : AbstractValidator<GetProductsByPageQuery>
     {

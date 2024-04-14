@@ -1,17 +1,17 @@
 ﻿using CSharpFunctionalExtensions;
 using FiestaMarketBackend.Application.Responses;
 using FiestaMarketBackend.Core;
-using FiestaMarketBackend.Infrastructure.Repositories;
+using FiestaMarketBackend.Core.Repositories;
 using Mapster;
 using MediatR;
 
-namespace FiestaMarketBackend.Application.Product.Queries
+namespace FiestaMarketBackend.Application.Product
 {
     public class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQuery, Result<ProductResponse, Error>>
     {
-        private readonly ProductsRepository _productsRepository;
+        private readonly IProductsRepository _productsRepository;
 
-        public GetProductByIdQueryHandler(ProductsRepository productsRepository)
+        public GetProductByIdQueryHandler(IProductsRepository productsRepository)
         {
             _productsRepository = productsRepository;
         }

@@ -21,6 +21,8 @@ namespace FiestaMarketBackend.Infrastructure.Configurations
             builder.OwnsMany(u => u.Addresses).WithOwner().HasForeignKey(a => a.UserId);
 
             builder.HasIndex(u => u.Email).IsUnique();
+
+            builder.HasMany(u => u.Roles).WithMany(r => r.Users);
         }
     }
 }

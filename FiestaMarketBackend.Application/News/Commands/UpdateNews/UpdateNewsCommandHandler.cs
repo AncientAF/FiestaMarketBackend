@@ -1,18 +1,19 @@
-﻿using FiestaMarketBackend.Infrastructure.Repositories;
-using Mapster;
+﻿using Mapster;
 using MediatR;
 
-namespace FiestaMarketBackend.Application.News.Commands.UpdateNews
+namespace FiestaMarketBackend.Application.News
 {
     using CSharpFunctionalExtensions;
     using FiestaMarketBackend.Application.Responses;
     using FiestaMarketBackend.Core;
     using FiestaMarketBackend.Core.Entities;
+    using FiestaMarketBackend.Core.Repositories;
+
     public class UpdateNewsCommandHandler : IRequestHandler<UpdateNewsCommand, Result<NewsResponse, Error>>
     {
-        private readonly NewsRepository _newsRepository;
+        private readonly INewsRepository _newsRepository;
 
-        public UpdateNewsCommandHandler(NewsRepository newsRepository)
+        public UpdateNewsCommandHandler(INewsRepository newsRepository)
         {
             _newsRepository = newsRepository;
         }

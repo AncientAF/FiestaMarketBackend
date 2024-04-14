@@ -1,12 +1,18 @@
+using FiestaMarketBackend.API.Extensions;
 using FiestaMarketBackend.API.Middleware;
+using FiestaMarketBackend.Application.Abstractions.Authentication;
 using FiestaMarketBackend.Application.Abstractions.Behaviors;
 using FiestaMarketBackend.Application.Abstractions.Caching;
-using FiestaMarketBackend.Application.Product.Commands;
-using FiestaMarketBackend.Application.Services;
-using FiestaMarketBackend.Application.User.Commands;
+using FiestaMarketBackend.Application.Abstractions.Services;
+using FiestaMarketBackend.Application.Product;
+using FiestaMarketBackend.Application.User;
 using FiestaMarketBackend.Infrastructure;
+using FiestaMarketBackend.Infrastructure.Authentication;
 using FiestaMarketBackend.Infrastructure.Repositories;
+using FiestaMarketBackend.Infrastructure.Services;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Serilog;
@@ -40,12 +46,21 @@ builder.Services.AddScoped<CategoryRepository>();
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<OrderRepository>();
 builder.Services.AddScoped<OrderRepository>();
+
 builder.Services.AddScoped<ICacheService, CacheService>();
-//builder.Services.AddTransient<GlobalExceptionHandlingMiddleware>();
+builder.Services.AddTransient<GlobalExceptionHandlingMiddleware>();
+
+builder.Services.Configure<JwtOptions>(configuration.GetSection(nameof(JwtOptions)));
+builder.Services.Configure<AuthOptions>(configuration.GetSection(nameof(AuthOptions)));
+builder.Services.AddApiAuthentication(configuration);
+builder.Services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
+
+builder.Services.AddScoped<IJwtProvider>();
+builder.Services.AddScoped<IPasswordHasher>();
 
 var requestPath = "/StaticFiles";
 var staticFilesPath = Path.Combine(builder.Environment.ContentRootPath, "StaticFiles");
-builder.Services.AddScoped<FileService>(_ => new FileService(staticFilesPath, requestPath));
+builder.Services.AddScoped<IFileService>(_ => new FileService(staticFilesPath, requestPath));
 
 builder.Services.AddMediatR(cfg =>
     {
@@ -71,6 +86,13 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseCookiePolicy(new CookiePolicyOptions
+{
+    MinimumSameSitePolicy = SameSiteMode.Strict,
+    HttpOnly = HttpOnlyPolicy.Always,
+    Secure = CookieSecurePolicy.Always,
+});
+
 app.UseMiddleware<RequestLogContextMiddleware>();
 
 app.UseSerilogRequestLogging();
@@ -81,9 +103,11 @@ app.UseStaticFiles(new StaticFileOptions
     RequestPath = requestPath
 });
 
+app.UseAuthentication();
 app.UseAuthorization();
 
-//app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
+
+app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 
 app.MapControllers();
 

@@ -1,11 +1,13 @@
 ﻿using CSharpFunctionalExtensions;
 using FiestaMarketBackend.Core;
 using FiestaMarketBackend.Core.Entities;
+using FiestaMarketBackend.Core.Enums;
+using FiestaMarketBackend.Core.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace FiestaMarketBackend.Infrastructure.Repositories
 {
-    public class UserRepository
+    public class UserRepository : IUserRepository
     {
         private readonly FiestaDbContext _dbContext;
 
@@ -20,10 +22,12 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
         {
             var result = await _dbContext.Users
                 .Include(u => u.Favorite)
-                .ThenInclude(f => f.Products)
+                .ThenInclude(f => f!.Products)
                 .Include(u => u.Orders)
                 .Include(u => u.Cart)
                 .Include(u => u.Addresses)
+                .Include(u => u.Roles)
+                .ThenInclude(r => r.Permissions)
                 .AsNoTracking()
                 .ToListAsync();
 
@@ -37,7 +41,7 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
         {
             var result = await _dbContext.Users
                 .Include(u => u.Favorite)
-                .ThenInclude(f => f.Products)
+                .ThenInclude(f => f!.Products)
                 .Include(u => u.Orders)
                 .Include(u => u.Cart)
                 .Include(u => u.Addresses)
@@ -50,11 +54,39 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
             return Result.Success<User, Error>(result);
         }
 
+        public async Task<Result<User, Error>> GetByEmail(string email)
+        {
+            var result = await _dbContext.Users
+                .AsNoTracking()
+                .FirstOrDefaultAsync(u => u.Email == email);
+
+            if (result is null)
+                return Result.Failure<User, Error>(Error.NotFound("User.NotFoundByEmail", $"No users with email {email} was found"));
+
+            return Result.Success<User, Error>(result);
+        }
+
+        public async Task<HashSet<PermissionEnum>> GetUserPermissions(Guid id)
+        {
+            var roles = await _dbContext.Users
+                .AsNoTracking()
+                .Include(u => u.Roles)
+                .ThenInclude(r => r.Permissions)
+                .Where(u => u.Id == id)
+                .Select(u => u.Roles)
+                .ToListAsync();
+
+            return roles.SelectMany(r => r)
+                .SelectMany(r => r.Permissions)
+                .Select(p => (PermissionEnum)p.Id)
+                .ToHashSet();
+        }
+
         private async Task<Result<User, Error>> GetByIdTrackingAsync(Guid id)
         {
             var result = await _dbContext.Users
                 .Include(u => u.Favorite)
-                .ThenInclude(f => f.Products)
+                .ThenInclude(f => f!.Products)
                 .Include(u => u.Orders)
                 .Include(u => u.Cart)
                 .Include(u => u.Addresses)
@@ -68,12 +100,20 @@ namespace FiestaMarketBackend.Infrastructure.Repositories
 
         #endregion
 
-        public async Task<Result<Guid, Error>> AddAsync(User user)
+        public async Task<Result<Guid, Error>> AddAsync(User user, List<int> roles)
         {
             try
             {
                 var id = Guid.NewGuid();
                 user.Id = id;
+
+                user.Roles = new();
+                foreach (var role in roles)
+                {
+                    var userRole = _dbContext.Roles.FirstOrDefault(r => r.Id == role);
+                    if (userRole is not null)
+                        user.Roles.Add(userRole);
+                }
 
                 await _dbContext.Users.AddAsync(user);
                 await _dbContext.SaveChangesAsync();

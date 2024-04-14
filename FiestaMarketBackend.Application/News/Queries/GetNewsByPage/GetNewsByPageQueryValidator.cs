@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace FiestaMarketBackend.Application.News.Queries.GetNewsByPage
+namespace FiestaMarketBackend.Application.News
 {
     public class GetNewsByPageQueryValidator : AbstractValidator<GetNewsByPageQuery>
     {

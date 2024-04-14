@@ -1,9 +1,8 @@
 ﻿using CSharpFunctionalExtensions;
 using FiestaMarketBackend.Application.Abstractions.Caching;
-using FiestaMarketBackend.Application.Abstractions.Messaging;
 using FiestaMarketBackend.Core;
 
-namespace FiestaMarketBackend.Application.Order.Commands
+namespace FiestaMarketBackend.Application.Order
 {
     public class DeleteOrderCommand : IInvalidateCacheCommand<UnitResult<Error>>
     {

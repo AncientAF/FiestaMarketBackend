@@ -1,17 +1,17 @@
 ﻿using CSharpFunctionalExtensions;
 using FiestaMarketBackend.Application.Responses;
 using FiestaMarketBackend.Core;
-using FiestaMarketBackend.Infrastructure.Repositories;
+using FiestaMarketBackend.Core.Repositories;
 using Mapster;
 using MediatR;
 
-namespace FiestaMarketBackend.Application.News.Queries
+namespace FiestaMarketBackend.Application.News
 {
     public class GetNewsByIdQueryHandler : IRequestHandler<GetNewsByIdQuery, Result<NewsResponse, Error>>
     {
-        private readonly NewsRepository _newsRepository;
+        private readonly INewsRepository _newsRepository;
 
-        public GetNewsByIdQueryHandler(NewsRepository newsRepository)
+        public GetNewsByIdQueryHandler(INewsRepository newsRepository)
         {
             _newsRepository = newsRepository;
         }

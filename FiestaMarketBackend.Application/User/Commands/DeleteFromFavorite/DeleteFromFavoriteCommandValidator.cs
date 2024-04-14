@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace FiestaMarketBackend.Application.User.Commands.DeleteFromFavorite
+namespace FiestaMarketBackend.Application.User
 {
     public class DeleteFromFavoriteCommandValidator : AbstractValidator<DeleteFromFavoriteCommand>
     {

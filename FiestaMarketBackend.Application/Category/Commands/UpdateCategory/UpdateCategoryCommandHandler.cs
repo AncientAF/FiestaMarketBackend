@@ -1,5 +1,4 @@
-﻿using FiestaMarketBackend.Infrastructure.Repositories;
-using Mapster;
+﻿using Mapster;
 using MediatR;
 
 namespace FiestaMarketBackend.Application.Category
@@ -8,12 +7,13 @@ namespace FiestaMarketBackend.Application.Category
     using FiestaMarketBackend.Application.Responses;
     using FiestaMarketBackend.Core;
     using FiestaMarketBackend.Core.Entities;
+    using FiestaMarketBackend.Core.Repositories;
 
     public class UpdateCategoryCommandHandler : IRequestHandler<UpdateCategoryCommand, Result<CategoryResponse, Error>>
     {
-        private readonly CategoryRepository _categoryRepository;
+        private readonly ICategoryRepository _categoryRepository;
 
-        public UpdateCategoryCommandHandler(CategoryRepository categoryRepository)
+        public UpdateCategoryCommandHandler(ICategoryRepository categoryRepository)
         {
             _categoryRepository = categoryRepository;
         }

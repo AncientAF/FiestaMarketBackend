@@ -1,18 +1,19 @@
-﻿using FiestaMarketBackend.Infrastructure.Repositories;
-using Mapster;
+﻿using Mapster;
 using MediatR;
 
-namespace FiestaMarketBackend.Application.User.Commands
+namespace FiestaMarketBackend.Application.User
 {
     using CSharpFunctionalExtensions;
     using FiestaMarketBackend.Application.Responses;
     using FiestaMarketBackend.Core;
     using FiestaMarketBackend.Core.Entities;
+    using FiestaMarketBackend.Core.Repositories;
+
     internal class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, Result<UserResponse, Error>>
     {
-        private readonly UserRepository _userRepository;
+        private readonly IUserRepository _userRepository;
 
-        public UpdateUserCommandHandler(UserRepository userRepository)
+        public UpdateUserCommandHandler(IUserRepository userRepository)
         {
             _userRepository = userRepository;
         }

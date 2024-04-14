@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace FiestaMarketBackend.Application.News.Commands.UpdateNews
+namespace FiestaMarketBackend.Application.News
 {
     public class UpdateNewsCommandValidator : AbstractValidator<UpdateNewsCommand>
     {

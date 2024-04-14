@@ -1,15 +1,15 @@
 ﻿using CSharpFunctionalExtensions;
 using FiestaMarketBackend.Core;
-using FiestaMarketBackend.Infrastructure.Repositories;
+using FiestaMarketBackend.Core.Repositories;
 using MediatR;
 
-namespace FiestaMarketBackend.Application.News.Commands.DeleteNews
+namespace FiestaMarketBackend.Application.News
 {
     internal class DeleteNewsCommandHandler : IRequestHandler<DeleteNewsCommand, UnitResult<Error>>
     {
-        private readonly NewsRepository _newsRepository;
+        private readonly INewsRepository _newsRepository;
 
-        public DeleteNewsCommandHandler(NewsRepository newsRepository)
+        public DeleteNewsCommandHandler(INewsRepository newsRepository)
         {
             _newsRepository = newsRepository;
         }

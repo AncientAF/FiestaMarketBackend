@@ -1,15 +1,15 @@
 ﻿using CSharpFunctionalExtensions;
 using FiestaMarketBackend.Core;
-using FiestaMarketBackend.Infrastructure.Repositories;
+using FiestaMarketBackend.Core.Repositories;
 using MediatR;
 
-namespace FiestaMarketBackend.Application.User.Commands
+namespace FiestaMarketBackend.Application.User
 {
     public class DeleteFromCartCommandHandler : IRequestHandler<DeleteFromCartCommand, UnitResult<Error>>
     {
-        private readonly UserRepository _userRepository;
+        private readonly IUserRepository _userRepository;
 
-        public DeleteFromCartCommandHandler(UserRepository userRepository)
+        public DeleteFromCartCommandHandler(IUserRepository userRepository)
         {
             _userRepository = userRepository;
         }

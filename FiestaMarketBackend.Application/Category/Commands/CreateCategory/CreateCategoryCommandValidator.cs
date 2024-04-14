@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace FiestaMarketBackend.Application.Category.Commands.CreateCategory
+namespace FiestaMarketBackend.Application.Category.Commands
 {
     public class CreateCategoryCommandValidator : AbstractValidator<CreateCategoryCommand>
     {

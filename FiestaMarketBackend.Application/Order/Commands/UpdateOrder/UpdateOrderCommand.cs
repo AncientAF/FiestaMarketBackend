@@ -1,12 +1,11 @@
 ﻿using CSharpFunctionalExtensions;
 using FiestaMarketBackend.Application.Abstractions.Caching;
-using FiestaMarketBackend.Application.Abstractions.Messaging;
 using FiestaMarketBackend.Application.Responses;
 using FiestaMarketBackend.Core;
 using FiestaMarketBackend.Core.Entities;
 using FiestaMarketBackend.Core.Enums;
 
-namespace FiestaMarketBackend.Application.Order.Commands
+namespace FiestaMarketBackend.Application.Order
 {
     public class UpdateOrderCommand : IInvalidateCacheCommand<Result<OrderResponse, Error>>
     {

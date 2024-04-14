@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-	  <ProjectReference Include="..\FiestaMarketBackend.Infrastructure\FiestaMarketBackend.Infrastructure.csproj" />
+	  <ProjectReference Include="..\FiestaMarketBackend.Core\FiestaMarketBackend.Core.csproj" />
   </ItemGroup>
 
 	<ItemGroup>

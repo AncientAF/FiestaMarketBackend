@@ -1,8 +1,8 @@
 ﻿using FiestaMarketBackend.API.Extensions;
 using FiestaMarketBackend.Application.Responses;
-using FiestaMarketBackend.Application.User.Commands;
-using FiestaMarketBackend.Application.User.Queries;
+using FiestaMarketBackend.Application.User;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using IResult = Microsoft.AspNetCore.Http.IResult;
 
@@ -73,6 +73,7 @@ namespace FiestaMarketBackend.API.Controllers
 
         [HttpDelete]
         [Route("{id:guid}")]
+        [Authorize(Policy = "Admin")]
         [ProducesResponseType(204)]
         public async Task<IResult> Delete(Guid id)
         {
@@ -83,6 +84,20 @@ namespace FiestaMarketBackend.API.Controllers
                 return result.ToProblemDetails();
 
             return Results.StatusCode(204);
+        }
+
+        [HttpPost]
+        [Route("login")]
+        [ProducesResponseType(200)]
+        public async Task<IResult> Login(LoginUserCommand command)
+        {
+            var result = await _mediator.Send(command);
+
+            if (result.IsFailure)
+                return result.ToProblemDetails();
+
+            HttpContext.Response.Cookies.Append("token", result.Value);
+            return Results.Ok(result.Value);
         }
 
         #region Favorite

@@ -1,17 +1,17 @@
 ﻿using CSharpFunctionalExtensions;
-using FiestaMarketBackend.Application.Services;
+using FiestaMarketBackend.Application.Abstractions.Services;
 using FiestaMarketBackend.Core;
-using FiestaMarketBackend.Infrastructure.Repositories;
+using FiestaMarketBackend.Core.Repositories;
 using MediatR;
 
-namespace FiestaMarketBackend.Application.Product.Commands
+namespace FiestaMarketBackend.Application.Product
 {
     public class DeleteProductCommandHandler : IRequestHandler<DeleteProductCommand, UnitResult<Error>>
     {
-        private readonly ProductsRepository _productsRepository;
-        private readonly FileService _fileService;
+        private readonly IProductsRepository _productsRepository;
+        private readonly IFileService _fileService;
 
-        public DeleteProductCommandHandler(ProductsRepository productsRepository, FileService fileService)
+        public DeleteProductCommandHandler(IProductsRepository productsRepository, IFileService fileService)
         {
             _productsRepository = productsRepository;
             _fileService = fileService;

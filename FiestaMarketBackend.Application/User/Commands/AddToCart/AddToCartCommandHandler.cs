@@ -2,17 +2,17 @@
 using FiestaMarketBackend.Application.Responses;
 using FiestaMarketBackend.Core;
 using FiestaMarketBackend.Core.Entities;
-using FiestaMarketBackend.Infrastructure.Repositories;
+using FiestaMarketBackend.Core.Repositories;
 using Mapster;
 using MediatR;
 
-namespace FiestaMarketBackend.Application.User.Commands
+namespace FiestaMarketBackend.Application.User
 {
     internal class AddToCartCommandHandler : IRequestHandler<AddToCartCommand, Result<CartResponse, Error>>
     {
-        private readonly UserRepository _userRepository;
+        private readonly IUserRepository _userRepository;
 
-        public AddToCartCommandHandler(UserRepository userRepository)
+        public AddToCartCommandHandler(IUserRepository userRepository)
         {
             _userRepository = userRepository;
         }

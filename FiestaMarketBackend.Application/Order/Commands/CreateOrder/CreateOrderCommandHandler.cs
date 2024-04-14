@@ -1,19 +1,19 @@
-﻿using FiestaMarketBackend.Infrastructure.Repositories;
-using MediatR;
+﻿using MediatR;
 
-namespace FiestaMarketBackend.Application.Order.Commands
+namespace FiestaMarketBackend.Application.Order
 {
     using CSharpFunctionalExtensions;
     using FiestaMarketBackend.Core;
     using FiestaMarketBackend.Core.Entities;
+    using FiestaMarketBackend.Core.Repositories;
     using Mapster;
 
     public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Result<Guid, Error>>
     {
-        private readonly UserRepository _userRepository;
-        private readonly OrderRepository _orderRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly IOrderRepository _orderRepository;
 
-        public CreateOrderCommandHandler(OrderRepository orderRepository, UserRepository userRepository)
+        public CreateOrderCommandHandler(IOrderRepository orderRepository, IUserRepository userRepository)
         {
             _orderRepository = orderRepository;
             _userRepository = userRepository;

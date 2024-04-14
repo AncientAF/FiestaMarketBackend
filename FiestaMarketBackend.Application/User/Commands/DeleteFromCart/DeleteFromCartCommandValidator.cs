@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace FiestaMarketBackend.Application.User.Commands.DeleteFromCart
+namespace FiestaMarketBackend.Application.User
 {
     public class DeleteFromCartCommandValidator : AbstractValidator<DeleteFromCartCommand>
     {

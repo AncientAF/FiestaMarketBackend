@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using System.Text.RegularExpressions;
 
-namespace FiestaMarketBackend.Application.User.Commands.UpdateUser
+namespace FiestaMarketBackend.Application.User
 {
     public class UpdateUserCommandValidator : AbstractValidator<UpdateUserCommand>
     {

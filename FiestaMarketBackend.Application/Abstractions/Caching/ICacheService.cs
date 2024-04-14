@@ -1,7 +1,4 @@
-﻿using CSharpFunctionalExtensions;
-using FiestaMarketBackend.Core;
-
-namespace FiestaMarketBackend.Application.Abstractions.Caching
+﻿namespace FiestaMarketBackend.Application.Abstractions.Caching
 {
     public interface ICacheService
     {

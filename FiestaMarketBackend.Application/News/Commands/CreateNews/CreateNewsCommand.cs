@@ -2,7 +2,7 @@
 using FiestaMarketBackend.Application.Abstractions.Messaging;
 using FiestaMarketBackend.Core;
 
-namespace FiestaMarketBackend.Application.News.Commands.CreateNews
+namespace FiestaMarketBackend.Application.News
 {
     public class CreateNewsCommand : ICommand<Result<Guid, Error>>
     {

@@ -1,15 +1,15 @@
 ﻿using CSharpFunctionalExtensions;
 using FiestaMarketBackend.Core;
-using FiestaMarketBackend.Infrastructure.Repositories;
+using FiestaMarketBackend.Core.Repositories;
 using MediatR;
 
 namespace FiestaMarketBackend.Application.Category
 {
     public class DeleteCategoryCommandHandler : IRequestHandler<DeleteCategoryCommand, UnitResult<Error>>
     {
-        private readonly CategoryRepository _categoryRepository;
+        private readonly ICategoryRepository _categoryRepository;
 
-        public DeleteCategoryCommandHandler(CategoryRepository categoryRepository)
+        public DeleteCategoryCommandHandler(ICategoryRepository categoryRepository)
         {
             _categoryRepository = categoryRepository;
         }

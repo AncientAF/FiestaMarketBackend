@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace FiestaMarketBackend.Application.User.Commands.UpdateQtyInCart
+namespace FiestaMarketBackend.Application.User
 {
     public class UpdateQtyInCartCommandValidator : AbstractValidator<UpdateQtyInCartCommand>
     {

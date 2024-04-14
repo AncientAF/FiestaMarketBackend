@@ -1,18 +1,19 @@
 ﻿using FiestaMarketBackend.Application.Responses;
-using FiestaMarketBackend.Infrastructure.Repositories;
 using Mapster;
 using MediatR;
 
-namespace FiestaMarketBackend.Application.Product.Commands
+namespace FiestaMarketBackend.Application.Product
 {
     using CSharpFunctionalExtensions;
     using FiestaMarketBackend.Core;
     using FiestaMarketBackend.Core.Entities;
+    using FiestaMarketBackend.Core.Repositories;
+
     public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand, Result<ProductResponse, Error>>
     {
-        private readonly ProductsRepository _productsRepository;
+        private readonly IProductsRepository _productsRepository;
 
-        public UpdateProductCommandHandler(ProductsRepository productsRepository)
+        public UpdateProductCommandHandler(IProductsRepository productsRepository)
         {
             _productsRepository = productsRepository;
         }

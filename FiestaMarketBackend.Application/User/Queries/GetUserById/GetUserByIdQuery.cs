@@ -3,7 +3,7 @@ using FiestaMarketBackend.Application.Abstractions.Caching;
 using FiestaMarketBackend.Application.Responses;
 using FiestaMarketBackend.Core;
 
-namespace FiestaMarketBackend.Application.User.Queries
+namespace FiestaMarketBackend.Application.User
 {
     public class GetUserByIdQuery : ICachedQuery<Result<UserResponse, Error>>
     {

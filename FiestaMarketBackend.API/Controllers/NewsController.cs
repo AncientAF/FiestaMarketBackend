@@ -1,8 +1,5 @@
 ﻿using FiestaMarketBackend.API.Extensions;
-using FiestaMarketBackend.Application.News.Commands.CreateNews;
-using FiestaMarketBackend.Application.News.Commands.DeleteNews;
-using FiestaMarketBackend.Application.News.Commands.UpdateNews;
-using FiestaMarketBackend.Application.News.Queries;
+using FiestaMarketBackend.Application.News;
 using FiestaMarketBackend.Application.Responses;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

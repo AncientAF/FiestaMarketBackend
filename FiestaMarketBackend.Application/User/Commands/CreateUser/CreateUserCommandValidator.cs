@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using System.Text.RegularExpressions;
 
-namespace FiestaMarketBackend.Application.User.Commands
+namespace FiestaMarketBackend.Application.User
 {
     public class CreateUserCommandValidator : AbstractValidator<CreateUserCommand>
     {
@@ -30,11 +30,13 @@ namespace FiestaMarketBackend.Application.User.Commands
                 RuleFor(a => a.PhoneNumber)
                     .Must(IsPhoneNumber).WithMessage("Incorrect phone number").When(a => a.Addresses != null).OverridePropertyName("AddressPhoneNumber");
             });
+
+            RuleFor(u => u.Roles).NotEmpty().WithMessage("User must have a role");
         }
 
         private bool IsPhoneNumber(string phoneNumber)
         {
-            if(phoneNumber == null) return false;
+            if (phoneNumber == null) return false;
 
             var pattern = "^((8|\\+7)[\\- ]?)?(\\(?\\d{3}\\)?[\\- ]?)?[\\d\\- ]{7,10}$";
             var regex = new Regex(pattern);

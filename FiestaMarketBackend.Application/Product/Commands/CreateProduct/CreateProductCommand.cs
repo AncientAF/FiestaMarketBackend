@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace FiestaMarketBackend.Application.Product.Commands
+namespace FiestaMarketBackend.Application.Product
 {
     using CSharpFunctionalExtensions;
     using FiestaMarketBackend.Application.Abstractions.Messaging;

@@ -1,15 +1,15 @@
 ﻿using CSharpFunctionalExtensions;
 using FiestaMarketBackend.Core;
-using FiestaMarketBackend.Infrastructure.Repositories;
+using FiestaMarketBackend.Core.Repositories;
 using MediatR;
 
-namespace FiestaMarketBackend.Application.Order.Commands
+namespace FiestaMarketBackend.Application.Order
 {
     public class DeleteOrderCommandHandler : IRequestHandler<DeleteOrderCommand, UnitResult<Error>>
     {
-        private readonly OrderRepository _orderRepository;
+        private readonly IOrderRepository _orderRepository;
 
-        public DeleteOrderCommandHandler(OrderRepository orderRepository)
+        public DeleteOrderCommandHandler(IOrderRepository orderRepository)
         {
             _orderRepository = orderRepository;
         }

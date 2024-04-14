@@ -1,6 +1,5 @@
 ﻿using FiestaMarketBackend.API.Extensions;
-using FiestaMarketBackend.Application.Order.Commands;
-using FiestaMarketBackend.Application.Order.Queries;
+using FiestaMarketBackend.Application.Order;
 using FiestaMarketBackend.Application.Responses;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

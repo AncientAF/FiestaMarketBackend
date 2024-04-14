@@ -1,5 +1,4 @@
 ﻿using FiestaMarketBackend.Application.Responses;
-using FiestaMarketBackend.Infrastructure.Repositories;
 using Mapster;
 using MediatR;
 
@@ -7,12 +6,14 @@ namespace FiestaMarketBackend.Application.Category
 {
     using CSharpFunctionalExtensions;
     using FiestaMarketBackend.Core;
+    using FiestaMarketBackend.Core.Repositories;
+
     public class GetCategoryWithSubCategoriesQueryHandler : IRequestHandler<GetCategoryWithSubCategoriesQuery, Result<List<CategoryResponse>, Error>>
     {
 
-        private readonly CategoryRepository _categoryRepository;
+        private readonly ICategoryRepository _categoryRepository;
 
-        public GetCategoryWithSubCategoriesQueryHandler(CategoryRepository categoryRepository)
+        public GetCategoryWithSubCategoriesQueryHandler(ICategoryRepository categoryRepository)
         {
             _categoryRepository = categoryRepository;
         }

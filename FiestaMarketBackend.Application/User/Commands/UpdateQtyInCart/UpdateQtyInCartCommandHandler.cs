@@ -1,17 +1,17 @@
 ﻿using CSharpFunctionalExtensions;
 using FiestaMarketBackend.Application.Responses;
 using FiestaMarketBackend.Core;
-using FiestaMarketBackend.Infrastructure.Repositories;
+using FiestaMarketBackend.Core.Repositories;
 using Mapster;
 using MediatR;
 
-namespace FiestaMarketBackend.Application.User.Commands
+namespace FiestaMarketBackend.Application.User
 {
     public class UpdateQtyInCartCommandHandler : IRequestHandler<UpdateQtyInCartCommand, Result<CartResponse, Error>>
     {
-        private readonly UserRepository _userRepository;
+        private readonly IUserRepository _userRepository;
 
-        public UpdateQtyInCartCommandHandler(UserRepository userRepository)
+        public UpdateQtyInCartCommandHandler(IUserRepository userRepository)
         {
             _userRepository = userRepository;
         }

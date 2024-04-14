@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace FiestaMarketBackend.Application.User.Commands.AddToCart
+namespace FiestaMarketBackend.Application.User
 {
     public class AddToCartCommandValidator : AbstractValidator<AddToCartCommand>
     {

@@ -1,10 +1,9 @@
 ﻿using CSharpFunctionalExtensions;
 using FiestaMarketBackend.Application.Responses;
 
-namespace FiestaMarketBackend.Application.User.Commands
+namespace FiestaMarketBackend.Application.User
 {
     using FiestaMarketBackend.Application.Abstractions.Caching;
-    using FiestaMarketBackend.Application.Abstractions.Messaging;
     using FiestaMarketBackend.Core;
     using FiestaMarketBackend.Core.Entities;
 

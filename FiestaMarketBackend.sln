@@ -8,8 +8,14 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FiestaMarketBackend.Core", "FiestaMarketBackend.Core\FiestaMarketBackend.Core.csproj", "{05594E42-D66F-4EDA-A8C8-46FF12406132}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FiestaMarketBackend.Application", "FiestaMarketBackend.Application\FiestaMarketBackend.Application.csproj", "{AAD394CD-6AC5-487E-BC0B-6492D71F75CB}"
+	ProjectSection(ProjectDependencies) = postProject
+		{05594E42-D66F-4EDA-A8C8-46FF12406132} = {05594E42-D66F-4EDA-A8C8-46FF12406132}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FiestaMarketBackend.Infrastructure", "FiestaMarketBackend.Infrastructure\FiestaMarketBackend.Infrastructure.csproj", "{A33FF1C6-D83F-4AED-AF75-D88C7F082290}"
+	ProjectSection(ProjectDependencies) = postProject
+		{AAD394CD-6AC5-487E-BC0B-6492D71F75CB} = {AAD394CD-6AC5-487E-BC0B-6492D71F75CB}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

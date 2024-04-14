@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace FiestaMarketBackend.Application.Order.Commands.UpdateOrder
+namespace FiestaMarketBackend.Application.Order
 {
     public class UpdateOrderCommandValidator : AbstractValidator<UpdateOrderCommand>
     {

@@ -1,7 +1,7 @@
 ﻿using FiestaMarketBackend.Core.Entities;
 using FluentValidation;
 
-namespace FiestaMarketBackend.Application.Product.Commands.CreateProduct
+namespace FiestaMarketBackend.Application.Product
 {
     public class CreateProductCommandValidator : AbstractValidator<CreateProductCommand>
     {

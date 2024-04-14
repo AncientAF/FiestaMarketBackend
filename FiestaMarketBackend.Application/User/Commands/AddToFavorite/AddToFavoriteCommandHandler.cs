@@ -1,17 +1,17 @@
 ﻿using CSharpFunctionalExtensions;
 using FiestaMarketBackend.Application.Responses;
 using FiestaMarketBackend.Core;
-using FiestaMarketBackend.Infrastructure.Repositories;
+using FiestaMarketBackend.Core.Repositories;
 using Mapster;
 using MediatR;
 
-namespace FiestaMarketBackend.Application.User.Commands
+namespace FiestaMarketBackend.Application.User
 {
     public class AddToFavoriteCommandHandler : IRequestHandler<AddToFavoriteCommand, Result<FavoriteResponse, Error>>
     {
-        private readonly UserRepository _userRepository;
+        private readonly IUserRepository _userRepository;
 
-        public AddToFavoriteCommandHandler(UserRepository userRepository)
+        public AddToFavoriteCommandHandler(IUserRepository userRepository)
         {
             _userRepository = userRepository;
         }

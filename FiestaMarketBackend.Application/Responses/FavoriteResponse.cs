@@ -3,6 +3,6 @@
     public class FavoriteResponse
     {
         public Guid Id { get; set; }
-        public List<ProductResponse> Products { get; set; }
+        public List<ProductResponse>? Products { get; set; }
     }
 }

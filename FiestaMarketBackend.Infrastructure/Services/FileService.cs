@@ -1,11 +1,12 @@
 ﻿using CSharpFunctionalExtensions;
+using FiestaMarketBackend.Application.Abstractions.Services;
 using FiestaMarketBackend.Core;
 using FiestaMarketBackend.Core.Entities;
 using Microsoft.AspNetCore.Http;
 
-namespace FiestaMarketBackend.Application.Services
+namespace FiestaMarketBackend.Infrastructure.Services
 {
-    public class FileService
+    public class FileService : IFileService
     {
         private readonly string _rootPath;
         private readonly string _requestPath;
