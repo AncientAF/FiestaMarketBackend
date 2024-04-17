@@ -6,6 +6,7 @@ using FiestaMarketBackend.Application.Abstractions.Caching;
 using FiestaMarketBackend.Application.Abstractions.Services;
 using FiestaMarketBackend.Application.Product;
 using FiestaMarketBackend.Application.User;
+using FiestaMarketBackend.Core.Repositories;
 using FiestaMarketBackend.Infrastructure;
 using FiestaMarketBackend.Infrastructure.Authentication;
 using FiestaMarketBackend.Infrastructure.Repositories;
@@ -40,12 +41,11 @@ builder.Services.AddDbContext<FiestaDbContext>(
 builder.Services.AddStackExchangeRedisCache(options =>
     options.Configuration = configuration.GetConnectionString("Cache"));
 
-builder.Services.AddScoped<ProductsRepository>();
-builder.Services.AddScoped<NewsRepository>();
-builder.Services.AddScoped<CategoryRepository>();
-builder.Services.AddScoped<UserRepository>();
-builder.Services.AddScoped<OrderRepository>();
-builder.Services.AddScoped<OrderRepository>();
+builder.Services.AddScoped<IProductsRepository, ProductsRepository>();
+builder.Services.AddScoped<INewsRepository, NewsRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository> ();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IOrderRepository,OrderRepository>();
 
 builder.Services.AddScoped<ICacheService, CacheService>();
 builder.Services.AddTransient<GlobalExceptionHandlingMiddleware>();
@@ -55,8 +55,8 @@ builder.Services.Configure<AuthOptions>(configuration.GetSection(nameof(AuthOpti
 builder.Services.AddApiAuthentication(configuration);
 builder.Services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
 
-builder.Services.AddScoped<IJwtProvider>();
-builder.Services.AddScoped<IPasswordHasher>();
+builder.Services.AddScoped<IJwtProvider, JwtProvider>();
+builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 
 var requestPath = "/StaticFiles";
 var staticFilesPath = Path.Combine(builder.Environment.ContentRootPath, "StaticFiles");
