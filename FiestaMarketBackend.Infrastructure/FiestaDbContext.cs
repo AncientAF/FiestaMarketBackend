@@ -25,15 +25,6 @@ namespace FiestaMarketBackend.Infrastructure
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //modelBuilder.ApplyConfiguration(new CatalogConfiguration());
-            //modelBuilder.ApplyConfiguration(new CategoryConfiguration());
-            ////modelBuilder.ApplyConfiguration(new ImageConfiguration());
-            //modelBuilder.ApplyConfiguration(new NewsConfiguration());
-            //modelBuilder.ApplyConfiguration(new ProductConfiguration());
-            //modelBuilder.ApplyConfiguration(new UserConfiguration());
-            //modelBuilder.ApplyConfiguration(new OrderConfiguration());
-            //modelBuilder.ApplyConfiguration(new CartConfiguration());
-            //modelBuilder.ApplyConfiguration(new FavoriteConfiguration());
 
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(FiestaDbContext).Assembly);
 

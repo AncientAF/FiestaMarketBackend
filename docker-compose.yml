@@ -1,0 +1,43 @@
+version: '3.4'
+
+services:
+    database:
+        container_name: fiesta.database
+        image: postgres:latest
+        environment:
+            POSTGRES_DB: "Fiesta"
+            POSTGRES_USER: "postgres"
+            POSTGRES_PASSWORD: "123"
+        volumes:
+        - postgres-data:/var/lib/postgresql/data
+        ports:
+        - "5432:5432"
+    seq:
+        image: datalust/seq:latest
+        container_name: fiesta.seq
+        environment:
+            - ACCEPT_EULA=Y
+        ports:
+            - 5341:5341
+            - 80:80
+    redis:
+        image: redis:latest
+        container_name: fiesta.redis
+        ports:
+            - '6379:6379'
+    fiestamarketbackend.api:
+        image: ${DOCKER_REGISTRY-}fiestamarketbackendapi
+        build:
+          context: .
+          dockerfile: FiestaMarketBackend.API/Dockerfile
+        depends_on:
+            - redis
+            - seq
+            - database
+        ports:
+            - "5000:5000"
+            - "5001:5001" 
+
+volumes:
+    postgres-data:
+            
