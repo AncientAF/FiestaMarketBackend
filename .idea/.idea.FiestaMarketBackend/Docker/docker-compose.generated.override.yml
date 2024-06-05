@@ -1,0 +1,21 @@
+# This is a generated file. Not intended for manual editing.
+version: "3.4"
+services:
+  fiestamarketbackend.api:
+    build:
+      context: "C:\\Users\\levon\\source\\repos\\FiestaMarketBackend"
+      dockerfile: "FiestaMarketBackend.API/Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net8.0/FiestaMarketBackend.API.dll"
+    environment:
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+    image: "fiestamarketbackend.api:dev"
+    ports: []
+    volumes:
+    - "C:\\Users\\levon\\.nuget\\packages:/home/app/.nuget/packages"
+    - "C:\\Users\\levon\\source\\repos\\FiestaMarketBackend\\FiestaMarketBackend.API:/app:rw"
+    - "C:\\Users\\levon\\source\\repos\\FiestaMarketBackend:/src:rw"
+    working_dir: "/app"

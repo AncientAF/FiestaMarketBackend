@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Serilog;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +32,8 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+Console.WriteLine(builder.Configuration.GetConnectionString(nameof(FiestaDbContext)));
 
 builder.Services.AddDbContext<FiestaDbContext>(
     options =>
@@ -77,12 +80,8 @@ builder.Services.AddValidatorsFromAssemblyContaining<CreateUserCommandValidator>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
@@ -96,6 +95,16 @@ app.UseCookiePolicy(new CookiePolicyOptions
 app.UseMiddleware<RequestLogContextMiddleware>();
 
 app.UseSerilogRequestLogging();
+
+
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider
+        .GetRequiredService<FiestaDbContext>();
+
+    dbContext.Database.EnsureCreated();
+}
+
 
 app.UseStaticFiles(new StaticFileOptions
 {

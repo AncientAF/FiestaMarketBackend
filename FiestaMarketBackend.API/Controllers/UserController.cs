@@ -54,7 +54,7 @@ namespace FiestaMarketBackend.API.Controllers
             if (result.IsFailure)
                 return result.ToProblemDetails();
 
-            var location = Url.Action("", nameof(NewsController));
+            var location = Url.Action("", controller: nameof(UserController));
             return Results.Created(location, result.Value);
         }
 
